@@ -1,4 +1,4 @@
-package com.upf464.presentation
+package com.upf464.koonsdiary.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

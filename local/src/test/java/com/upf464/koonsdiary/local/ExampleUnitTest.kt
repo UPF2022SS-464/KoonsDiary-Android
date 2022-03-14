@@ -1,4 +1,4 @@
-package com.upf464.local
+package com.upf464.koonsdiary.local
 
 import org.junit.Test
 

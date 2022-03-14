@@ -1,4 +1,4 @@
-package com.upf464.presentation
+package com.upf464.koonsdiary.presentation
 
 import org.junit.Test
 
