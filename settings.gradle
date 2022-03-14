@@ -18,3 +18,4 @@ rootProject.name = "Koon's Diary"
 include ':app'
 include ':domain'
 include ':data'
+include ':local'
