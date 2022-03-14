@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Koon's Diary"
 include ':app'
+include ':domain'
