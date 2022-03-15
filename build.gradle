@@ -4,6 +4,7 @@ buildscript {
         hilt_version = "2.41"
         junit_version = "4.13.2"
         mockk_version = "1.12.3"
+        coroutine_version = "1.6.0"
     }
 
     dependencies {
