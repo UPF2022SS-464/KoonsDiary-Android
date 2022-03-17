@@ -18,6 +18,14 @@ jobs:
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
 
+      - name: Set up secret Key
+        shell: bash
+        env:
+          SECRETS_XML: ${{secrets.SECRETS_XML}}
+        run: |
+          touch app/src/main/res/values/secrets.xml
+          echo $SECRETS_XML > app/src/main/res/values/secrets.xml
+
       - name: Build Project
         run: ./gradlew assemble
 
