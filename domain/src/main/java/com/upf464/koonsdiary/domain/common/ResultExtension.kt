@@ -8,3 +8,12 @@ inline fun <T, R> Result<T>.flatMap(
         else -> Result.failure(exception)
     }
 }
+
+inline fun <T> Result<T>.errorMap(
+    transform: (Throwable) -> Exception
+): Result<T> {
+    return when (val exception = exceptionOrNull()) {
+        null -> this
+        else -> Result.failure(transform(exception))
+    }
+}
