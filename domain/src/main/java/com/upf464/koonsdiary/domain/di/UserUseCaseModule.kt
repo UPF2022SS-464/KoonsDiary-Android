@@ -1,6 +1,6 @@
 package com.upf464.koonsdiary.domain.di
 
-import com.upf464.koonsdiary.domain.request.EmptyRequest
+import com.upf464.koonsdiary.domain.request.LoginWithKakaoRequest
 import com.upf464.koonsdiary.domain.request.LoginWithUsernameRequest
 import com.upf464.koonsdiary.domain.response.EmptyResponse
 import com.upf464.koonsdiary.domain.usecase.LoginWithKakaoUseCase
@@ -23,5 +23,5 @@ internal abstract class UserUseCaseModule {
     @Binds
     abstract fun bindLoginWithKakaoUseCase(
         useCase: LoginWithKakaoUseCase
-    ) : ResultUseCase<EmptyRequest, EmptyResponse>
+    ) : ResultUseCase<LoginWithKakaoRequest, EmptyResponse>
 }
