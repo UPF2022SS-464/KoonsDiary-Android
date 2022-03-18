@@ -15,7 +15,7 @@ internal class LoginWithUsernameUseCase @Inject constructor(
     override suspend fun invoke(request: LoginWithUsernameRequest): Result<EmptyResponse> {
         return userRepository.loginWithUsername(
             request.username,
-            hashGenerator.hashPasswordWithSalt(request.username, request.password)
+            hashGenerator.hashPasswordWithSalt(request.password, request.username)
         ).flatMap {
             Result.success(EmptyResponse)
         }

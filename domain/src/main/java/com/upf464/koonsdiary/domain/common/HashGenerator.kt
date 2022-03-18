@@ -10,8 +10,8 @@ internal class HashGenerator @Inject constructor(
     private val digest: MessageDigest
 ) {
 
-    fun hashPasswordWithSalt(username: String, password: String): String {
-        val passwordWithSalt = password + hash(username)
+    fun hashPasswordWithSalt(password: String, salt: String): String {
+        val passwordWithSalt = password + hash(salt)
         return hash(passwordWithSalt)
     }
 
