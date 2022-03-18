@@ -12,7 +12,7 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
         return Result.success(Unit)
     }
 
-    override suspend fun signUpWithAccount(user: SignUpUserData): Result<Unit> {
+    override suspend fun signUpWithUsername(user: SignUpUserData): Result<Unit> {
         // TODO("서버 완료 되면 진행")
         return Result.success(Unit)
     }

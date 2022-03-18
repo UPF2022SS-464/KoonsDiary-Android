@@ -14,8 +14,8 @@ internal class UserRepositoryImpl @Inject constructor(
         return remote.signInWithUsername(username, password)
     }
 
-    override suspend fun signUpWithAccount(user: SignUpUser): Result<Unit> {
-        return remote.signUpWithAccount(user.toData())
+    override suspend fun signUpWithUsername(user: SignUpUser): Result<Unit> {
+        return remote.signUpWithUsername(user.toData())
     }
 
     override suspend fun generateSaltOf(username: String): Result<String> {

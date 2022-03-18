@@ -38,7 +38,7 @@ internal class SignUpWithUsernameUseCase @Inject constructor(
                 nickname = request.nickname
             )
 
-            userRepository.signUpWithAccount(user)
+            userRepository.signUpWithUsername(user)
         }.flatMap {
             Result.success(EmptyResponse)
         }
