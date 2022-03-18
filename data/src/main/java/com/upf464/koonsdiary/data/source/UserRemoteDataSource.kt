@@ -9,4 +9,6 @@ interface UserRemoteDataSource {
     suspend fun signUpWithAccount(user: SignUpUserData): Result<Unit>
 
     suspend fun generateSaltOf(username: String): Result<String>
+    
+    suspend fun fetchSaltOf(username: String): Result<String>
 }

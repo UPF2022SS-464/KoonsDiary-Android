@@ -21,4 +21,9 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
         // TODO("서버 완료 되면 진행")
         return Result.success("")
     }
+
+    override suspend fun fetchSaltOf(username: String): Result<String> {
+        // TODO("서버 완료 되면 진행")
+        return Result.success("")
+    }
 }
