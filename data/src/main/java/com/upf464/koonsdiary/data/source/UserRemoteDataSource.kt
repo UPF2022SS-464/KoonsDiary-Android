@@ -1,6 +1,12 @@
 package com.upf464.koonsdiary.data.source
 
+import com.upf464.koonsdiary.data.model.SignUpUserData
+
 interface UserRemoteDataSource {
 
     suspend fun loginWithUsername(username: String, password: String): Result<Unit>
+
+    suspend fun signUpWithAccount(user: SignUpUserData): Result<Unit>
+
+    suspend fun generateSaltOf(username: String): Result<String>
 }
