@@ -6,7 +6,7 @@ interface UserRepository {
 
     suspend fun signInWithUsername(username: String, password: String) : Result<Unit>
 
-    suspend fun signUpWithAccount(user: SignUpUser): Result<Unit>
+    suspend fun signUpWithUsername(user: SignUpUser): Result<Unit>
 
     suspend fun generateSaltOf(username: String): Result<String>
     
