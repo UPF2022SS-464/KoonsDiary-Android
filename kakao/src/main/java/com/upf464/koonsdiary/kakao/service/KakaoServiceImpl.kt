@@ -16,7 +16,7 @@ internal class KakaoServiceImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ): KakaoService {
 
-    override suspend fun loginWithKakao(): Result<Unit> {
+    override suspend fun signInWithKakao(): Result<Unit> {
         val result = suspendCancellableCoroutine<Result<Unit>> { cancellable ->
             with(UserApiClient.instance) {
                 if (isKakaoTalkLoginAvailable(context)) {
@@ -24,6 +24,8 @@ internal class KakaoServiceImpl @Inject constructor(
                         error?.let {
                             cancellable.resume(Result.failure(error))
                         } ?: cancellable.resume(Result.success(Unit))
+
+                        // TODO("카톡 앱으로 로그인 실패했을 경우 웹뷰 띄우기")
                     }
                 } else {
                     loginWithKakaoAccount(context) { token, error ->

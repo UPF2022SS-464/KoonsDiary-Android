@@ -10,8 +10,8 @@ internal class UserRepositoryImpl @Inject constructor(
     private val remote: UserRemoteDataSource
 ) : UserRepository {
 
-    override suspend fun loginWithUsername(username: String, password: String): Result<Unit> {
-        return remote.loginWithUsername(username, password)
+    override suspend fun signInWithUsername(username: String, password: String): Result<Unit> {
+        return remote.signInWithUsername(username, password)
     }
 
     override suspend fun signUpWithAccount(user: SignUpUser): Result<Unit> {
