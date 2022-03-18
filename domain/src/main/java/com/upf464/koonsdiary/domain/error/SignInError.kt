@@ -1,6 +1,6 @@
 package com.upf464.koonsdiary.domain.error
 
-sealed class UserError(
+sealed class SignInError(
     message: String? = null,
     cause: Throwable? = null
 ) : Exception(message, cause) {
@@ -8,10 +8,12 @@ sealed class UserError(
     data class KakaoSignInCancel(
         override val message: String? = null,
         override val cause: Throwable? = null
-    ) : UserError(message, cause)
+    ) : SignInError(message, cause)
 
     data class KakaoSignInFailed(
         override val message: String? = null,
         override val cause: Throwable? = null
-    ) : UserError()
+    ) : SignInError()
+
+    object IncorrectUsernameOrPassword : SignInError()
 }
