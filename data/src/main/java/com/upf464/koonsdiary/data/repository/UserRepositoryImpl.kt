@@ -21,4 +21,8 @@ internal class UserRepositoryImpl @Inject constructor(
     override suspend fun generateSaltOf(username: String): Result<String> {
         return remote.generateSaltOf(username)
     }
+
+    override suspend fun fetchSaltOf(username: String): Result<String> {
+        return remote.fetchSaltOf(username)
+    }
 }

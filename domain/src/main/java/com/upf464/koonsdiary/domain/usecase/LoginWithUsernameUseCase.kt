@@ -13,10 +13,12 @@ internal class LoginWithUsernameUseCase @Inject constructor(
 ) : ResultUseCase<LoginWithUsernameRequest, EmptyResponse> {
 
     override suspend fun invoke(request: LoginWithUsernameRequest): Result<EmptyResponse> {
-        return userRepository.loginWithUsername(
-            request.username,
-            hashGenerator.hashPasswordWithSalt(request.password, request.username)
-        ).flatMap {
+        return userRepository.fetchSaltOf(request.username).flatMap { salt ->
+            userRepository.loginWithUsername(
+                request.username,
+                hashGenerator.hashPasswordWithSalt(request.password, salt)
+            )
+        }.flatMap {
             Result.success(EmptyResponse)
         }
     }
