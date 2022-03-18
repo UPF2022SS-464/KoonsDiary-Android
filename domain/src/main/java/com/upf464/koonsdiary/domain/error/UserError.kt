@@ -5,12 +5,12 @@ sealed class UserError(
     cause: Throwable? = null
 ) : Exception(message, cause) {
 
-    data class KakaoLoginCancel(
+    data class KakaoSignInCancel(
         override val message: String? = null,
         override val cause: Throwable? = null
     ) : UserError(message, cause)
 
-    data class KakaoLoginFailed(
+    data class KakaoSignInFailed(
         override val message: String? = null,
         override val cause: Throwable? = null
     ) : UserError()
