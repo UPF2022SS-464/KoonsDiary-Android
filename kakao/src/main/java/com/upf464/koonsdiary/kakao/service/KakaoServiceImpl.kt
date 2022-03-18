@@ -3,6 +3,7 @@ package com.upf464.koonsdiary.kakao.service
 import android.content.Context
 import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.upf464.koonsdiary.domain.common.errorMap
 import com.upf464.koonsdiary.domain.service.KakaoService
@@ -20,15 +21,21 @@ internal class KakaoServiceImpl @Inject constructor(
         val result = suspendCancellableCoroutine<Result<Unit>> { cancellable ->
             with(UserApiClient.instance) {
                 if (isKakaoTalkLoginAvailable(context)) {
-                    loginWithKakaoTalk(context) { token, error ->
+                    loginWithKakaoTalk(context) { _, error ->
                         error?.let {
-                            cancellable.resume(Result.failure(error))
-                        } ?: cancellable.resume(Result.success(Unit))
+                            if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                                cancellable.resume(Result.failure(error))
+                            }
 
-                        // TODO("카톡 앱으로 로그인 실패했을 경우 웹뷰 띄우기")
+                            loginWithKakaoAccount(context) { _, error ->
+                                error?.let {
+                                    cancellable.resume(Result.failure(error))
+                                } ?: cancellable.resume(Result.success(Unit))
+                            }
+                        } ?: cancellable.resume(Result.success(Unit))
                     }
                 } else {
-                    loginWithKakaoAccount(context) { token, error ->
+                    loginWithKakaoAccount(context) { _, error ->
                         error?.let {
                             cancellable.resume(Result.failure(error))
                         } ?: cancellable.resume(Result.success(Unit))
