@@ -12,4 +12,10 @@ sealed class SignUpError(
     object InvalidEmail : SignUpError()
 
     object InvalidNickname : SignUpError()
+
+    object DuplicatedUsername : SignUpError()
+
+    object DuplicatedEmail : SignUpError()
+
+    object DuplicatedKakaoUser : SignUpError()
 }
