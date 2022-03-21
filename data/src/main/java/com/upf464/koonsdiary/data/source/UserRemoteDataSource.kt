@@ -10,6 +10,8 @@ interface UserRemoteDataSource {
 
     suspend fun signInWithKakao(token: String): Result<Unit>
 
+    suspend fun signUpWithKakao(token: String, nickname: String): Result<Unit>
+
     suspend fun generateSaltOf(username: String): Result<String>
     
     suspend fun fetchSaltOf(username: String): Result<String>
