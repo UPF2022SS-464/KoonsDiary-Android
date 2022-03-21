@@ -42,5 +42,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
 
+    implementation "androidx.preference:preference-ktx:1.2.0"
+
     implementation project(path: ':data')
 }
