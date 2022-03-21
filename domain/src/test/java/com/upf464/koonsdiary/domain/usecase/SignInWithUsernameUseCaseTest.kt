@@ -37,7 +37,7 @@ class SignInWithUsernameUseCaseTest {
 
         coEvery {
             userRepository.signInWithUsername("username", "passwordWithSalt")
-        } returns Result.success(Unit)
+        } returns Result.success("token")
 
         val result = useCase(SignInWithUsernameRequest("username", "password"))
 

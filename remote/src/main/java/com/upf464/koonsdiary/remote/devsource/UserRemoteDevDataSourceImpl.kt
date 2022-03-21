@@ -7,12 +7,12 @@ import javax.inject.Inject
 internal class UserRemoteDevDataSourceImpl @Inject constructor(
 ): UserRemoteDataSource {
 
-    override suspend fun signInWithUsername(username: String, password: String): Result<Unit> {
-        return Result.success(Unit)
+    override suspend fun signInWithUsername(username: String, password: String): Result<String> {
+        return Result.success("")
     }
 
-    override suspend fun signUpWithUsername(user: SignUpUserData): Result<Unit> {
-        return Result.success(Unit)
+    override suspend fun signUpWithUsername(user: SignUpUserData): Result<String> {
+        return Result.success("")
     }
 
     override suspend fun signInWithKakao(token: String): Result<Unit> {
