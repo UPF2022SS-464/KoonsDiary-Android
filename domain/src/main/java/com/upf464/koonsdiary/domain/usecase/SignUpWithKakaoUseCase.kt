@@ -22,6 +22,8 @@ internal class SignUpWithKakaoUseCase @Inject constructor(
             } else Result.failure(error)
         }.flatMap {
             Result.success(EmptyResponse)
+        }.onSuccess {
+            userRepository.setAutoSignInWithKakao()
         }
     }
 
