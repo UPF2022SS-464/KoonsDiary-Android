@@ -18,7 +18,7 @@ internal class UserRepositoryImpl @Inject constructor(
     private val local: UserLocalDataSource
 ) : UserRepository {
 
-    override suspend fun signInWithUsername(username: String, password: String): Result<Unit> {
+    override suspend fun signInWithUsername(username: String, password: String): Result<String> {
         return remote.signInWithUsername(username, password).errorMap { error ->
             when (error) {
                 is SignInErrorData -> error.toDomain()
@@ -27,7 +27,7 @@ internal class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun signUpWithUsername(user: SignUpUser): Result<Unit> {
+    override suspend fun signUpWithUsername(user: SignUpUser): Result<String> {
         return remote.signUpWithUsername(user.toData())
     }
 
