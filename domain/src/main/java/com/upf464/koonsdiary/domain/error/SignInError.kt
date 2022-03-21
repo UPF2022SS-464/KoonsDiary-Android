@@ -15,5 +15,9 @@ sealed class SignInError(
         override val cause: Throwable? = null
     ) : SignInError()
 
+    object AccessTokenExpired : SignInError()
+
+    object NoSuchKakaoUser : SignInError()
+
     object IncorrectUsernameOrPassword : SignInError()
 }

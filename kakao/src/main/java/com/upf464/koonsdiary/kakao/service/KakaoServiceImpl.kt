@@ -1,11 +1,13 @@
 package com.upf464.koonsdiary.kakao.service
 
 import android.content.Context
+import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.upf464.koonsdiary.domain.common.errorMap
+import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.service.KakaoService
 import com.upf464.koonsdiary.kakao.mapper.toDomain
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -51,5 +53,15 @@ internal class KakaoServiceImpl @Inject constructor(
                 else -> Exception(error)
             }
         }
+    }
+
+    override suspend fun getAccessToken(): Result<String> {
+        val token = suspendCancellableCoroutine<String?> { cancellable ->
+            val token = AuthApiClient.instance.tokenManagerProvider.manager.getToken()?.accessToken
+            cancellable.resume(token)
+        }
+
+        return token?.let { Result.success(token) }
+            ?: Result.failure(SignInError.AccessTokenExpired)
     }
 }

@@ -15,6 +15,10 @@ internal class UserRemoteDevDataSourceImpl @Inject constructor(
         return Result.success(Unit)
     }
 
+    override suspend fun signInWithKakao(token: String): Result<Unit> {
+        return Result.success(Unit)
+    }
+
     override suspend fun generateSaltOf(username: String): Result<String> {
         return Result.success("")
     }
