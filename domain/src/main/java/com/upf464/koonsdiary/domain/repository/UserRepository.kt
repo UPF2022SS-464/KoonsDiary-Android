@@ -5,13 +5,15 @@ import com.upf464.koonsdiary.domain.model.SignUpUser
 
 interface UserRepository {
 
-    suspend fun signInWithUsername(username: String, password: String) : Result<String>
-
     suspend fun signUpWithUsername(user: SignUpUser): Result<String>
+
+    suspend fun signUpWithKakao(token: String, nickname: String): Result<Unit>
+
+    suspend fun signInWithUsername(username: String, password: String) : Result<String>
 
     suspend fun signInWithKakao(token: String): Result<Unit>
 
-    suspend fun signUpWithKakao(token: String, nickname: String): Result<Unit>
+    suspend fun signInWithToken(token: String): Result<String?>
 
     suspend fun generateSaltOf(username: String): Result<String>
     
