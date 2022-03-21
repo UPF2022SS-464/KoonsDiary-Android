@@ -17,3 +17,12 @@ inline fun <T> Result<T>.errorMap(
         else -> Result.failure(transform(exception))
     }
 }
+
+inline fun <T> Result<T>.handleWith(
+    transform: (Throwable) -> Result<T>
+): Result<T> {
+    return when (val exception = exceptionOrNull()) {
+        null -> this
+        else -> transform(exception)
+    }
+}
