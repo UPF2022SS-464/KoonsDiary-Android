@@ -35,6 +35,10 @@ internal class UserRepositoryImpl @Inject constructor(
         return remote.signInWithKakao(token)
     }
 
+    override suspend fun signInWithToken(token: String): Result<String?> {
+        return remote.signInWithToken(token)
+    }
+
     override suspend fun signUpWithKakao(token: String, nickname: String): Result<Unit> {
         return remote.signUpWithKakao(token, nickname)
     }

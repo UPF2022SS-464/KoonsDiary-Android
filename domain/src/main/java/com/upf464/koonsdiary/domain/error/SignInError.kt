@@ -19,5 +19,7 @@ sealed class SignInError(
 
     object NoSuchKakaoUser : SignInError()
 
+    object NoAutoSignIn : SignInError()
+
     object IncorrectUsernameOrPassword : SignInError()
 }
