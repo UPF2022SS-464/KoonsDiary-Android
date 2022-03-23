@@ -1,6 +1,8 @@
 package com.upf464.koonsdiary.remote.di
 
+import com.upf464.koonsdiary.data.source.DiaryRemoteDataSource
 import com.upf464.koonsdiary.data.source.UserRemoteDataSource
+import com.upf464.koonsdiary.remote.devsource.DiaryRemoteDevDataSourceImpl
 import com.upf464.koonsdiary.remote.devsource.UserRemoteDevDataSourceImpl
 import dagger.Binds
 import dagger.Module
@@ -15,4 +17,9 @@ internal abstract class DataSourceModule {
     abstract fun bindUserRemoteDataSource(
         source: UserRemoteDevDataSourceImpl
     ): UserRemoteDataSource
+
+    @Binds
+    abstract fun bindDiaryRemoteDataSource(
+        source: DiaryRemoteDevDataSourceImpl
+    ): DiaryRemoteDataSource
 }

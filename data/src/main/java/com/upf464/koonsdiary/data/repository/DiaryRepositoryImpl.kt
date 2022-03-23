@@ -10,7 +10,7 @@ internal class DiaryRepositoryImpl @Inject constructor(
     private val remote: DiaryRemoteDataSource
 ) : DiaryRepository {
 
-    override fun fetchSentimentOf(content: String): Result<Sentiment> {
+    override suspend fun fetchSentimentOf(content: String): Result<Sentiment> {
         return remote.fetchSentimentOf(content).flatMap { sentimentOrder ->
             Result.success(Sentiment.values()[sentimentOrder])
         }
