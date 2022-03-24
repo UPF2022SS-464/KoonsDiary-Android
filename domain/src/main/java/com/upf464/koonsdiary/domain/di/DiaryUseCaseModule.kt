@@ -1,7 +1,10 @@
 package com.upf464.koonsdiary.domain.di
 
+import com.upf464.koonsdiary.domain.request.AddDiaryRequest
 import com.upf464.koonsdiary.domain.request.AnalyzeSentimentRequest
+import com.upf464.koonsdiary.domain.response.AddDiaryResponse
 import com.upf464.koonsdiary.domain.response.AnalyzeSentimentResponse
+import com.upf464.koonsdiary.domain.usecase.AddDiaryUseCase
 import com.upf464.koonsdiary.domain.usecase.AnalyzeSentimentUseCase
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import dagger.Binds
@@ -17,4 +20,9 @@ internal abstract class DiaryUseCaseModule {
     abstract fun bindAnalyzeSentimentUseCase(
         useCase: AnalyzeSentimentUseCase
     ) : ResultUseCase<AnalyzeSentimentRequest, AnalyzeSentimentResponse>
+
+    @Binds
+    abstract fun bindAddDiaryUseCase(
+        useCase: AddDiaryUseCase
+    ) : ResultUseCase<AddDiaryRequest, AddDiaryResponse>
 }
