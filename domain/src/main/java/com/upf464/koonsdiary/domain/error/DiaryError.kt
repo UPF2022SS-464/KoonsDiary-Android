@@ -6,4 +6,6 @@ sealed class DiaryError(
 ) : Exception(message, cause) {
 
     object EmptyContent : DiaryError()
+
+    object IncorrectDiaryId : DiaryError()
 }
