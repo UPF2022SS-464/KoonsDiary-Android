@@ -1,4 +1,4 @@
-package com.upf464.koonsdiary.domain.usecase
+package com.upf464.koonsdiary.domain.usecase.user
 
 import com.upf464.koonsdiary.domain.common.HashGenerator
 import com.upf464.koonsdiary.domain.error.SignInError
