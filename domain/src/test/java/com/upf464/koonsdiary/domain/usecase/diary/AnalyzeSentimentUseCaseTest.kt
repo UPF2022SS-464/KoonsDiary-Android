@@ -1,10 +1,10 @@
-package com.upf464.koonsdiary.domain.usecase
+package com.upf464.koonsdiary.domain.usecase.diary
 
 import com.upf464.koonsdiary.domain.common.DiaryValidator
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.AddDiaryRequest
+import com.upf464.koonsdiary.domain.request.AnalyzeSentimentRequest
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockkClass
@@ -12,19 +12,18 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import java.time.LocalDate
 
-class AddDiaryUseCaseTest {
+class AnalyzeSentimentUseCaseTest {
 
     private lateinit var validator: DiaryValidator
     private lateinit var diaryRepository: DiaryRepository
-    private lateinit var useCase: AddDiaryUseCase
+    private lateinit var useCase: AnalyzeSentimentUseCase
 
     @Before
     fun setup() {
         validator = mockkClass(DiaryValidator::class)
         diaryRepository = mockkClass(DiaryRepository::class)
-        useCase = AddDiaryUseCase(
+        useCase = AnalyzeSentimentUseCase(
             validator = validator,
             diaryRepository = diaryRepository
         )
@@ -33,22 +32,19 @@ class AddDiaryUseCaseTest {
     @Test
     fun invoke_validDiary_isSuccess(): Unit = runBlocking {
         coEvery {
-            diaryRepository.addDiary(any())
-        } returns Result.success(1)
+            diaryRepository.fetchSentimentOf("content")
+        } returns Result.success(Sentiment.GOOD)
 
         every {
             validator.validateContent("content")
         } returns true
 
-        val result = useCase(AddDiaryRequest(
-            date = LocalDate.of(2022, 3, 25),
-            content = "content",
-            sentiment = Sentiment.GOOD,
-            imageList = emptyList()
-        ))
+        val result = useCase(
+            AnalyzeSentimentRequest("content")
+        )
 
         assertTrue(result.isSuccess)
-        assertEquals(1, result.getOrNull()?.diaryId)
+        assertEquals(Sentiment.GOOD, result.getOrNull()?.sentiment)
     }
 
     @Test
@@ -57,12 +53,9 @@ class AddDiaryUseCaseTest {
             validator.validateContent("")
         } returns false
 
-        val result = useCase(AddDiaryRequest(
-            date = LocalDate.of(2022, 3, 25),
-            content = "",
-            sentiment = Sentiment.GOOD,
-            imageList = emptyList()
-        ))
+        val result = useCase(
+            AnalyzeSentimentRequest("")
+        )
 
         assertFalse(result.isSuccess)
         assertEquals(DiaryError.EmptyContent, result.exceptionOrNull())

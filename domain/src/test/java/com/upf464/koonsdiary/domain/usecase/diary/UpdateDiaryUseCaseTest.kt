@@ -1,4 +1,4 @@
-package com.upf464.koonsdiary.domain.usecase
+package com.upf464.koonsdiary.domain.usecase.diary
 
 import com.upf464.koonsdiary.domain.common.DiaryValidator
 import com.upf464.koonsdiary.domain.error.DiaryError

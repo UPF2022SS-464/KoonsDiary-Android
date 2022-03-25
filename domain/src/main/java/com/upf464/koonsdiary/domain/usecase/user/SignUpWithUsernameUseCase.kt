@@ -1,4 +1,4 @@
-package com.upf464.koonsdiary.domain.usecase
+package com.upf464.koonsdiary.domain.usecase.user
 
 import com.upf464.koonsdiary.domain.common.HashGenerator
 import com.upf464.koonsdiary.domain.common.SignUpValidator
@@ -8,6 +8,7 @@ import com.upf464.koonsdiary.domain.model.SignUpUser
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.request.SignUpWithUsernameRequest
 import com.upf464.koonsdiary.domain.response.EmptyResponse
+import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import javax.inject.Inject
 
 internal class SignUpWithUsernameUseCase @Inject constructor(

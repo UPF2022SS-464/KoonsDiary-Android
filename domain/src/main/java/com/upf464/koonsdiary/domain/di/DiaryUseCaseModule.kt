@@ -6,10 +6,10 @@ import com.upf464.koonsdiary.domain.request.UpdateDiaryRequest
 import com.upf464.koonsdiary.domain.response.AddDiaryResponse
 import com.upf464.koonsdiary.domain.response.AnalyzeSentimentResponse
 import com.upf464.koonsdiary.domain.response.UpdateDiaryResponse
-import com.upf464.koonsdiary.domain.usecase.AddDiaryUseCase
-import com.upf464.koonsdiary.domain.usecase.AnalyzeSentimentUseCase
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
-import com.upf464.koonsdiary.domain.usecase.UpdateDiaryUseCase
+import com.upf464.koonsdiary.domain.usecase.diary.AddDiaryUseCase
+import com.upf464.koonsdiary.domain.usecase.diary.AnalyzeSentimentUseCase
+import com.upf464.koonsdiary.domain.usecase.diary.UpdateDiaryUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
