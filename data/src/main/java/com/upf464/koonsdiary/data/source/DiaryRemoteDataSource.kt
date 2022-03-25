@@ -7,4 +7,6 @@ interface DiaryRemoteDataSource {
     suspend fun fetchSentimentOf(content: String): Result<Int>
 
     suspend fun addDiary(diary: DiaryData): Result<Int>
+
+    suspend fun updateDiary(diary: DiaryData): Result<Int>
 }

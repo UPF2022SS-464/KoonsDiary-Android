@@ -2,11 +2,14 @@ package com.upf464.koonsdiary.domain.di
 
 import com.upf464.koonsdiary.domain.request.AddDiaryRequest
 import com.upf464.koonsdiary.domain.request.AnalyzeSentimentRequest
+import com.upf464.koonsdiary.domain.request.UpdateDiaryRequest
 import com.upf464.koonsdiary.domain.response.AddDiaryResponse
 import com.upf464.koonsdiary.domain.response.AnalyzeSentimentResponse
+import com.upf464.koonsdiary.domain.response.UpdateDiaryResponse
 import com.upf464.koonsdiary.domain.usecase.AddDiaryUseCase
 import com.upf464.koonsdiary.domain.usecase.AnalyzeSentimentUseCase
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
+import com.upf464.koonsdiary.domain.usecase.UpdateDiaryUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,4 +28,9 @@ internal abstract class DiaryUseCaseModule {
     abstract fun bindAddDiaryUseCase(
         useCase: AddDiaryUseCase
     ) : ResultUseCase<AddDiaryRequest, AddDiaryResponse>
+
+    @Binds
+    abstract fun bindUpdateDiaryUseCase(
+        useCase: UpdateDiaryUseCase
+    ) : ResultUseCase<UpdateDiaryRequest, UpdateDiaryResponse>
 }
