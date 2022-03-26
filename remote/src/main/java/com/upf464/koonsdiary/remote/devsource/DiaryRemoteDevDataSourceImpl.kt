@@ -18,4 +18,8 @@ internal class DiaryRemoteDevDataSourceImpl @Inject constructor(
     override suspend fun updateDiary(diary: DiaryData): Result<Int> {
         return Result.success(0)
     }
+
+    override suspend fun deleteDiary(diaryId: Int): Result<Unit> {
+        return Result.success(Unit)
+    }
 }

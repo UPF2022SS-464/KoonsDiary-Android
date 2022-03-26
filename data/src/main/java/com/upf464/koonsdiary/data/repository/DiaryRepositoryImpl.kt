@@ -25,4 +25,8 @@ internal class DiaryRepositoryImpl @Inject constructor(
     override suspend fun updateDiary(diary: Diary): Result<Int> {
         return remote.updateDiary(diary.toData())
     }
+
+    override suspend fun deleteDiary(diaryId: Int): Result<Unit> {
+        return remote.deleteDiary(diaryId)
+    }
 }
