@@ -5,9 +5,10 @@ import com.upf464.koonsdiary.domain.model.SignInType
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.request.user.AutoSignInRequest
 import com.upf464.koonsdiary.domain.service.KakaoService
+import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.mockkClass
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -15,14 +16,14 @@ import org.junit.Before
 import org.junit.Test
 
 class AutoSignInUseCaseTest {
-    private lateinit var kakaoService: KakaoService
-    private lateinit var userRepository: UserRepository
+
+    @MockK private lateinit var kakaoService: KakaoService
+    @MockK private lateinit var userRepository: UserRepository
     private lateinit var useCase: AutoSignInUseCase
 
     @Before
     fun setup() {
-        kakaoService = mockkClass(KakaoService::class)
-        userRepository = mockkClass(UserRepository::class)
+        MockKAnnotations.init(this)
         useCase = AutoSignInUseCase(
             userRepository = userRepository,
             kakaoService = kakaoService

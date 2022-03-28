@@ -4,9 +4,10 @@ import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.request.user.SignInWithKakaoRequest
 import com.upf464.koonsdiary.domain.service.KakaoService
+import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.mockkClass
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -15,14 +16,13 @@ import org.junit.Test
 
 class SignInWithKakaoUseCaseTest {
 
-    private lateinit var kakaoService: KakaoService
-    private lateinit var userRepository: UserRepository
+    @MockK private lateinit var kakaoService: KakaoService
+    @MockK private lateinit var userRepository: UserRepository
     private lateinit var useCase: SignInWithKakaoUseCase
 
     @Before
     fun setup() {
-        kakaoService = mockkClass(KakaoService::class)
-        userRepository = mockkClass(UserRepository::class)
+        MockKAnnotations.init(this)
         useCase = SignInWithKakaoUseCase(kakaoService, userRepository)
     }
 
