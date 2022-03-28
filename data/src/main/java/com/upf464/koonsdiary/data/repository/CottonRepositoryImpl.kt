@@ -12,8 +12,8 @@ internal class CottonRepositoryImpl @Inject constructor(
 ): CottonRepository{
 
     override suspend fun getRandomQuestion(): Result<Question> {
-        return remote.getRandomQuestion().map { questiondata ->
-            questiondata.toDomain()
+        return remote.getRandomQuestion().map { questionData ->
+            questionData.toDomain()
         }
     }
 }
