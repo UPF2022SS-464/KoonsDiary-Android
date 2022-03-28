@@ -8,6 +8,6 @@ internal class CottonRemoteDevDataSourceImpl @Inject constructor(
 ): CottonRemoteDataSource {
 
     override suspend fun getRandomQuestion(): Result<QuestionData> {
-        return Result.success(QuestionData(id= 1, questionKR= "", questionUS= ""))
+        return Result.success(QuestionData(id= 1, korean= "", english= ""))
     }
 }
