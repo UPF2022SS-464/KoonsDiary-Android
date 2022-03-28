@@ -11,4 +11,6 @@ interface DiaryRemoteDataSource {
     suspend fun updateDiary(diary: DiaryData): Result<Int>
 
     suspend fun deleteDiary(diaryId: Int): Result<Unit>
+
+    suspend fun fetchDiary(diaryId: Int): Result<DiaryData>
 }

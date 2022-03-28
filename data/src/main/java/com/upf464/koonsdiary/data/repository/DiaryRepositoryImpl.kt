@@ -1,6 +1,7 @@
 package com.upf464.koonsdiary.data.repository
 
 import com.upf464.koonsdiary.data.mapper.toData
+import com.upf464.koonsdiary.data.mapper.toDomain
 import com.upf464.koonsdiary.data.source.DiaryRemoteDataSource
 import com.upf464.koonsdiary.domain.common.flatMap
 import com.upf464.koonsdiary.domain.model.Diary
@@ -28,5 +29,11 @@ internal class DiaryRepositoryImpl @Inject constructor(
 
     override suspend fun deleteDiary(diaryId: Int): Result<Unit> {
         return remote.deleteDiary(diaryId)
+    }
+
+    override suspend fun fetchDiary(diaryId: Int): Result<Diary> {
+        return remote.fetchDiary(diaryId).map { diary ->
+            diary.toDomain()
+        }
     }
 }
