@@ -8,3 +8,9 @@ internal fun Question.toData() = QuestionData(
     questionKR = questionKR,
     questionUS = questionUS
 )
+
+internal fun QuestionData.toDT() = Question(
+    id = id,
+    questionKR = questionKR,
+    questionUS = questionUS
+)

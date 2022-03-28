@@ -1,7 +1,7 @@
 package com.upf464.koonsdiary.domain.model
 
 data class QuestionAnswer(
-    val id: String,
+    val id: Int,
     val writer: String,
     val date: String,
     val FKquestion : String, //FK
