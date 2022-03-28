@@ -11,8 +11,8 @@ internal class CottonRepositoryImpl @Inject constructor(
     private val remote: CottonRemoteDataSource,
 ) : CottonRepository {
 
-    override suspend fun getRandomQuestion(): Result<Question> {
-        return remote.getRandomQuestion().map { questionData ->
+    override suspend fun fetchRandomQuestion(): Result<Question> {
+        return remote.fetchRandomQuestion().map { questionData ->
             questionData.toDomain()
         }
     }

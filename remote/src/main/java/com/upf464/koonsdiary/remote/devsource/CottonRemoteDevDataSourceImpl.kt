@@ -7,7 +7,7 @@ import javax.inject.Inject
 internal class CottonRemoteDevDataSourceImpl @Inject constructor(
 ): CottonRemoteDataSource {
 
-    override suspend fun getRandomQuestion(): Result<QuestionData> {
-        return Result.success(QuestionData(id= 1, korean= "", english= ""))
+    override suspend fun fetchRandomQuestion(): Result<QuestionData> {
+        return Result.success(QuestionData(id = 1, korean = "", english = ""))
     }
 }
