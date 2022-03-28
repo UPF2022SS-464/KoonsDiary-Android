@@ -2,7 +2,7 @@ package com.upf464.koonsdiary.domain.usecase.diary
 
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.DeleteDiaryRequest
+import com.upf464.koonsdiary.domain.request.diary.DeleteDiaryRequest
 import io.mockk.coEvery
 import io.mockk.mockkClass
 import kotlinx.coroutines.runBlocking
