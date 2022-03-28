@@ -5,12 +5,12 @@ import com.upf464.koonsdiary.domain.model.Question
 
 internal fun Question.toData() = QuestionData(
     id = id,
-    questionKR = questionKR,
-    questionUS = questionUS
+    korean = korean,
+    english = english
 )
 
 internal fun QuestionData.toDomain() = Question(
     id = id,
-    questionKR = questionKR,
-    questionUS = questionUS
+    korean = korean,
+    english = english
 )
