@@ -4,5 +4,5 @@ import com.upf464.koonsdiary.data.model.QuestionData
 
 interface CottonRemoteDataSource {
 
-    suspend fun getRandomQuestion(): Result<QuestionData>
+    suspend fun fetchRandomQuestion(): Result<QuestionData>
 }

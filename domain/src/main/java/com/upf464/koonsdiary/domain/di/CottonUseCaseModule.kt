@@ -1,9 +1,9 @@
 package com.upf464.koonsdiary.domain.di
 
-import com.upf464.koonsdiary.domain.request.cotton.GetRandomQuestionRequest
-import com.upf464.koonsdiary.domain.response.cotton.GetRandomQuestionResponse
+import com.upf464.koonsdiary.domain.request.cotton.FetchRandomQuestionRequest
+import com.upf464.koonsdiary.domain.response.cotton.FetchRandomQuestionResponse
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
-import com.upf464.koonsdiary.domain.usecase.cotton.GetRandomQuestionUseCase
+import com.upf464.koonsdiary.domain.usecase.cotton.FetchRandomQuestionUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,8 +15,8 @@ import dagger.hilt.components.SingletonComponent
 internal abstract class CottonUseCaseModule {
 
     @Binds
-    abstract fun bindGetRandomQuestionUseCase(
-        useCase: GetRandomQuestionUseCase
-    ): ResultUseCase<GetRandomQuestionRequest, GetRandomQuestionResponse>
+    abstract fun bindFetchRandomQuestionUseCase(
+        useCase: FetchRandomQuestionUseCase
+    ): ResultUseCase<FetchRandomQuestionRequest, FetchRandomQuestionResponse>
 
 }
