@@ -41,13 +41,13 @@ class DeleteDiaryUseCaseTest {
     fun invoke_invalidDiaryId_isFailure(): Unit = runBlocking {
         coEvery {
             diaryRepository.deleteDiary(1)
-        } returns Result.failure(DiaryError.IncorrectDiaryId)
+        } returns Result.failure(DiaryError.InvalidDiaryId)
 
         val result = useCase(
             DeleteDiaryRequest(1)
         )
 
         assertTrue(result.isFailure)
-        assertEquals(DiaryError.IncorrectDiaryId, result.exceptionOrNull())
+        assertEquals(DiaryError.InvalidDiaryId, result.exceptionOrNull())
     }
 }

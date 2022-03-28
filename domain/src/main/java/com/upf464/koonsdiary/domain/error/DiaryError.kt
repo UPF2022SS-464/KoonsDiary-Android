@@ -7,5 +7,5 @@ sealed class DiaryError(
 
     object EmptyContent : DiaryError()
 
-    object IncorrectDiaryId : DiaryError()
+    object InvalidDiaryId : DiaryError()
 }
