@@ -6,7 +6,6 @@ import com.upf464.koonsdiary.data.mapper.toDomain
 import com.upf464.koonsdiary.data.source.UserLocalDataSource
 import com.upf464.koonsdiary.data.source.UserRemoteDataSource
 import com.upf464.koonsdiary.domain.common.errorMap
-import com.upf464.koonsdiary.domain.common.flatMap
 import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.model.SignInType
 import com.upf464.koonsdiary.domain.model.SignUpUser
@@ -64,8 +63,8 @@ internal class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getAutoSignIn(): Result<SignInType?> {
-        return local.getAutoSignInType().flatMap { type ->
-            Result.success(type?.let { SignInType.valueOf(type) })
+        return local.getAutoSignInType().map { type ->
+            type?.let { SignInType.valueOf(type) }
         }
     }
 

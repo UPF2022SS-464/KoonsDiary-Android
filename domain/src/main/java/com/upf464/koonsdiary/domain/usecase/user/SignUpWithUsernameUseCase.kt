@@ -42,8 +42,8 @@ internal class SignUpWithUsernameUseCase @Inject constructor(
             userRepository.signUpWithUsername(user)
         }.onSuccess { token ->
             userRepository.setAutoSignInWithToken(token)
-        }.flatMap {
-            Result.success(EmptyResponse)
+        }.map {
+            EmptyResponse
         }
     }
 }

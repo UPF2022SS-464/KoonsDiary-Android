@@ -21,8 +21,8 @@ internal class SignUpWithKakaoUseCase @Inject constructor(
                 kakaoService.signInWithKakao()
                 trySignUpWithToken(request.nickname)
             } else Result.failure(error)
-        }.flatMap {
-            Result.success(EmptyResponse)
+        }.map {
+            EmptyResponse
         }.onSuccess {
             userRepository.setAutoSignInWithKakao()
         }

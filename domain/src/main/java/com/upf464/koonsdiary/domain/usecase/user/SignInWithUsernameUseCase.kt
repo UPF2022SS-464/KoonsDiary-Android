@@ -19,8 +19,8 @@ internal class SignInWithUsernameUseCase @Inject constructor(
                 request.username,
                 hashGenerator.hashPasswordWithSalt(request.password, salt)
             )
-        }.flatMap {
-            Result.success(EmptyResponse)
+        }.map {
+            EmptyResponse
         }
     }
 }

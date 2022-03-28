@@ -1,7 +1,6 @@
 package com.upf464.koonsdiary.domain.usecase.diary
 
 import com.upf464.koonsdiary.domain.common.DiaryValidator
-import com.upf464.koonsdiary.domain.common.flatMap
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.model.Diary
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
@@ -28,8 +27,8 @@ internal class UpdateDiaryUseCase @Inject constructor(
             imageList = request.imageList
         )
 
-        return diaryRepository.updateDiary(diary).flatMap { diaryId ->
-            Result.success(UpdateDiaryResponse(diaryId))
+        return diaryRepository.updateDiary(diary).map { diaryId ->
+            UpdateDiaryResponse(diaryId)
         }
     }
 }

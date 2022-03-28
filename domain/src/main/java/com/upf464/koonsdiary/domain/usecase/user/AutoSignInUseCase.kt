@@ -22,8 +22,8 @@ internal class AutoSignInUseCase @Inject constructor(
                 SignInType.KAKAO -> autoSignInWithKakao()
                 null -> Result.failure(SignInError.NoAutoSignIn)
             }
-        }.flatMap {
-            Result.success(EmptyResponse)
+        }.map {
+            EmptyResponse
         }.onFailure { error ->
             if (error !is SignInError.NoAutoSignIn) {
                 userRepository.clearAutoSignIn()
@@ -34,12 +34,11 @@ internal class AutoSignInUseCase @Inject constructor(
     private suspend fun autoSignInWithToken(): Result<Unit> {
         return userRepository.getAutoSignInToken().flatMap { token ->
             userRepository.signInWithToken(token)
-        }.flatMap { token ->
+        }.onSuccess { token ->
             token?.let {
                 userRepository.setAutoSignInWithToken(token)
             }
-            Result.success(Unit)
-        }
+        }.map { }
     }
 
     private suspend fun autoSignInWithKakao(): Result<Unit> {
