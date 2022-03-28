@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 internal class CottonRepositoryImpl @Inject constructor(
     private val remote: CottonRemoteDataSource,
-): CottonRepository{
+) : CottonRepository {
 
     override suspend fun getRandomQuestion(): Result<Question> {
         return remote.getRandomQuestion().map { questionData ->
