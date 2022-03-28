@@ -4,6 +4,6 @@ data class QuestionAnswer(
     val id: Int,
     val writer: String,
     val date: String,
-    val FKquestion : String, //FK
+    val questionId: String,
     val content: String
 )
