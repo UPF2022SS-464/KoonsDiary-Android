@@ -35,4 +35,12 @@ internal class DiaryRepositoryImpl @Inject constructor(
             diary.toDomain()
         }
     }
+
+    override suspend fun fetchMonthlySentiment(year: Int, month: Int): Result<List<Sentiment?>> {
+        return remote.fetchMonthlySentiment(year, month).map { sentimentList ->
+            sentimentList.map { sentiment ->
+                sentiment?.let { Sentiment.values()[it] }
+            }
+        }
+    }
 }

@@ -14,4 +14,6 @@ interface DiaryRepository {
     suspend fun deleteDiary(diaryId: Int): Result<Unit>
 
     suspend fun fetchDiary(diaryId: Int): Result<Diary>
+
+    suspend fun fetchMonthlySentiment(year: Int, month: Int): Result<List<Sentiment?>>
 }

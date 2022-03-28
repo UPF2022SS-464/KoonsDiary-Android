@@ -13,4 +13,6 @@ interface DiaryRemoteDataSource {
     suspend fun deleteDiary(diaryId: Int): Result<Unit>
 
     suspend fun fetchDiary(diaryId: Int): Result<DiaryData>
+
+    suspend fun fetchMonthlySentiment(year: Int, month: Int): Result<List<Int?>>
 }
