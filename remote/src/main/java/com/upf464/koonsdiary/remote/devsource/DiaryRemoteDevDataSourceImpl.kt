@@ -22,4 +22,8 @@ internal class DiaryRemoteDevDataSourceImpl @Inject constructor(
     override suspend fun deleteDiary(diaryId: Int): Result<Unit> {
         return Result.success(Unit)
     }
+
+    override suspend fun fetchDiary(diaryId: Int): Result<DiaryData> {
+        return Result.success(DiaryData())
+    }
 }
