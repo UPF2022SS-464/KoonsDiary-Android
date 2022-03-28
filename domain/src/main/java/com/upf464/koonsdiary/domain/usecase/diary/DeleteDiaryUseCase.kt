@@ -1,6 +1,5 @@
 package com.upf464.koonsdiary.domain.usecase.diary
 
-import com.upf464.koonsdiary.domain.common.flatMap
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
 import com.upf464.koonsdiary.domain.request.DeleteDiaryRequest
 import com.upf464.koonsdiary.domain.response.EmptyResponse
@@ -12,8 +11,8 @@ internal class DeleteDiaryUseCase @Inject constructor(
 ) : ResultUseCase<DeleteDiaryRequest, EmptyResponse> {
 
     override suspend fun invoke(request: DeleteDiaryRequest): Result<EmptyResponse> {
-        return diaryRepository.deleteDiary(request.diaryId).flatMap {
-            Result.success(EmptyResponse)
+        return diaryRepository.deleteDiary(request.diaryId).map {
+            EmptyResponse
         }
     }
 }

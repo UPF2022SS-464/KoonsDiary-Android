@@ -1,7 +1,6 @@
 package com.upf464.koonsdiary.domain.usecase.diary
 
 import com.upf464.koonsdiary.domain.common.DiaryValidator
-import com.upf464.koonsdiary.domain.common.flatMap
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
 import com.upf464.koonsdiary.domain.request.AnalyzeSentimentRequest
@@ -19,8 +18,8 @@ internal class AnalyzeSentimentUseCase @Inject constructor(
             return Result.failure(DiaryError.EmptyContent)
         }
 
-        return diaryRepository.fetchSentimentOf(request.content).flatMap { sentiment ->
-            Result.success(AnalyzeSentimentResponse(sentiment))
+        return diaryRepository.fetchSentimentOf(request.content).map { sentiment ->
+            AnalyzeSentimentResponse(sentiment)
         }
     }
 }

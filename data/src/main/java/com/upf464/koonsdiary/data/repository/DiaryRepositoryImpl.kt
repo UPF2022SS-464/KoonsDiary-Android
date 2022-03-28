@@ -3,7 +3,6 @@ package com.upf464.koonsdiary.data.repository
 import com.upf464.koonsdiary.data.mapper.toData
 import com.upf464.koonsdiary.data.mapper.toDomain
 import com.upf464.koonsdiary.data.source.DiaryRemoteDataSource
-import com.upf464.koonsdiary.domain.common.flatMap
 import com.upf464.koonsdiary.domain.model.Diary
 import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
@@ -14,8 +13,8 @@ internal class DiaryRepositoryImpl @Inject constructor(
 ) : DiaryRepository {
 
     override suspend fun fetchSentimentOf(content: String): Result<Sentiment> {
-        return remote.fetchSentimentOf(content).flatMap { sentimentOrder ->
-            Result.success(Sentiment.values()[sentimentOrder])
+        return remote.fetchSentimentOf(content).map { sentimentOrder ->
+            Sentiment.values()[sentimentOrder]
         }
     }
 
