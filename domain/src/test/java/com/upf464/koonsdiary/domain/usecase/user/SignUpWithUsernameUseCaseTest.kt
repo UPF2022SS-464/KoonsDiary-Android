@@ -5,10 +5,11 @@ import com.upf464.koonsdiary.domain.common.SignUpValidator
 import com.upf464.koonsdiary.domain.error.SignUpError
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.request.user.SignUpWithUsernameRequest
+import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.mockkClass
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before
@@ -16,16 +17,14 @@ import org.junit.Test
 
 class SignUpWithUsernameUseCaseTest {
 
-    private lateinit var userRepository: UserRepository
-    private lateinit var validator: SignUpValidator
-    private lateinit var hashGenerator: HashGenerator
+    @MockK private lateinit var userRepository: UserRepository
+    @MockK private lateinit var validator: SignUpValidator
+    @MockK private lateinit var hashGenerator: HashGenerator
     private lateinit var useCase: SignUpWithUsernameUseCase
 
     @Before
     fun setup() {
-        userRepository = mockkClass(UserRepository::class)
-        validator = mockkClass(SignUpValidator::class)
-        hashGenerator = mockkClass(HashGenerator::class)
+        MockKAnnotations.init(this)
         useCase = SignUpWithUsernameUseCase(
             userRepository = userRepository,
             validator = validator,

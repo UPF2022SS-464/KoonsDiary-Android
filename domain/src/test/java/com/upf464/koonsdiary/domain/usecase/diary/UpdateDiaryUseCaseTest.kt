@@ -5,9 +5,10 @@ import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
 import com.upf464.koonsdiary.domain.request.diary.UpdateDiaryRequest
+import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.mockkClass
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Assert.assertEquals
@@ -18,14 +19,13 @@ import java.time.LocalDate
 
 class UpdateDiaryUseCaseTest {
 
-    private lateinit var validator: DiaryValidator
-    private lateinit var diaryRepository: DiaryRepository
+    @MockK private lateinit var validator: DiaryValidator
+    @MockK private lateinit var diaryRepository: DiaryRepository
     private lateinit var useCase: UpdateDiaryUseCase
 
     @Before
     fun setup() {
-        validator = mockkClass(DiaryValidator::class)
-        diaryRepository = mockkClass(DiaryRepository::class)
+        MockKAnnotations.init(this)
         useCase = UpdateDiaryUseCase(
             validator = validator,
             diaryRepository = diaryRepository

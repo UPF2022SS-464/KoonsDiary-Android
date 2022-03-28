@@ -3,8 +3,9 @@ package com.upf464.koonsdiary.domain.usecase.diary
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
 import com.upf464.koonsdiary.domain.request.diary.DeleteDiaryRequest
+import io.mockk.MockKAnnotations
 import io.mockk.coEvery
-import io.mockk.mockkClass
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -13,12 +14,12 @@ import org.junit.Test
 
 class DeleteDiaryUseCaseTest {
 
-    private lateinit var diaryRepository: DiaryRepository
+    @MockK private lateinit var diaryRepository: DiaryRepository
     private lateinit var useCase: DeleteDiaryUseCase
 
     @Before
     fun setup() {
-        diaryRepository = mockkClass(DiaryRepository::class)
+        MockKAnnotations.init(this)
         useCase = DeleteDiaryUseCase(
             diaryRepository = diaryRepository
         )

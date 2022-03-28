@@ -4,9 +4,10 @@ import com.upf464.koonsdiary.domain.common.HashGenerator
 import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.request.user.SignInWithUsernameRequest
+import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.mockkClass
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Before
@@ -14,14 +15,13 @@ import org.junit.Test
 
 class SignInWithUsernameUseCaseTest {
 
-    private lateinit var userRepository: UserRepository
-    private lateinit var hashGenerator: HashGenerator
+    @MockK private lateinit var userRepository: UserRepository
+    @MockK private lateinit var hashGenerator: HashGenerator
     private lateinit var useCase: SignInWithUsernameUseCase
 
     @Before
     fun setup() {
-        userRepository = mockkClass(UserRepository::class)
-        hashGenerator = mockkClass(HashGenerator::class)
+        MockKAnnotations.init(this)
         useCase = SignInWithUsernameUseCase(userRepository, hashGenerator)
     }
 
