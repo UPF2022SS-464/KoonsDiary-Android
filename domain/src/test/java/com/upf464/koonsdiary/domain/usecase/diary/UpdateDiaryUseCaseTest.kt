@@ -77,10 +77,10 @@ class UpdateDiaryUseCaseTest {
     }
 
     @Test
-    fun invoke_incorrectDiaryId_isFailure(): Unit = runBlocking {
+    fun invoke_invalidDiaryId_isFailure(): Unit = runBlocking {
         coEvery {
             diaryRepository.updateDiary(any())
-        } returns Result.failure(DiaryError.IncorrectDiaryId)
+        } returns Result.failure(DiaryError.InvalidDiaryId)
 
         every {
             validator.validateContent("content")
@@ -97,6 +97,6 @@ class UpdateDiaryUseCaseTest {
         )
 
         Assert.assertFalse(result.isSuccess)
-        assertEquals(DiaryError.IncorrectDiaryId, result.exceptionOrNull())
+        assertEquals(DiaryError.InvalidDiaryId, result.exceptionOrNull())
     }
 }
