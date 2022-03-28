@@ -17,6 +17,6 @@ internal abstract class CottonUseCaseModule {
     @Binds
     abstract fun bindGetRandomQuestionUseCase(
         useCase: GetRandomQuestionUseCase
-    ) : ResultUseCase<GetRandomQuestionRequest, GetRandomQuestionResponse>
+    ): ResultUseCase<GetRandomQuestionRequest, GetRandomQuestionResponse>
 
 }

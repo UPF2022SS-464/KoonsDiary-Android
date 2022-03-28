@@ -9,7 +9,7 @@ internal fun Question.toData() = QuestionData(
     questionUS = questionUS
 )
 
-internal fun QuestionData.toDT() = Question(
+internal fun QuestionData.toDomain() = Question(
     id = id,
     questionKR = questionKR,
     questionUS = questionUS

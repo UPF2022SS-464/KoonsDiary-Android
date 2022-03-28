@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 internal class GetRandomQuestionUseCase @Inject constructor(
     private val cottonRepository: CottonRepository
-): ResultUseCase<GetRandomQuestionRequest, GetRandomQuestionResponse>{
+) : ResultUseCase<GetRandomQuestionRequest, GetRandomQuestionResponse> {
 
     override suspend fun invoke(request: GetRandomQuestionRequest): Result<GetRandomQuestionResponse> {
         return cottonRepository.getRandomQuestion().map { question ->
