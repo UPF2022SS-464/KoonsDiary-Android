@@ -6,7 +6,7 @@ import com.upf464.koonsdiary.domain.response.calendar.FetchCalendarResponse
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import javax.inject.Inject
 
-class FetchCalendarUseCase @Inject constructor(
+internal class FetchCalendarUseCase @Inject constructor(
     private val diaryRepository: DiaryRepository
 ) : ResultUseCase<FetchCalendarRequest, FetchCalendarResponse> {
 

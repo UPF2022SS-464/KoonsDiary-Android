@@ -4,6 +4,7 @@ import com.upf464.koonsdiary.data.mapper.toData
 import com.upf464.koonsdiary.data.mapper.toDomain
 import com.upf464.koonsdiary.data.source.DiaryRemoteDataSource
 import com.upf464.koonsdiary.domain.model.Diary
+import com.upf464.koonsdiary.domain.model.DiaryPreview
 import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
 import javax.inject.Inject
@@ -33,6 +34,12 @@ internal class DiaryRepositoryImpl @Inject constructor(
     override suspend fun fetchDiary(diaryId: Int): Result<Diary> {
         return remote.fetchDiary(diaryId).map { diary ->
             diary.toDomain()
+        }
+    }
+
+    override suspend fun fetchDiaryPreview(diaryId: Int): Result<DiaryPreview> {
+        return remote.fetchDiaryPreview(diaryId).map { diaryPreview ->
+            diaryPreview.toDomain()
         }
     }
 
