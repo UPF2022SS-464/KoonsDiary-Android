@@ -3,7 +3,7 @@ package com.upf464.koonsdiary.domain.usecase.diary
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.model.Diary
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.FetchDiaryRequest
+import com.upf464.koonsdiary.domain.request.diary.FetchDiaryRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK

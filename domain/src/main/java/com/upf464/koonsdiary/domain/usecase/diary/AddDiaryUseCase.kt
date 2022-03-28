@@ -4,8 +4,8 @@ import com.upf464.koonsdiary.domain.common.DiaryValidator
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.model.Diary
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.AddDiaryRequest
-import com.upf464.koonsdiary.domain.response.AddDiaryResponse
+import com.upf464.koonsdiary.domain.request.diary.AddDiaryRequest
+import com.upf464.koonsdiary.domain.response.diary.AddDiaryResponse
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import javax.inject.Inject
 

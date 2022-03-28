@@ -1,7 +1,7 @@
 package com.upf464.koonsdiary.domain.usecase.diary
 
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.DeleteDiaryRequest
+import com.upf464.koonsdiary.domain.request.diary.DeleteDiaryRequest
 import com.upf464.koonsdiary.domain.response.EmptyResponse
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import javax.inject.Inject

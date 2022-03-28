@@ -3,7 +3,7 @@ package com.upf464.koonsdiary.domain.usecase.user
 import com.upf464.koonsdiary.domain.common.HashGenerator
 import com.upf464.koonsdiary.domain.common.flatMap
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.request.SignInWithUsernameRequest
+import com.upf464.koonsdiary.domain.request.user.SignInWithUsernameRequest
 import com.upf464.koonsdiary.domain.response.EmptyResponse
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import javax.inject.Inject

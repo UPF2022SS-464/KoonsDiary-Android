@@ -1,8 +1,8 @@
 package com.upf464.koonsdiary.domain.usecase.calendar
 
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.FetchCalendarRequest
-import com.upf464.koonsdiary.domain.response.FetchCalendarResponse
+import com.upf464.koonsdiary.domain.request.calendar.FetchCalendarRequest
+import com.upf464.koonsdiary.domain.response.calendar.FetchCalendarResponse
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import javax.inject.Inject
 

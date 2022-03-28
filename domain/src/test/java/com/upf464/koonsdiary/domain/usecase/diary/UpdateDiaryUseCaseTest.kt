@@ -4,7 +4,7 @@ import com.upf464.koonsdiary.domain.common.DiaryValidator
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.UpdateDiaryRequest
+import com.upf464.koonsdiary.domain.request.diary.UpdateDiaryRequest
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockkClass

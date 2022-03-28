@@ -4,7 +4,7 @@ import com.upf464.koonsdiary.domain.common.DiaryValidator
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.AddDiaryRequest
+import com.upf464.koonsdiary.domain.request.diary.AddDiaryRequest
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockkClass
@@ -40,12 +40,14 @@ class AddDiaryUseCaseTest {
             validator.validateContent("content")
         } returns true
 
-        val result = useCase(AddDiaryRequest(
+        val result = useCase(
+            AddDiaryRequest(
             date = LocalDate.of(2022, 3, 25),
             content = "content",
             sentiment = Sentiment.GOOD,
             imageList = emptyList()
-        ))
+        )
+        )
 
         assertTrue(result.isSuccess)
         assertEquals(1, result.getOrNull()?.diaryId)
@@ -57,12 +59,14 @@ class AddDiaryUseCaseTest {
             validator.validateContent("")
         } returns false
 
-        val result = useCase(AddDiaryRequest(
+        val result = useCase(
+            AddDiaryRequest(
             date = LocalDate.of(2022, 3, 25),
             content = "",
             sentiment = Sentiment.GOOD,
             imageList = emptyList()
-        ))
+        )
+        )
 
         assertFalse(result.isSuccess)
         assertEquals(DiaryError.EmptyContent, result.exceptionOrNull())

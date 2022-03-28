@@ -2,7 +2,7 @@ package com.upf464.koonsdiary.domain.usecase.user
 
 import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.request.SignInWithKakaoRequest
+import com.upf464.koonsdiary.domain.request.user.SignInWithKakaoRequest
 import com.upf464.koonsdiary.domain.service.KakaoService
 import io.mockk.coEvery
 import io.mockk.coVerify

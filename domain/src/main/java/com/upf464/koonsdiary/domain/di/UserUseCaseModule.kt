@@ -1,6 +1,6 @@
 package com.upf464.koonsdiary.domain.di
 
-import com.upf464.koonsdiary.domain.request.*
+import com.upf464.koonsdiary.domain.request.user.*
 import com.upf464.koonsdiary.domain.response.EmptyResponse
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import com.upf464.koonsdiary.domain.usecase.user.*

@@ -3,7 +3,7 @@ package com.upf464.koonsdiary.domain.usecase.user
 import com.upf464.koonsdiary.domain.common.HashGenerator
 import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.request.SignInWithUsernameRequest
+import com.upf464.koonsdiary.domain.request.user.SignInWithUsernameRequest
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockkClass
