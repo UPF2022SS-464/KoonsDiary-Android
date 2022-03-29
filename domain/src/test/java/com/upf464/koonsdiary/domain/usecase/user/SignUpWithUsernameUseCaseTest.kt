@@ -59,7 +59,7 @@ class SignUpWithUsernameUseCaseTest {
         } returns "passwordWithSalt"
 
         coEvery {
-            userRepository.signUpWithUsername(any())
+            userRepository.signUpWithUsername(any(), any())
         } returns Result.success("token")
 
         coEvery {
