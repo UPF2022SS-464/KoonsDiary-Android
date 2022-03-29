@@ -8,7 +8,7 @@ import com.upf464.koonsdiary.data.source.UserRemoteDataSource
 import com.upf464.koonsdiary.domain.common.errorMap
 import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.model.SignInType
-import com.upf464.koonsdiary.domain.model.SignUpUser
+import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import javax.inject.Inject
 
@@ -26,8 +26,8 @@ internal class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun signUpWithUsername(user: SignUpUser): Result<String> {
-        return remote.signUpWithUsername(user.toData())
+    override suspend fun signUpWithUsername(user: User, password: String): Result<String> {
+        return remote.signUpWithUsername(user.toData(), password)
     }
 
     override suspend fun signInWithKakao(token: String): Result<Unit> {
@@ -38,8 +38,8 @@ internal class UserRepositoryImpl @Inject constructor(
         return remote.signInWithToken(token)
     }
 
-    override suspend fun signUpWithKakao(token: String, nickname: String): Result<Unit> {
-        return remote.signUpWithKakao(token, nickname)
+    override suspend fun signUpWithKakao(user: User, token: String): Result<Unit> {
+        return remote.signUpWithKakao(user.toData(), token)
     }
 
     override suspend fun generateSaltOf(username: String): Result<String> {

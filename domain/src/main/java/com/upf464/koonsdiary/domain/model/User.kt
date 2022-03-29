@@ -1,8 +1,8 @@
 package com.upf464.koonsdiary.domain.model
 
-data class SignUpUser(
+data class User(
+    val id: Int = 0,
     val username: String,
-    val email: String,
-    val password: String,
+    val email: String? = null,
     val nickname: String
 )

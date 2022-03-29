@@ -1,6 +1,6 @@
 package com.upf464.koonsdiary.remote.devsource
 
-import com.upf464.koonsdiary.data.model.SignUpUserData
+import com.upf464.koonsdiary.data.model.UserData
 import com.upf464.koonsdiary.data.source.UserRemoteDataSource
 import javax.inject.Inject
 
@@ -11,7 +11,7 @@ internal class UserRemoteDevDataSourceImpl @Inject constructor(
         return Result.success("")
     }
 
-    override suspend fun signUpWithUsername(user: SignUpUserData): Result<String> {
+    override suspend fun signUpWithUsername(user: UserData, password: String): Result<String> {
         return Result.success("")
     }
 
@@ -23,7 +23,7 @@ internal class UserRemoteDevDataSourceImpl @Inject constructor(
         return Result.success(null)
     }
 
-    override suspend fun signUpWithKakao(token: String, nickname: String): Result<Unit> {
+    override suspend fun signUpWithKakao(user: UserData, token: String): Result<Unit> {
         return Result.success(Unit)
     }
 
