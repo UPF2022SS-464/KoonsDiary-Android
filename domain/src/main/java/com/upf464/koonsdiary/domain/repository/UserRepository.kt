@@ -1,13 +1,13 @@
 package com.upf464.koonsdiary.domain.repository
 
 import com.upf464.koonsdiary.domain.model.SignInType
-import com.upf464.koonsdiary.domain.model.SignUpUser
+import com.upf464.koonsdiary.domain.model.User
 
 interface UserRepository {
 
-    suspend fun signUpWithUsername(user: SignUpUser): Result<String>
+    suspend fun signUpWithUsername(user: User, password: String): Result<String>
 
-    suspend fun signUpWithKakao(token: String, nickname: String): Result<Unit>
+    suspend fun signUpWithKakao(user: User, token: String): Result<Unit>
 
     suspend fun signInWithUsername(username: String, password: String) : Result<String>
 

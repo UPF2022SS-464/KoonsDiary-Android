@@ -4,7 +4,7 @@ import com.upf464.koonsdiary.domain.common.HashGenerator
 import com.upf464.koonsdiary.domain.common.SignUpValidator
 import com.upf464.koonsdiary.domain.common.flatMap
 import com.upf464.koonsdiary.domain.error.SignUpError
-import com.upf464.koonsdiary.domain.model.SignUpUser
+import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.request.user.SignUpWithUsernameRequest
 import com.upf464.koonsdiary.domain.response.EmptyResponse
@@ -32,14 +32,13 @@ internal class SignUpWithUsernameUseCase @Inject constructor(
         return userRepository.generateSaltOf(request.username).flatMap { salt ->
             val hashedPassword = hashGenerator.hashPasswordWithSalt(request.password, salt)
 
-            val user = SignUpUser(
+            val user = User(
                 username = request.username,
                 email = request.email,
-                password = hashedPassword,
                 nickname = request.nickname
             )
 
-            userRepository.signUpWithUsername(user)
+            userRepository.signUpWithUsername(user, hashedPassword)
         }.onSuccess { token ->
             userRepository.setAutoSignInWithToken(token)
         }.map {

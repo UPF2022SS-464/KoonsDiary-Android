@@ -1,12 +1,12 @@
 package com.upf464.koonsdiary.data.source
 
-import com.upf464.koonsdiary.data.model.SignUpUserData
+import com.upf464.koonsdiary.data.model.UserData
 
 interface UserRemoteDataSource {
 
-    suspend fun signUpWithUsername(user: SignUpUserData): Result<String>
+    suspend fun signUpWithUsername(user: UserData, password: String): Result<String>
 
-    suspend fun signUpWithKakao(token: String, nickname: String): Result<Unit>
+    suspend fun signUpWithKakao(user: UserData, token: String): Result<Unit>
 
     suspend fun signInWithUsername(username: String, password: String): Result<String>
 
