@@ -9,3 +9,10 @@ internal fun User.toData() = UserData(
     email = email,
     nickname = nickname
 )
+
+internal fun UserData.toDomain() = User(
+    id = id,
+    username = username,
+    email = email,
+    nickname = nickname
+)
