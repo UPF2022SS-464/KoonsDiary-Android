@@ -1,5 +1,6 @@
 package com.upf464.koonsdiary.remote.devsource
 
+import com.upf464.koonsdiary.data.model.ShareGroupData
 import com.upf464.koonsdiary.data.model.UserData
 import com.upf464.koonsdiary.data.source.ShareRemoteDataSource
 import javax.inject.Inject
@@ -9,5 +10,9 @@ internal class ShareRemoteDevDataSourceImpl @Inject constructor(
 
     override suspend fun searchUser(keyword: String): Result<List<UserData>> {
         return Result.success(emptyList())
+    }
+
+    override suspend fun addGroup(group: ShareGroupData, inviteUserIdList: List<Int>): Result<Int> {
+        return Result.success(1)
     }
 }
