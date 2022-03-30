@@ -18,7 +18,6 @@ internal class AddQuestionAnswerUseCase @Inject constructor(
         }
 
         val questionAnswer = QuestionAnswer(
-            writerId = request.writerId,
             questionId = request.questionId,
             content = request.content
         )
