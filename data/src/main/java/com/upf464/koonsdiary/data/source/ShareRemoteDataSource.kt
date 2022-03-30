@@ -12,4 +12,6 @@ interface ShareRemoteDataSource {
     suspend fun updateGroup(group: ShareGroupData): Result<Int>
 
     suspend fun deleteGroup(groupId: Int): Result<Unit>
+
+    suspend fun fetchGroupList(): Result<List<ShareGroupData>>
 }
