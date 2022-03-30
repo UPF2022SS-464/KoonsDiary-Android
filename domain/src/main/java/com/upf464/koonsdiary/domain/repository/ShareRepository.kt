@@ -8,4 +8,6 @@ interface ShareRepository {
     suspend fun searchUser(keyword: String): Result<List<User>>
 
     suspend fun addGroup(group: ShareGroup, inviteUserIdList: List<Int>): Result<Int>
+
+    suspend fun updateGroup(group: ShareGroup): Result<Int>
 }

@@ -21,4 +21,8 @@ internal class ShareRepositoryImpl @Inject constructor(
     override suspend fun addGroup(group: ShareGroup, inviteUserIdList: List<Int>): Result<Int> {
         return remote.addGroup(group.toData(), inviteUserIdList)
     }
+
+    override suspend fun updateGroup(group: ShareGroup): Result<Int> {
+        return remote.updateGroup(group.toData())
+    }
 }

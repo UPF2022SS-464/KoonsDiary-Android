@@ -15,4 +15,8 @@ internal class ShareRemoteDevDataSourceImpl @Inject constructor(
     override suspend fun addGroup(group: ShareGroupData, inviteUserIdList: List<Int>): Result<Int> {
         return Result.success(1)
     }
+
+    override suspend fun updateGroup(group: ShareGroupData): Result<Int> {
+        return Result.success(1)
+    }
 }
