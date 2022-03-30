@@ -3,16 +3,16 @@ package com.upf464.koonsdiary.domain.usecase.cotton
 import com.upf464.koonsdiary.domain.error.CottonAnswerError
 import com.upf464.koonsdiary.domain.model.QuestionAnswer
 import com.upf464.koonsdiary.domain.repository.CottonRepository
-import com.upf464.koonsdiary.domain.request.cotton.AddCottonAnswerRequest
-import com.upf464.koonsdiary.domain.response.cotton.AddCottonAnswerResponse
+import com.upf464.koonsdiary.domain.request.cotton.AddQuestionAnswerRequest
+import com.upf464.koonsdiary.domain.response.cotton.AddQuestionAnswerResponse
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import javax.inject.Inject
 
-internal class AddCottonAnswerUseCase @Inject constructor(
+internal class AddQuestionAnswerUseCase @Inject constructor(
     private val cottonRepository: CottonRepository
-) : ResultUseCase<AddCottonAnswerRequest, AddCottonAnswerResponse> {
+) : ResultUseCase<AddQuestionAnswerRequest, AddQuestionAnswerResponse> {
 
-    override suspend fun invoke(request: AddCottonAnswerRequest): Result<AddCottonAnswerResponse> {
+    override suspend fun invoke(request: AddQuestionAnswerRequest): Result<AddQuestionAnswerResponse> {
         if (request.content.isBlank()) {
             return Result.failure(CottonAnswerError.EmptyContent)
         }
@@ -23,8 +23,8 @@ internal class AddCottonAnswerUseCase @Inject constructor(
             content = request.content
         )
 
-        return cottonRepository.addCottonAnswer(questionAnswer).map { id ->
-            AddCottonAnswerResponse(id)
+        return cottonRepository.addQuestionAnswer(questionAnswer).map { id ->
+            AddQuestionAnswerResponse(id)
         }
     }
 }

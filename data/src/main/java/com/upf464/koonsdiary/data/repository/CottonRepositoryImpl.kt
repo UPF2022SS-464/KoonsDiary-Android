@@ -19,7 +19,7 @@ internal class CottonRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addCottonAnswer(questionAnswer: QuestionAnswer): Result<Int> {
-        return remote.addCottonAnswer(questionAnswer.toData())
+    override suspend fun addQuestionAnswer(questionAnswer: QuestionAnswer): Result<Int> {
+        return remote.addQuestionAnswer(questionAnswer.toData())
     }
 }

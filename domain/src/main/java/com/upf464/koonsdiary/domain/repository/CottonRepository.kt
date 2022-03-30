@@ -5,5 +5,5 @@ import com.upf464.koonsdiary.domain.model.QuestionAnswer
 
 interface CottonRepository {
     suspend fun fetchRandomQuestion(): Result<Question>
-    suspend fun addCottonAnswer(questionAnswer: QuestionAnswer): Result<Int>
+    suspend fun addQuestionAnswer(questionAnswer: QuestionAnswer): Result<Int>
 }

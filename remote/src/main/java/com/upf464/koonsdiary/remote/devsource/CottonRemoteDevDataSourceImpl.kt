@@ -12,7 +12,7 @@ internal class CottonRemoteDevDataSourceImpl @Inject constructor(
         return Result.success(QuestionData(id = 1, korean = "", english = ""))
     }
 
-    override suspend fun addCottonAnswer(questionAnswer: QuestionAnswerData): Result<Int> {
+    override suspend fun addQuestionAnswer(questionAnswer: QuestionAnswerData): Result<Int> {
         return Result.success(0)
     }
 }
