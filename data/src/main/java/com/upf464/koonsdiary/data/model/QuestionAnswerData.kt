@@ -1,8 +1,8 @@
-package com.upf464.koonsdiary.domain.model
+package com.upf464.koonsdiary.data.model
 
 import java.time.LocalDateTime
 
-data class QuestionAnswer(
+data class QuestionAnswerData(
     val id: Int = 0,
     val writerId: Int = 0,
     val date: LocalDateTime = LocalDateTime.now(),
