@@ -6,4 +6,6 @@ sealed class ShareError(
 ) : Exception(message, cause) {
 
     object EmptyContent : ShareError()
+
+    object InvalidGroupName : ShareError()
 }
