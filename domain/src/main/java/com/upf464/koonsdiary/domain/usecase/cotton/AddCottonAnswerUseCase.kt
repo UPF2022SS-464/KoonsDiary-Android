@@ -18,8 +18,7 @@ internal class AddCottonAnswerUseCase @Inject constructor(
         }
 
         val questionAnswer = QuestionAnswer(
-            writer = request.writer,
-            date = request.date,
+            writerId = request.writerId,
             questionId = request.questionId,
             content = request.content
         )

@@ -1,9 +1,11 @@
 package com.upf464.koonsdiary.data.repository
 
 
+import com.upf464.koonsdiary.data.mapper.toData
 import com.upf464.koonsdiary.data.mapper.toDomain
 import com.upf464.koonsdiary.data.source.CottonRemoteDataSource
 import com.upf464.koonsdiary.domain.model.Question
+import com.upf464.koonsdiary.domain.model.QuestionAnswer
 import com.upf464.koonsdiary.domain.repository.CottonRepository
 import javax.inject.Inject
 
@@ -15,5 +17,9 @@ internal class CottonRepositoryImpl @Inject constructor(
         return remote.fetchRandomQuestion().map { questionData ->
             questionData.toDomain()
         }
+    }
+
+    override suspend fun addCottonAnswer(questionAnswer: QuestionAnswer): Result<Int> {
+        return remote.addCottonAnswer(questionAnswer.toData())
     }
 }
