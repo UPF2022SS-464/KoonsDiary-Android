@@ -8,4 +8,6 @@ sealed class ShareError(
     object EmptyContent : ShareError()
 
     object InvalidGroupName : ShareError()
+
+    object InvalidGroupId : ShareError()
 }
