@@ -2,6 +2,7 @@ package com.upf464.koonsdiary.domain.usecase.diary
 
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.model.Diary
+import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
 import com.upf464.koonsdiary.domain.request.diary.FetchDiaryRequest
 import io.mockk.MockKAnnotations
@@ -12,6 +13,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.time.LocalDate
 
 class FetchDiaryUseCaseTest {
 
@@ -28,7 +30,12 @@ class FetchDiaryUseCaseTest {
 
     @Test
     fun invoke_validDiaryId_isSuccess(): Unit = runBlocking {
-        val fetchedDiary = Diary()
+        val fetchedDiary = Diary(
+            date = LocalDate.of(2022, 3, 30),
+            content = "content",
+            sentiment = Sentiment.NORMAL,
+            imageList = emptyList()
+        )
 
         coEvery {
             diaryRepository.fetchDiary(1)
