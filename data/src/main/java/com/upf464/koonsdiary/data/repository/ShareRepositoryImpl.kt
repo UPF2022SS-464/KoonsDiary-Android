@@ -29,4 +29,10 @@ internal class ShareRepositoryImpl @Inject constructor(
     override suspend fun deleteGroup(groupId: Int): Result<Unit> {
         return remote.deleteGroup(groupId)
     }
+
+    override suspend fun fetchGroupList(): Result<List<ShareGroup>> {
+        return remote.fetchGroupList().map { groupList ->
+            groupList.map { it.toDomain() }
+        }
+    }
 }
