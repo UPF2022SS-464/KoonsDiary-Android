@@ -10,4 +10,6 @@ interface ShareRepository {
     suspend fun addGroup(group: ShareGroup, inviteUserIdList: List<Int>): Result<Int>
 
     suspend fun updateGroup(group: ShareGroup): Result<Int>
+
+    suspend fun deleteGroup(groupId: Int): Result<Unit>
 }

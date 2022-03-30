@@ -25,4 +25,8 @@ internal class ShareRepositoryImpl @Inject constructor(
     override suspend fun updateGroup(group: ShareGroup): Result<Int> {
         return remote.updateGroup(group.toData())
     }
+
+    override suspend fun deleteGroup(groupId: Int): Result<Unit> {
+        return remote.deleteGroup(groupId)
+    }
 }
