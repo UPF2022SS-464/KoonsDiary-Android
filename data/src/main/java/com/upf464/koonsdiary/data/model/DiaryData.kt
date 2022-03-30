@@ -5,10 +5,10 @@ import java.time.LocalDateTime
 
 data class DiaryData(
     val id: Int = 0,
-    val date: LocalDate = LocalDate.now(),
-    val content: String = "",
-    val sentiment: Int = 0,
-    val imageList: List<ImageData> = emptyList(),
+    val date: LocalDate,
+    val content: String,
+    val sentiment: Int,
+    val imageList: List<ImageData>,
     val lastModifiedDate: LocalDateTime = LocalDateTime.now(),
     val createdDate: LocalDateTime = LocalDateTime.now()
 ) {
