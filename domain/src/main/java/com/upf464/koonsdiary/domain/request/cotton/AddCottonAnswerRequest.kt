@@ -4,6 +4,6 @@ import com.upf464.koonsdiary.domain.request.Request
 
 data class AddCottonAnswerRequest(
     val writerId: Int,
-    val questionId: String,
+    val questionId: Int,
     val content: String
 ) : Request

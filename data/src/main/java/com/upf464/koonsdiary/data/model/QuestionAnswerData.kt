@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 data class QuestionAnswerData(
     val id: Int = 0,
     val writerId: Int = 0,
-    val date: LocalDateTime = LocalDateTime.now(),
-    val questionId: String,
+    val createdDate: LocalDateTime = LocalDateTime.now(),
+    val questionId: Int,
     val content: String
 )
