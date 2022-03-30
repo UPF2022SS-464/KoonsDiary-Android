@@ -23,8 +23,8 @@ internal class AddQuestionAnswerUseCase @Inject constructor(
             content = request.content
         )
 
-        return cottonRepository.addQuestionAnswer(questionAnswer).map { id ->
-            AddQuestionAnswerResponse(id)
+        return cottonRepository.addQuestionAnswer(questionAnswer).map { answerId ->
+            AddQuestionAnswerResponse(answerId)
         }
     }
 }
