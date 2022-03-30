@@ -6,7 +6,7 @@ import com.upf464.koonsdiary.domain.model.QuestionAnswer
 internal fun QuestionAnswer.toData() = QuestionAnswerData(
     id = id,
     writerId = writerId,
-    date = date,
+    createdDate = createdDate,
     questionId = questionId,
     content = content
 )
