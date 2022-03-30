@@ -1,6 +1,6 @@
 package com.upf464.koonsdiary.domain.usecase.cotton
 
-import com.upf464.koonsdiary.domain.error.CottonAnswerError
+import com.upf464.koonsdiary.domain.error.CottonError
 import com.upf464.koonsdiary.domain.model.QuestionAnswer
 import com.upf464.koonsdiary.domain.repository.CottonRepository
 import com.upf464.koonsdiary.domain.request.cotton.AddQuestionAnswerRequest
@@ -14,7 +14,7 @@ internal class AddQuestionAnswerUseCase @Inject constructor(
 
     override suspend fun invoke(request: AddQuestionAnswerRequest): Result<AddQuestionAnswerResponse> {
         if (request.content.isBlank()) {
-            return Result.failure(CottonAnswerError.EmptyContent)
+            return Result.failure(CottonError.EmptyContent)
         }
 
         val questionAnswer = QuestionAnswer(
