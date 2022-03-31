@@ -8,13 +8,7 @@ data class Diary(
     val date: LocalDate,
     val content: String,
     val sentiment: Sentiment,
-    val imageList: List<Image>,
+    val imageList: List<DiaryImage>,
     val lastModifiedDate: LocalDateTime = LocalDateTime.now(),
     val createdDate: LocalDateTime = LocalDateTime.now()
-) {
-
-    data class Image(
-        val imagePath: String,
-        val comment: String
-    )
-}
+)

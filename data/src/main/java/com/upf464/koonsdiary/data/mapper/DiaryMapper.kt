@@ -1,6 +1,8 @@
 package com.upf464.koonsdiary.data.mapper
 
 import com.upf464.koonsdiary.data.model.DiaryData
+import com.upf464.koonsdiary.data.model.toData
+import com.upf464.koonsdiary.data.model.toDomain
 import com.upf464.koonsdiary.domain.model.Diary
 import com.upf464.koonsdiary.domain.model.Sentiment
 
@@ -9,12 +11,7 @@ internal fun Diary.toData() = DiaryData(
     date = date,
     content = content,
     sentiment = sentiment.ordinal,
-    imageList = imageList.map { image ->
-        DiaryData.ImageData(
-            imagePath = image.imagePath,
-            comment = image.comment
-        )
-    },
+    imageList = imageList.map { it.toData() },
     lastModifiedDate = lastModifiedDate,
     createdDate = createdDate
 )
@@ -24,12 +21,7 @@ internal fun DiaryData.toDomain() = Diary(
     date = date,
     content = content,
     sentiment = Sentiment.values()[sentiment],
-    imageList = imageList.map { image ->
-        Diary.Image(
-            imagePath = image.imagePath,
-            comment = image.imagePath
-        )
-    },
+    imageList = imageList.map { it.toDomain() },
     lastModifiedDate = lastModifiedDate,
     createdDate = createdDate
 )
