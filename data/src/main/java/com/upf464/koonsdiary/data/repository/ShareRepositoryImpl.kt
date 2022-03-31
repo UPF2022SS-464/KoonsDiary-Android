@@ -60,4 +60,11 @@ internal class ShareRepositoryImpl @Inject constructor(
             else Exception(error)
         }
     }
+
+    override suspend fun updateDiary(diary: ShareDiary): Result<Int> {
+        return remote.updateDiary(diary.toData()).errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
 }

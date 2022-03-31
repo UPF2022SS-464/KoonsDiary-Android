@@ -17,4 +17,6 @@ interface ShareRemoteDataSource {
     suspend fun fetchGroupList(): Result<List<ShareGroupData>>
 
     suspend fun addDiary(diary: ShareDiaryData): Result<Int>
+
+    suspend fun updateDiary(diary: ShareDiaryData): Result<Int>
 }
