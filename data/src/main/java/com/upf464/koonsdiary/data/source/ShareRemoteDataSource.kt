@@ -28,4 +28,6 @@ interface ShareRemoteDataSource {
     suspend fun addComment(comment: CommentData): Result<Unit>
 
     suspend fun deleteComment(commentId: Int): Result<Unit>
+
+    suspend fun fetchCommentList(diaryId: Int): Result<List<CommentData>>
 }
