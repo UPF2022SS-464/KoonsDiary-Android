@@ -21,4 +21,6 @@ interface ShareRepository {
     suspend fun updateDiary(diary: ShareDiary): Result<Int>
 
     suspend fun deleteDiary(diaryId: Int): Result<Unit>
+
+    suspend fun fetchDiaryList(groupId: Int): Result<List<ShareDiary>>
 }
