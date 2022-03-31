@@ -48,4 +48,9 @@ internal abstract class ShareUseCaseModule {
     abstract fun bindUpdateShareDiaryUseCase(
         useCase: UpdateShareDiaryUseCase
     ): ResultUseCase<UpdateShareDiaryRequest, UpdateShareDiaryResponse>
+
+    @Binds
+    abstract fun bindDeleteShareDiaryUseCase(
+        useCase: DeleteShareDiaryUseCase
+    ): ResultUseCase<DeleteShareDiaryRequest, EmptyResponse>
 }
