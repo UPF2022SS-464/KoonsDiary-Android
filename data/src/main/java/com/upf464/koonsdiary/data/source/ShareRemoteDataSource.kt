@@ -1,5 +1,6 @@
 package com.upf464.koonsdiary.data.source
 
+import com.upf464.koonsdiary.data.model.ShareDiaryData
 import com.upf464.koonsdiary.data.model.ShareGroupData
 import com.upf464.koonsdiary.data.model.UserData
 
@@ -14,4 +15,6 @@ interface ShareRemoteDataSource {
     suspend fun deleteGroup(groupId: Int): Result<Unit>
 
     suspend fun fetchGroupList(): Result<List<ShareGroupData>>
+
+    suspend fun addDiary(diary: ShareDiaryData): Result<Int>
 }
