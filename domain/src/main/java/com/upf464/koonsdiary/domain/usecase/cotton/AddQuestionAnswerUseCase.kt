@@ -1,6 +1,7 @@
 package com.upf464.koonsdiary.domain.usecase.cotton
 
 import com.upf464.koonsdiary.domain.error.CottonError
+import com.upf464.koonsdiary.domain.model.Question
 import com.upf464.koonsdiary.domain.model.QuestionAnswer
 import com.upf464.koonsdiary.domain.repository.CottonRepository
 import com.upf464.koonsdiary.domain.request.cotton.AddQuestionAnswerRequest
@@ -18,7 +19,7 @@ internal class AddQuestionAnswerUseCase @Inject constructor(
         }
 
         val questionAnswer = QuestionAnswer(
-            questionId = request.questionId,
+            questionId = Question(id = request.questionId, korean = "", english = ""),
             content = request.content
         )
 
