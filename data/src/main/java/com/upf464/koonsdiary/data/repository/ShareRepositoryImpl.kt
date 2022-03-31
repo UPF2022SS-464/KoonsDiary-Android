@@ -74,4 +74,13 @@ internal class ShareRepositoryImpl @Inject constructor(
             else Exception(error)
         }
     }
+
+    override suspend fun fetchDiaryList(groupId: Int): Result<List<ShareDiary>> {
+        return remote.fetchDiaryList(groupId).map { diaryList ->
+            diaryList.map { it.toDomain() }
+        }.errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
 }

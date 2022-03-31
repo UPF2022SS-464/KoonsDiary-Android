@@ -40,4 +40,8 @@ internal class ShareRemoteDevDataSourceImpl @Inject constructor(
     override suspend fun deleteDiary(diaryId: Int): Result<Unit> {
         return Result.success(Unit)
     }
+
+    override suspend fun fetchDiaryList(groupId: Int): Result<List<ShareDiaryData>> {
+        return Result.success(emptyList())
+    }
 }
