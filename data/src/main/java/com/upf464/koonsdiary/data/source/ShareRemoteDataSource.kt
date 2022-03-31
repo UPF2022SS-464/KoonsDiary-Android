@@ -19,4 +19,6 @@ interface ShareRemoteDataSource {
     suspend fun addDiary(diary: ShareDiaryData): Result<Int>
 
     suspend fun updateDiary(diary: ShareDiaryData): Result<Int>
+
+    suspend fun deleteDiary(diaryId: Int): Result<Unit>
 }

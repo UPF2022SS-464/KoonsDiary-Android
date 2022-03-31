@@ -19,4 +19,6 @@ interface ShareRepository {
     suspend fun addDiary(diary: ShareDiary): Result<Int>
 
     suspend fun updateDiary(diary: ShareDiary): Result<Int>
+
+    suspend fun deleteDiary(diaryId: Int): Result<Unit>
 }
