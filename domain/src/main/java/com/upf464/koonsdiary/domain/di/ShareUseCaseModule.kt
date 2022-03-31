@@ -2,10 +2,7 @@ package com.upf464.koonsdiary.domain.di
 
 import com.upf464.koonsdiary.domain.request.share.*
 import com.upf464.koonsdiary.domain.response.EmptyResponse
-import com.upf464.koonsdiary.domain.response.share.AddGroupResponse
-import com.upf464.koonsdiary.domain.response.share.FetchGroupListResponse
-import com.upf464.koonsdiary.domain.response.share.SearchUserResponse
-import com.upf464.koonsdiary.domain.response.share.UpdateGroupResponse
+import com.upf464.koonsdiary.domain.response.share.*
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import com.upf464.koonsdiary.domain.usecase.share.*
 import dagger.Binds
@@ -41,4 +38,9 @@ internal abstract class ShareUseCaseModule {
     abstract fun bindFetchGroupListUseCase(
         useCase: FetchGroupListUseCase
     ): ResultUseCase<FetchGroupListRequest, FetchGroupListResponse>
+
+    @Binds
+    abstract fun bindAddShareDiaryUseCase(
+        useCase: AddShareDiaryUseCase
+    ): ResultUseCase<AddShareDiaryRequest, AddShareDiaryResponse>
 }
