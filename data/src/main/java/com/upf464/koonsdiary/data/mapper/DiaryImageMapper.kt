@@ -1,5 +1,6 @@
-package com.upf464.koonsdiary.data.model
+package com.upf464.koonsdiary.data.mapper
 
+import com.upf464.koonsdiary.data.model.DiaryImageData
 import com.upf464.koonsdiary.domain.model.DiaryImage
 
 internal fun DiaryImage.toData() = DiaryImageData(
