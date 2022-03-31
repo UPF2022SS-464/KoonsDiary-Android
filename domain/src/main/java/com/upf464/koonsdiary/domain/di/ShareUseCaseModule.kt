@@ -58,4 +58,9 @@ internal abstract class ShareUseCaseModule {
     abstract fun bindFetchShareDiaryListUseCase(
         useCase: FetchShareDiaryListUseCase
     ): ResultUseCase<FetchShareDiaryListRequest, FetchShareDiaryListResponse>
+
+    @Binds
+    abstract fun bindAddCommentUseCase(
+        useCase: AddCommentUseCase
+    ): ResultUseCase<AddCommentRequest, EmptyResponse>
 }

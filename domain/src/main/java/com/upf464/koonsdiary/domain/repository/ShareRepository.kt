@@ -1,5 +1,6 @@
 package com.upf464.koonsdiary.domain.repository
 
+import com.upf464.koonsdiary.domain.model.Comment
 import com.upf464.koonsdiary.domain.model.ShareDiary
 import com.upf464.koonsdiary.domain.model.ShareGroup
 import com.upf464.koonsdiary.domain.model.User
@@ -23,4 +24,6 @@ interface ShareRepository {
     suspend fun deleteDiary(diaryId: Int): Result<Unit>
 
     suspend fun fetchDiaryList(groupId: Int): Result<List<ShareDiary>>
+
+    suspend fun addComment(comment: Comment): Result<Unit>
 }

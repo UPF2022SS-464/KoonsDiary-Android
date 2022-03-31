@@ -1,5 +1,6 @@
 package com.upf464.koonsdiary.data.source
 
+import com.upf464.koonsdiary.data.model.CommentData
 import com.upf464.koonsdiary.data.model.ShareDiaryData
 import com.upf464.koonsdiary.data.model.ShareGroupData
 import com.upf464.koonsdiary.data.model.UserData
@@ -23,4 +24,6 @@ interface ShareRemoteDataSource {
     suspend fun deleteDiary(diaryId: Int): Result<Unit>
 
     suspend fun fetchDiaryList(groupId: Int): Result<List<ShareDiaryData>>
+
+    suspend fun addComment(comment: CommentData): Result<Unit>
 }

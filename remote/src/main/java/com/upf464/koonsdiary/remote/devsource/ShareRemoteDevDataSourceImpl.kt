@@ -1,5 +1,6 @@
 package com.upf464.koonsdiary.remote.devsource
 
+import com.upf464.koonsdiary.data.model.CommentData
 import com.upf464.koonsdiary.data.model.ShareDiaryData
 import com.upf464.koonsdiary.data.model.ShareGroupData
 import com.upf464.koonsdiary.data.model.UserData
@@ -43,5 +44,9 @@ internal class ShareRemoteDevDataSourceImpl @Inject constructor(
 
     override suspend fun fetchDiaryList(groupId: Int): Result<List<ShareDiaryData>> {
         return Result.success(emptyList())
+    }
+
+    override suspend fun addComment(comment: CommentData): Result<Unit> {
+        return Result.success(Unit)
     }
 }
