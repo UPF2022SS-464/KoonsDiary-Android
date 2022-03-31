@@ -10,4 +10,6 @@ sealed class ShareError(
     object InvalidGroupName : ShareError()
 
     object InvalidGroupId : ShareError()
+
+    object InvalidDiaryId : ShareError()
 }
