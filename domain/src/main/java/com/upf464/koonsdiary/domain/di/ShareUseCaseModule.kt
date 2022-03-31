@@ -68,4 +68,9 @@ internal abstract class ShareUseCaseModule {
     abstract fun bindDeleteCommentUseCase(
         useCase: DeleteCommentUseCase
     ): ResultUseCase<DeleteCommentRequest, EmptyResponse>
+
+    @Binds
+    abstract fun bindFetchCommentListUseCase(
+        useCase: FetchCommentListUseCase
+    ): ResultUseCase<FetchCommentListRequest, FetchCommentListResponse>
 }

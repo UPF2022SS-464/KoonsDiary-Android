@@ -98,4 +98,13 @@ internal class ShareRepositoryImpl @Inject constructor(
             else Exception(error)
         }
     }
+
+    override suspend fun fetchCommentList(diaryId: Int): Result<List<Comment>> {
+        return remote.fetchCommentList(diaryId).map { commentList ->
+            commentList.map { it.toDomain() }
+        }.errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
 }
