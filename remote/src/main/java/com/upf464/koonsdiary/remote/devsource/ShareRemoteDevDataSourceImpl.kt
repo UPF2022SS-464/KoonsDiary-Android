@@ -49,4 +49,8 @@ internal class ShareRemoteDevDataSourceImpl @Inject constructor(
     override suspend fun addComment(comment: CommentData): Result<Unit> {
         return Result.success(Unit)
     }
+
+    override suspend fun deleteComment(commentId: Int): Result<Unit> {
+        return Result.success(Unit)
+    }
 }
