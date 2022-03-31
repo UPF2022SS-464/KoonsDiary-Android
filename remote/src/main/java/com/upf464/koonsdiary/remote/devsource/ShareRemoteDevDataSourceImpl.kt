@@ -32,4 +32,8 @@ internal class ShareRemoteDevDataSourceImpl @Inject constructor(
     override suspend fun addDiary(diary: ShareDiaryData): Result<Int> {
         return Result.success(1)
     }
+
+    override suspend fun updateDiary(diary: ShareDiaryData): Result<Int> {
+        return Result.success(1)
+    }
 }

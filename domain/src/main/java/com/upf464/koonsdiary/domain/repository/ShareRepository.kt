@@ -17,4 +17,6 @@ interface ShareRepository {
     suspend fun fetchGroupList(): Result<List<ShareGroup>>
 
     suspend fun addDiary(diary: ShareDiary): Result<Int>
+
+    suspend fun updateDiary(diary: ShareDiary): Result<Int>
 }
