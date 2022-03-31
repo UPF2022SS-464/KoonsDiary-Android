@@ -1,8 +1,6 @@
 package com.upf464.koonsdiary.data.mapper
 
 import com.upf464.koonsdiary.data.model.ShareDiaryData
-import com.upf464.koonsdiary.data.model.toData
-import com.upf464.koonsdiary.data.model.toDomain
 import com.upf464.koonsdiary.domain.model.ShareDiary
 
 internal fun ShareDiaryData.toDomain() = ShareDiary(
