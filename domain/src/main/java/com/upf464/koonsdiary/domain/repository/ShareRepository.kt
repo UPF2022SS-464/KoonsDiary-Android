@@ -26,4 +26,6 @@ interface ShareRepository {
     suspend fun fetchDiaryList(groupId: Int): Result<List<ShareDiary>>
 
     suspend fun addComment(comment: Comment): Result<Unit>
+
+    suspend fun deleteComment(commentId: Int): Result<Unit>
 }

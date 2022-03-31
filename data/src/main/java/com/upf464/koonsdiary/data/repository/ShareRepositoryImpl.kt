@@ -91,4 +91,11 @@ internal class ShareRepositoryImpl @Inject constructor(
             else Exception(error)
         }
     }
+
+    override suspend fun deleteComment(commentId: Int): Result<Unit> {
+        return remote.deleteComment(commentId).errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
 }
