@@ -1,13 +1,7 @@
 package com.upf464.koonsdiary.remote.di
 
-import com.upf464.koonsdiary.data.source.CottonRemoteDataSource
-import com.upf464.koonsdiary.data.source.DiaryRemoteDataSource
-import com.upf464.koonsdiary.data.source.ShareRemoteDataSource
-import com.upf464.koonsdiary.data.source.UserRemoteDataSource
-import com.upf464.koonsdiary.remote.devsource.CottonRemoteDevDataSourceImpl
-import com.upf464.koonsdiary.remote.devsource.DiaryRemoteDevDataSourceImpl
-import com.upf464.koonsdiary.remote.devsource.ShareRemoteDevDataSourceImpl
-import com.upf464.koonsdiary.remote.devsource.UserRemoteDevDataSourceImpl
+import com.upf464.koonsdiary.data.source.*
+import com.upf464.koonsdiary.remote.devsource.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,8 +9,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal abstract class
-DataSourceModule {
+internal abstract class DataSourceModule {
 
     @Binds
     abstract fun bindUserRemoteDataSource(
@@ -37,4 +30,9 @@ DataSourceModule {
     abstract fun bindShareRemoteDataSource(
         source: ShareRemoteDevDataSourceImpl
     ): ShareRemoteDataSource
+
+    @Binds
+    abstract fun bindMessageRemoteDataSource(
+        source: MessageRemoteDevDataSourceImpl
+    ): MessageRemoteDataSource
 }
