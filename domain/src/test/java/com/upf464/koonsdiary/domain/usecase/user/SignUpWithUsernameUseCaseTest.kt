@@ -3,8 +3,10 @@ package com.upf464.koonsdiary.domain.usecase.user
 import com.upf464.koonsdiary.domain.common.HashGenerator
 import com.upf464.koonsdiary.domain.common.SignUpValidator
 import com.upf464.koonsdiary.domain.error.SignUpError
+import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.request.user.SignUpWithUsernameRequest
+import com.upf464.koonsdiary.domain.service.MessageService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -20,6 +22,8 @@ class SignUpWithUsernameUseCaseTest {
     @MockK private lateinit var userRepository: UserRepository
     @MockK private lateinit var validator: SignUpValidator
     @MockK private lateinit var hashGenerator: HashGenerator
+    @MockK private lateinit var messageService: MessageService
+    @MockK private lateinit var messageRepository: MessageRepository
     private lateinit var useCase: SignUpWithUsernameUseCase
 
     @Before
@@ -28,7 +32,9 @@ class SignUpWithUsernameUseCaseTest {
         useCase = SignUpWithUsernameUseCase(
             userRepository = userRepository,
             validator = validator,
-            hashGenerator = hashGenerator
+            hashGenerator = hashGenerator,
+            messageService = messageService,
+            messageRepository = messageRepository
         )
     }
 
@@ -64,6 +70,14 @@ class SignUpWithUsernameUseCaseTest {
 
         coEvery {
             userRepository.setAutoSignInWithToken("token")
+        } returns Result.success(Unit)
+
+        coEvery {
+            messageService.getToken()
+        } returns Result.success("token")
+
+        coEvery {
+            messageRepository.registerFcmToken("token")
         } returns Result.success(Unit)
 
         val result = useCase(

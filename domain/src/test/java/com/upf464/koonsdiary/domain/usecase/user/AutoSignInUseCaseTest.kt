@@ -2,9 +2,11 @@ package com.upf464.koonsdiary.domain.usecase.user
 
 import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.model.SignInType
+import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.request.user.AutoSignInRequest
 import com.upf464.koonsdiary.domain.service.KakaoService
+import com.upf464.koonsdiary.domain.service.MessageService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -19,6 +21,8 @@ class AutoSignInUseCaseTest {
 
     @MockK private lateinit var kakaoService: KakaoService
     @MockK private lateinit var userRepository: UserRepository
+    @MockK private lateinit var messageService: MessageService
+    @MockK private lateinit var messageRepository: MessageRepository
     private lateinit var useCase: AutoSignInUseCase
 
     @Before
@@ -26,7 +30,9 @@ class AutoSignInUseCaseTest {
         MockKAnnotations.init(this)
         useCase = AutoSignInUseCase(
             userRepository = userRepository,
-            kakaoService = kakaoService
+            kakaoService = kakaoService,
+            messageService = messageService,
+            messageRepository = messageRepository
         )
     }
 
@@ -42,6 +48,14 @@ class AutoSignInUseCaseTest {
 
         coEvery {
             userRepository.signInWithKakao("token")
+        } returns Result.success(Unit)
+
+        coEvery {
+            messageService.getToken()
+        } returns Result.success("token")
+
+        coEvery {
+            messageRepository.registerFcmToken("token")
         } returns Result.success(Unit)
 
         val result = useCase(AutoSignInRequest)
@@ -65,6 +79,14 @@ class AutoSignInUseCaseTest {
 
         coEvery {
             userRepository.setAutoSignInWithToken("new token")
+        } returns Result.success(Unit)
+
+        coEvery {
+            messageService.getToken()
+        } returns Result.success("token")
+
+        coEvery {
+            messageRepository.registerFcmToken("token")
         } returns Result.success(Unit)
 
         val result = useCase(AutoSignInRequest)
