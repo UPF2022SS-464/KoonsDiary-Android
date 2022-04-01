@@ -2,9 +2,11 @@ package com.upf464.koonsdiary.domain.usecase.user
 
 import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.model.User
+import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.request.user.SignUpWithKakaoRequest
 import com.upf464.koonsdiary.domain.service.KakaoService
+import com.upf464.koonsdiary.domain.service.MessageService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -18,12 +20,19 @@ class SignUpWithKakaoUseCaseTest {
 
     @MockK private lateinit var kakaoService: KakaoService
     @MockK private lateinit var userRepository: UserRepository
+    @MockK private lateinit var messageService: MessageService
+    @MockK private lateinit var messageRepository: MessageRepository
     private lateinit var useCase: SignUpWithKakaoUseCase
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        useCase = SignUpWithKakaoUseCase(kakaoService, userRepository)
+        useCase = SignUpWithKakaoUseCase(
+            kakaoService = kakaoService,
+            userRepository = userRepository,
+            messageService = messageService,
+            messageRepository = messageRepository
+        )
     }
 
     @Test
@@ -44,6 +53,14 @@ class SignUpWithKakaoUseCaseTest {
 
         coEvery {
             userRepository.setAutoSignInWithKakao()
+        } returns Result.success(Unit)
+
+        coEvery {
+            messageService.getToken()
+        } returns Result.success("token")
+
+        coEvery {
+            messageRepository.registerFcmToken("token")
         } returns Result.success(Unit)
 
         val result = useCase(SignUpWithKakaoRequest("username", "nickname"))
@@ -83,6 +100,14 @@ class SignUpWithKakaoUseCaseTest {
 
         coEvery {
             userRepository.setAutoSignInWithKakao()
+        } returns Result.success(Unit)
+
+        coEvery {
+            messageService.getToken()
+        } returns Result.success("token")
+
+        coEvery {
+            messageRepository.registerFcmToken("token")
         } returns Result.success(Unit)
 
         val result = useCase(SignUpWithKakaoRequest("username", "nickname"))
