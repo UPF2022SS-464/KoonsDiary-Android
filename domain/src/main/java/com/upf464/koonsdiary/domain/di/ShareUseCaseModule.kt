@@ -78,4 +78,9 @@ internal abstract class ShareUseCaseModule {
     abstract fun bindInviteUserUseCase(
         useCase: InviteUserUseCase
     ): ResultUseCase<InviteUserRequest, EmptyResponse>
+
+    @Binds
+    abstract fun bindKickUserUseCase(
+        useCase: KickUserUseCase
+    ): ResultUseCase<KickUserRequest, EmptyResponse>
 }

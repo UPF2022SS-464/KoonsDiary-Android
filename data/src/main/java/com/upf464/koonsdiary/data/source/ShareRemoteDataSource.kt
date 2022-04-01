@@ -32,4 +32,6 @@ interface ShareRemoteDataSource {
     suspend fun fetchCommentList(diaryId: Int): Result<List<CommentData>>
 
     suspend fun inviteUser(groupId: Int, userIdList: List<Int>): Result<Unit>
+
+    suspend fun kickUser(groupId: Int, userId: Int): Result<Unit>
 }
