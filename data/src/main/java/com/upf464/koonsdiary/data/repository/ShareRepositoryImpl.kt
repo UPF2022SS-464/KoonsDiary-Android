@@ -121,4 +121,11 @@ internal class ShareRepositoryImpl @Inject constructor(
             else Exception(error)
         }
     }
+
+    override suspend fun leaveGroup(groupId: Int): Result<Unit> {
+        return remote.leaveGroup(groupId).errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
 }

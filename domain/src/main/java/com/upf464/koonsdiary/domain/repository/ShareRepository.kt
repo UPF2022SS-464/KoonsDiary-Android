@@ -34,4 +34,6 @@ interface ShareRepository {
     suspend fun inviteUser(groupId: Int, userIdList: List<Int>): Result<Unit>
 
     suspend fun kickUser(groupId: Int, userId: Int): Result<Unit>
+
+    suspend fun leaveGroup(groupId: Int): Result<Unit>
 }

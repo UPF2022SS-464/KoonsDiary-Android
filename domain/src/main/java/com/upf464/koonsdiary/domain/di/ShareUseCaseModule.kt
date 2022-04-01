@@ -83,4 +83,9 @@ internal abstract class ShareUseCaseModule {
     abstract fun bindKickUserUseCase(
         useCase: KickUserUseCase
     ): ResultUseCase<KickUserRequest, EmptyResponse>
+
+    @Binds
+    abstract fun bindLeaveGroupUseCase(
+        useCase: LeaveGroupUseCase
+    ): ResultUseCase<LeaveGroupRequest, EmptyResponse>
 }
