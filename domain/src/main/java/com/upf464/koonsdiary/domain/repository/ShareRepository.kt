@@ -30,4 +30,6 @@ interface ShareRepository {
     suspend fun deleteComment(commentId: Int): Result<Unit>
 
     suspend fun fetchCommentList(diaryId: Int): Result<List<Comment>>
+
+    suspend fun inviteUser(groupId: Int, userIdList: List<Int>): Result<Unit>
 }

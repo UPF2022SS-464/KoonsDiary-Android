@@ -57,4 +57,8 @@ internal class ShareRemoteDevDataSourceImpl @Inject constructor(
     override suspend fun fetchCommentList(diaryId: Int): Result<List<CommentData>> {
         return Result.success(emptyList())
     }
+
+    override suspend fun inviteUser(groupId: Int, userIdList: List<Int>): Result<Unit> {
+        return Result.success(Unit)
+    }
 }
