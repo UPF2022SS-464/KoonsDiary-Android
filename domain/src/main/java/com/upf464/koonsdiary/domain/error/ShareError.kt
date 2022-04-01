@@ -14,4 +14,8 @@ sealed class ShareError(
     object InvalidDiaryId : ShareError()
 
     object InvalidUserId : ShareError()
+
+    object NoPermission : ShareError()
+
+    object NotIncludedInGroup : ShareError()
 }
