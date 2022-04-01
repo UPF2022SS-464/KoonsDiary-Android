@@ -107,4 +107,11 @@ internal class ShareRepositoryImpl @Inject constructor(
             else Exception(error)
         }
     }
+
+    override suspend fun inviteUser(groupId: Int, userIdList: List<Int>): Result<Unit> {
+        return remote.inviteUser(groupId, userIdList).errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
 }

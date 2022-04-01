@@ -73,4 +73,9 @@ internal abstract class ShareUseCaseModule {
     abstract fun bindFetchCommentListUseCase(
         useCase: FetchCommentListUseCase
     ): ResultUseCase<FetchCommentListRequest, FetchCommentListResponse>
+
+    @Binds
+    abstract fun bindInviteUserUseCase(
+        useCase: InviteUserUseCase
+    ): ResultUseCase<InviteUserRequest, EmptyResponse>
 }
