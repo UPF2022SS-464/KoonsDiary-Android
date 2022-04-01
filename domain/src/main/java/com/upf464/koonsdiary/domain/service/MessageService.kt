@@ -8,4 +8,6 @@ interface MessageService {
     fun getMessageFlow(): Flow<Message>
 
     fun setMessage(message: Message)
+
+    suspend fun getToken(): Result<String>
 }
