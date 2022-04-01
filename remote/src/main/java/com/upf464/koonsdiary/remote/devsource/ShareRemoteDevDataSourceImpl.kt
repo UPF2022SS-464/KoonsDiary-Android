@@ -65,4 +65,8 @@ internal class ShareRemoteDevDataSourceImpl @Inject constructor(
     override suspend fun kickUser(groupId: Int, userId: Int): Result<Unit> {
         return Result.success(Unit)
     }
+
+    override suspend fun leaveGroup(groupId: Int): Result<Unit> {
+        return Result.success(Unit)
+    }
 }
