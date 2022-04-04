@@ -59,4 +59,5 @@ dependencies {
     implementation project(":local")
     implementation project(":kakao")
     implementation project(":firebase")
+    implementation project(path: ':common')
 }

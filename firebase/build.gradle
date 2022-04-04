@@ -48,4 +48,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
 
     implementation project(path: ":domain")
+    implementation project(path: ':common')
 }
