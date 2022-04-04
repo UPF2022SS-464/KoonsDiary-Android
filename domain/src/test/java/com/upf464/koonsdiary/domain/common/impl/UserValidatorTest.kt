@@ -1,4 +1,4 @@
-package com.upf464.koonsdiary.domain.common
+package com.upf464.koonsdiary.domain.common.impl
 
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -7,11 +7,11 @@ import org.junit.Test
 
 class UserValidatorTest {
 
-    private lateinit var validator: UserValidator
+    private lateinit var validator: UserValidatorImpl
 
     @Before
     fun setup() {
-        validator = UserValidator()
+        validator = UserValidatorImpl()
     }
 
     @Test
