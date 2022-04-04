@@ -1,6 +1,8 @@
 package com.upf464.koonsdiary.local.di
 
+import com.upf464.koonsdiary.data.source.SecurityLocalDataSource
 import com.upf464.koonsdiary.data.source.UserLocalDataSource
+import com.upf464.koonsdiary.local.source.SecurityLocalDataSourceImpl
 import com.upf464.koonsdiary.local.source.UserLocalDataSourceImpl
 import dagger.Binds
 import dagger.Module
@@ -15,4 +17,9 @@ internal abstract class DataSourceModule {
     abstract fun bindUserLocalDataSource(
         source: UserLocalDataSourceImpl
     ): UserLocalDataSource
+
+    @Binds
+    abstract fun bindSecurityLocalDataSource(
+        source: SecurityLocalDataSourceImpl
+    ): SecurityLocalDataSource
 }
