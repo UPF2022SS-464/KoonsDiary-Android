@@ -1,9 +1,9 @@
 package com.upf464.koonsdiary.data.repository
 
+import com.upf464.koonsdiary.common.extension.errorMap
 import com.upf464.koonsdiary.data.error.ErrorData
 import com.upf464.koonsdiary.data.mapper.toDomain
 import com.upf464.koonsdiary.data.source.MessageRemoteDataSource
-import com.upf464.koonsdiary.domain.common.errorMap
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import javax.inject.Inject
 

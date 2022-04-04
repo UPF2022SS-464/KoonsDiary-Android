@@ -1,11 +1,11 @@
 package com.upf464.koonsdiary.data.repository
 
+import com.upf464.koonsdiary.common.extension.errorMap
 import com.upf464.koonsdiary.data.error.ErrorData
 import com.upf464.koonsdiary.data.mapper.toData
 import com.upf464.koonsdiary.data.mapper.toDomain
 import com.upf464.koonsdiary.data.source.UserLocalDataSource
 import com.upf464.koonsdiary.data.source.UserRemoteDataSource
-import com.upf464.koonsdiary.domain.common.errorMap
 import com.upf464.koonsdiary.domain.model.SignInType
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.repository.UserRepository

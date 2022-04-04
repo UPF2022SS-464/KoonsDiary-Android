@@ -1,4 +1,4 @@
-package com.upf464.koonsdiary.domain.common
+package com.upf464.koonsdiary.common.extension
 
 inline fun <T, R> Result<T>.flatMap(
     transform: (T) -> Result<R>

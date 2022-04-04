@@ -1,6 +1,6 @@
 package com.upf464.koonsdiary.domain.usecase.user
 
-import com.upf464.koonsdiary.domain.common.flatMap
+import com.upf464.koonsdiary.common.extension.flatMap
 import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.model.SignInType
 import com.upf464.koonsdiary.domain.repository.MessageRepository
