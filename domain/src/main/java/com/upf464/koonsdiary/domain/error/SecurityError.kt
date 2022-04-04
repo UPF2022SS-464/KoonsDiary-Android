@@ -9,4 +9,6 @@ sealed class SecurityError(
         override val message: String? = null,
         override val cause: Throwable? = null
     ) : SecurityError(message, cause)
+
+    object InvalidPIN : SecurityError()
 }
