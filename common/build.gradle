@@ -18,7 +18,4 @@ dependencies {
     testImplementation "io.mockk:mockk:$mockk_version"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
-
-    implementation project(path: ':data')
-    implementation project(path: ':common')
 }
