@@ -1,7 +1,7 @@
 package com.upf464.koonsdiary.domain.usecase.user
 
 import com.upf464.koonsdiary.domain.common.HashGenerator
-import com.upf464.koonsdiary.domain.common.SignUpValidator
+import com.upf464.koonsdiary.domain.common.UserValidator
 import com.upf464.koonsdiary.domain.common.flatMap
 import com.upf464.koonsdiary.domain.error.SignUpError
 import com.upf464.koonsdiary.domain.model.User
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 internal class SignUpWithUsernameUseCase @Inject constructor(
     private val userRepository: UserRepository,
-    private val validator: SignUpValidator,
+    private val validator: UserValidator,
     private val hashGenerator: HashGenerator,
     private val messageService: MessageService,
     private val messageRepository: MessageRepository
