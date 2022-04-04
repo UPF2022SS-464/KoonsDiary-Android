@@ -34,4 +34,8 @@ internal class UserRemoteDevDataSourceImpl @Inject constructor(
     override suspend fun fetchSaltOf(username: String): Result<String> {
         return Result.success("")
     }
+
+    override suspend fun updateUser(nickname: String): Result<Unit> {
+        return Result.success(Unit)
+    }
 }

@@ -101,4 +101,11 @@ internal class UserRepositoryImpl @Inject constructor(
             else Exception(error)
         }
     }
+
+    override suspend fun updateUser(nickname: String): Result<Unit> {
+        return remote.updateUser(nickname).errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
 }
