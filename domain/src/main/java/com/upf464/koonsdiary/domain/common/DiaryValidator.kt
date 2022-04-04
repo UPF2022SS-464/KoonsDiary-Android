@@ -1,12 +1,6 @@
 package com.upf464.koonsdiary.domain.common
 
-import javax.inject.Inject
-import javax.inject.Singleton
+internal interface DiaryValidator {
 
-@Singleton
-internal class DiaryValidator @Inject constructor() {
-
-    fun validateContent(content: String): Boolean {
-        return content.isNotBlank()
-    }
+    fun validateContent(content: String): Boolean
 }
