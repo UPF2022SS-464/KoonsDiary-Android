@@ -4,7 +4,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class SignUpValidator @Inject constructor() {
+internal class UserValidator @Inject constructor() {
 
     fun isEmailValid(email: String): Boolean {
         return email.matches("""^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[.][a-zA-Z]{2,3}$""".toRegex())

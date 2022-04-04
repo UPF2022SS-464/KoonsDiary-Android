@@ -5,13 +5,13 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class SignUpValidatorTest {
+class UserValidatorTest {
 
-    private lateinit var validator: SignUpValidator
+    private lateinit var validator: UserValidator
 
     @Before
     fun setup() {
-        validator = SignUpValidator()
+        validator = UserValidator()
     }
 
     @Test

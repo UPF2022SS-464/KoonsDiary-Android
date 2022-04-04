@@ -1,7 +1,7 @@
 package com.upf464.koonsdiary.domain.usecase.user
 
 import com.upf464.koonsdiary.domain.common.HashGenerator
-import com.upf464.koonsdiary.domain.common.SignUpValidator
+import com.upf464.koonsdiary.domain.common.UserValidator
 import com.upf464.koonsdiary.domain.error.SignUpError
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
@@ -20,7 +20,7 @@ import org.junit.Test
 class SignUpWithUsernameUseCaseTest {
 
     @MockK private lateinit var userRepository: UserRepository
-    @MockK private lateinit var validator: SignUpValidator
+    @MockK private lateinit var validator: UserValidator
     @MockK private lateinit var hashGenerator: HashGenerator
     @MockK private lateinit var messageService: MessageService
     @MockK private lateinit var messageRepository: MessageRepository
