@@ -6,6 +6,7 @@ import com.upf464.koonsdiary.domain.common.UserValidator
 import com.upf464.koonsdiary.domain.error.SignUpError
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.repository.MessageRepository
+import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.request.user.SignUpWithUsernameRequest
 import com.upf464.koonsdiary.domain.response.EmptyResponse
@@ -15,6 +16,7 @@ import javax.inject.Inject
 
 internal class SignUpWithUsernameUseCase @Inject constructor(
     private val userRepository: UserRepository,
+    private val securityRepository: SecurityRepository,
     private val validator: UserValidator,
     private val hashGenerator: HashGenerator,
     private val messageService: MessageService,
@@ -45,6 +47,7 @@ internal class SignUpWithUsernameUseCase @Inject constructor(
             userRepository.signUpWithUsername(user, hashedPassword)
         }.onSuccess { token ->
             userRepository.setAutoSignInWithToken(token)
+            securityRepository.clearPIN()
         }.flatMap {
             messageService.getToken()
         }.flatMap { token ->

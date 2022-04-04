@@ -5,6 +5,7 @@ import com.upf464.koonsdiary.common.extension.handleWith
 import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.repository.MessageRepository
+import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.request.user.SignUpWithKakaoRequest
 import com.upf464.koonsdiary.domain.response.EmptyResponse
@@ -16,6 +17,7 @@ import javax.inject.Inject
 internal class SignUpWithKakaoUseCase @Inject constructor(
     private val kakaoService: KakaoService,
     private val userRepository: UserRepository,
+    private val securityRepository: SecurityRepository,
     private val messageService: MessageService,
     private val messageRepository: MessageRepository
 ) : ResultUseCase<SignUpWithKakaoRequest, EmptyResponse> {
@@ -39,6 +41,7 @@ internal class SignUpWithKakaoUseCase @Inject constructor(
             EmptyResponse
         }.onSuccess {
             userRepository.setAutoSignInWithKakao()
+            securityRepository.clearPIN()
         }
     }
 

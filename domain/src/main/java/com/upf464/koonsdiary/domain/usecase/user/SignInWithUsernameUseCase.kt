@@ -3,6 +3,7 @@ package com.upf464.koonsdiary.domain.usecase.user
 import com.upf464.koonsdiary.common.extension.flatMap
 import com.upf464.koonsdiary.domain.common.HashGenerator
 import com.upf464.koonsdiary.domain.repository.MessageRepository
+import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.request.user.SignInWithUsernameRequest
 import com.upf464.koonsdiary.domain.response.EmptyResponse
@@ -12,6 +13,7 @@ import javax.inject.Inject
 
 internal class SignInWithUsernameUseCase @Inject constructor(
     private val userRepository: UserRepository,
+    private val securityRepository: SecurityRepository,
     private val hashGenerator: HashGenerator,
     private val messageService: MessageService,
     private val messageRepository: MessageRepository
@@ -23,6 +25,9 @@ internal class SignInWithUsernameUseCase @Inject constructor(
                 request.username,
                 hashGenerator.hashPasswordWithSalt(request.password, salt)
             )
+        }.onSuccess { token ->
+            userRepository.setAutoSignInWithToken(token)
+            securityRepository.clearPIN()
         }.flatMap {
             messageService.getToken()
         }.flatMap { token ->
