@@ -37,4 +37,9 @@ internal abstract class UserUseCaseModule {
     abstract fun bindAutoSignInUseCase(
         useCase: AutoSignInUseCase
     ) : ResultUseCase<AutoSignInRequest, EmptyResponse>
+
+    @Binds
+    abstract fun bindUpdateUserUseCase(
+        useCase: UpdateUserUseCase
+    ) : ResultUseCase<UpdateUserRequest, EmptyResponse>
 }

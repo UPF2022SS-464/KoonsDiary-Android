@@ -28,4 +28,6 @@ interface UserRepository {
     suspend fun getAutoSignIn(): Result<SignInType?>
 
     suspend fun getAutoSignInToken(): Result<String>
+
+    suspend fun updateUser(nickname: String): Result<Unit>
 }
