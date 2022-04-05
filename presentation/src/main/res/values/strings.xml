@@ -1,3 +1,5 @@
 <resources>
-
+    <string name="biometric_title">생체인증</string>
+    <string name="biometric_subtitle">생체 인증으로 잠금을 해제해주세요.</string>
+    <string name="biometric_cancel">PIN으로 잠금해제</string>
 </resources>
