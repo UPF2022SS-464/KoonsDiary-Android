@@ -17,15 +17,8 @@ internal class CottonRemoteDevDataSourceImpl @Inject constructor(
         return Result.success(0)
     }
 
-    override suspend fun fetchRandomAnswer(answerId: Int): Result<QuestionAnswerData> {
-        return Result.success(
-            QuestionAnswerData(
-                id = 1,
-                writerId = 1,
-                content = "content",
-                questionId = QuestionData(id = 1, korean = "", english = "")
-            )
-        )
+    override suspend fun fetchRandomAnswer(): Result<List<QuestionAnswerData>> {
+        return Result.success(emptyList())
     }
 
     override suspend fun fetchReaction(): Result<ReactionData> {

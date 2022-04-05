@@ -11,8 +11,8 @@ internal class FetchRandomAnswerUseCase @Inject constructor(
 ) : ResultUseCase<FetchRandomAnswerRequest, FetchRandomAnswerResponse> {
 
     override suspend fun invoke(request: FetchRandomAnswerRequest): Result<FetchRandomAnswerResponse> {
-        return cottonRepository.fetchRandomAnswer(request.answerId).map { answer ->
-            FetchRandomAnswerResponse(answer)
+        return cottonRepository.fetchRandomAnswer().map { questionAnswer ->
+            FetchRandomAnswerResponse(questionAnswer)
         }
     }
 }

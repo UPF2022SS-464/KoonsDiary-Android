@@ -10,7 +10,7 @@ interface CottonRepository {
 
     suspend fun addQuestionAnswer(questionAnswer: QuestionAnswer): Result<Int>
 
-    suspend fun fetchRandomAnswer(answerId: Int): Result<QuestionAnswer>
+    suspend fun fetchRandomAnswer(): Result<List<QuestionAnswer>>
 
     suspend fun fetchReaction(): Result<Reaction>
 }

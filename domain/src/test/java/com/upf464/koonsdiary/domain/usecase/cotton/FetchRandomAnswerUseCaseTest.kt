@@ -1,7 +1,5 @@
 package com.upf464.koonsdiary.domain.usecase.cotton
 
-import com.upf464.koonsdiary.domain.error.CottonError
-import com.upf464.koonsdiary.domain.model.Question
 import com.upf464.koonsdiary.domain.model.QuestionAnswer
 import com.upf464.koonsdiary.domain.repository.CottonRepository
 import com.upf464.koonsdiary.domain.request.cotton.FetchRandomAnswerRequest
@@ -29,33 +27,14 @@ class FetchRandomAnswerUseCaseTest {
     }
 
     @Test
-    fun invoke_validAnswerId_isSuccess(): Unit = runBlocking {
-        val fetchedAnswer = QuestionAnswer(
-            id = 1,
-            writerId = 1,
-            content = "content",
-            questionId = Question(id = 1, korean = "안녕", english = "hi")
-        )
-
+    fun invoke_nothing_isSuccess(): Unit = runBlocking {
         coEvery {
-            cottonRepository.fetchRandomAnswer(1)
-        } returns Result.success(fetchedAnswer)
+            cottonRepository.fetchRandomAnswer()
+        } returns Result.success(emptyList())
 
-        val result = useCase(FetchRandomAnswerRequest(1))
+        val result = useCase(FetchRandomAnswerRequest)
 
         assertTrue(result.isSuccess)
-        assertEquals(fetchedAnswer, result.getOrNull()?.questionAnswer)
-    }
-
-    @Test
-    fun invoke_invalidAnswerId_isFailure(): Unit = runBlocking {
-        coEvery {
-            cottonRepository.fetchRandomAnswer(1)
-        } returns Result.failure(CottonError.InvalidAnswerId)
-
-        val result = useCase(FetchRandomAnswerRequest(1))
-
-        assertTrue(result.isFailure)
-        assertEquals(CottonError.InvalidAnswerId, result.exceptionOrNull())
+        assertEquals(emptyList<QuestionAnswer>(), result.getOrNull()?.questionAnswer)
     }
 }
