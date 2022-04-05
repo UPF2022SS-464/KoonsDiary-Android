@@ -21,7 +21,7 @@ internal class CottonRemoteDevDataSourceImpl @Inject constructor(
         return Result.success(emptyList())
     }
 
-    override suspend fun fetchReaction(): Result<ReactionData> {
-        return Result.success(ReactionData(id = 1, name = ""))
+    override suspend fun fetchReaction(): Result<List<ReactionData>> {
+        return Result.success(emptyList())
     }
 }

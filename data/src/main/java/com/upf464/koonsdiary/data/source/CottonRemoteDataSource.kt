@@ -12,5 +12,5 @@ interface CottonRemoteDataSource {
 
     suspend fun fetchRandomAnswer(): Result<List<QuestionAnswerData>>
 
-    suspend fun fetchReaction(): Result<ReactionData>
+    suspend fun fetchReaction(): Result<List<ReactionData>>
 }

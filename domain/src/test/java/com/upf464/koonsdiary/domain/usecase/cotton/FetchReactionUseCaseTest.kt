@@ -28,15 +28,13 @@ class FetchReactionUseCaseTest {
 
     @Test
     fun invoke_nothing_isSuccess(): Unit = runBlocking {
-        val fetchedReaction = Reaction(id = 1, name = "이름")
-
         coEvery {
             cottonRepository.fetchReaction()
-        } returns Result.success(fetchedReaction)
+        } returns Result.success(emptyList())
 
         val result = useCase(FetchReactionRequest)
 
         assertTrue(result.isSuccess)
-        assertEquals(fetchedReaction, result.getOrNull()?.reaction)
+        assertEquals(emptyList<Reaction>(), result.getOrNull()?.reaction)
     }
 }

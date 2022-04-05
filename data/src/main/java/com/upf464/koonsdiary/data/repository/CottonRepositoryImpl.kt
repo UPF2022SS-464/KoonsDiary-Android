@@ -41,9 +41,9 @@ internal class CottonRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchReaction(): Result<Reaction> {
+    override suspend fun fetchReaction(): Result<List<Reaction>> {
         return remote.fetchReaction().map { reaction ->
-            reaction.toDomain()
+            reaction.map { it.toDomain() }
         }.errorMap { error ->
             if (error is ErrorData) error.toDomain()
             else Exception(error)
