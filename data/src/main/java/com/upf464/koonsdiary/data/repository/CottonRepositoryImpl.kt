@@ -1,9 +1,11 @@
 package com.upf464.koonsdiary.data.repository
 
 
+import com.upf464.koonsdiary.data.error.ErrorData
 import com.upf464.koonsdiary.data.mapper.toData
 import com.upf464.koonsdiary.data.mapper.toDomain
 import com.upf464.koonsdiary.data.source.CottonRemoteDataSource
+import com.upf464.koonsdiary.domain.common.errorMap
 import com.upf464.koonsdiary.domain.model.Question
 import com.upf464.koonsdiary.domain.model.QuestionAnswer
 import com.upf464.koonsdiary.domain.repository.CottonRepository
@@ -16,10 +18,25 @@ internal class CottonRepositoryImpl @Inject constructor(
     override suspend fun fetchRandomQuestion(): Result<Question> {
         return remote.fetchRandomQuestion().map { questionData ->
             questionData.toDomain()
+        }.errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
         }
     }
 
     override suspend fun addQuestionAnswer(questionAnswer: QuestionAnswer): Result<Int> {
-        return remote.addQuestionAnswer(questionAnswer.toData())
+        return remote.addQuestionAnswer(questionAnswer.toData()).errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
+
+    override suspend fun fetchRandomAnswer(answerId: Int): Result<QuestionAnswer> {
+        return remote.fetchRandomAnswer(answerId).map { questionAnswerData ->
+            questionAnswerData.toDomain()
+        }.errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
     }
 }
