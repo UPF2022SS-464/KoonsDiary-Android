@@ -46,6 +46,19 @@ internal class SecurityLocalDataSourceImpl @Inject constructor(
             pref.edit {
                 remove(KEY_PIN)
                 remove(KEY_UUID)
+                remove(KEY_BIOMETRIC)
+            }
+        }
+    }
+
+    override suspend fun setBiometric(isActive: Boolean): Result<Unit> = runCatching {
+        withContext(Dispatchers.IO) {
+            if (isActive && pref.getString(KEY_PIN, null) == null) {
+                throw SecurityErrorData.NoStoredPIN
+            }
+
+            pref.edit {
+                putBoolean(KEY_BIOMETRIC, isActive)
             }
         }
     }
@@ -53,5 +66,6 @@ internal class SecurityLocalDataSourceImpl @Inject constructor(
     companion object {
         private const val KEY_PIN = "KEY_PIN"
         private const val KEY_UUID = "KEY_UUID"
+        private const val KEY_BIOMETRIC = "KEY_UUID"
     }
 }

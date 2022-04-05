@@ -38,4 +38,11 @@ internal class SecurityRepositoryImpl @Inject constructor(
             else Exception(error)
         }
     }
+
+    override suspend fun setBiometric(isActive: Boolean): Result<Unit> {
+        return local.setBiometric(isActive).errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
 }

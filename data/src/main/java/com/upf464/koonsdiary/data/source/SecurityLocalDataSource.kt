@@ -9,4 +9,6 @@ interface SecurityLocalDataSource {
     suspend fun getDisposableSalt(): Result<String>
 
     suspend fun clearPIN(): Result<Unit>
+
+    suspend fun setBiometric(isActive: Boolean): Result<Unit>
 }
