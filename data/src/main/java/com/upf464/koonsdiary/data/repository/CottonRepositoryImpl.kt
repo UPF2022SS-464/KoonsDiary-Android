@@ -8,6 +8,7 @@ import com.upf464.koonsdiary.data.source.CottonRemoteDataSource
 import com.upf464.koonsdiary.domain.common.errorMap
 import com.upf464.koonsdiary.domain.model.Question
 import com.upf464.koonsdiary.domain.model.QuestionAnswer
+import com.upf464.koonsdiary.domain.model.Reaction
 import com.upf464.koonsdiary.domain.repository.CottonRepository
 import javax.inject.Inject
 
@@ -34,6 +35,15 @@ internal class CottonRepositoryImpl @Inject constructor(
     override suspend fun fetchRandomAnswer(answerId: Int): Result<QuestionAnswer> {
         return remote.fetchRandomAnswer(answerId).map { questionAnswerData ->
             questionAnswerData.toDomain()
+        }.errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
+
+    override suspend fun fetchReaction(): Result<Reaction> {
+        return remote.fetchReaction().map { reactionData ->
+            reactionData.toDomain()
         }.errorMap { error ->
             if (error is ErrorData) error.toDomain()
             else Exception(error)

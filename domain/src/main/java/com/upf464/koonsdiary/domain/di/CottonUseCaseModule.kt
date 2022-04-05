@@ -3,13 +3,16 @@ package com.upf464.koonsdiary.domain.di
 import com.upf464.koonsdiary.domain.request.cotton.AddQuestionAnswerRequest
 import com.upf464.koonsdiary.domain.request.cotton.FetchRandomAnswerRequest
 import com.upf464.koonsdiary.domain.request.cotton.FetchRandomQuestionRequest
+import com.upf464.koonsdiary.domain.request.cotton.FetchReactionRequest
 import com.upf464.koonsdiary.domain.response.cotton.AddQuestionAnswerResponse
 import com.upf464.koonsdiary.domain.response.cotton.FetchRandomAnswerResponse
 import com.upf464.koonsdiary.domain.response.cotton.FetchRandomQuestionResponse
+import com.upf464.koonsdiary.domain.response.cotton.FetchReactionResponse
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import com.upf464.koonsdiary.domain.usecase.cotton.AddQuestionAnswerUseCase
 import com.upf464.koonsdiary.domain.usecase.cotton.FetchRandomAnswerUseCase
 import com.upf464.koonsdiary.domain.usecase.cotton.FetchRandomQuestionUseCase
+import com.upf464.koonsdiary.domain.usecase.cotton.FetchReactionUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -34,4 +37,9 @@ internal abstract class CottonUseCaseModule {
     abstract fun bindFetchRandomAnswerUseCase(
         useCase: FetchRandomAnswerUseCase
     ): ResultUseCase<FetchRandomAnswerRequest, FetchRandomAnswerResponse>
+
+    @Binds
+    abstract fun bindFetchReactionUseCase(
+        useCase: FetchReactionUseCase
+    ): ResultUseCase<FetchReactionRequest, FetchReactionResponse>
 }
