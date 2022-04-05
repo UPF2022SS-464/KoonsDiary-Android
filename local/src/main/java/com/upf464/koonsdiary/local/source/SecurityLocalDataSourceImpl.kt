@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.upf464.koonsdiary.data.error.SecurityErrorData
+import com.upf464.koonsdiary.data.model.LockTypeData
 import com.upf464.koonsdiary.data.source.SecurityLocalDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -60,6 +61,18 @@ internal class SecurityLocalDataSourceImpl @Inject constructor(
             pref.edit {
                 putBoolean(KEY_BIOMETRIC, isActive)
             }
+        }
+    }
+
+    override suspend fun fetchLockType(): Result<LockTypeData> = runCatching {
+        withContext(Dispatchers.IO) {
+            val pin = pref.getString(KEY_PIN, null)
+            val biometric = pref.getBoolean(KEY_BIOMETRIC, false)
+
+            if (pin != null) {
+                if (biometric) LockTypeData.BIOMETRIC
+                else LockTypeData.PIN
+            } else LockTypeData.NONE
         }
     }
 

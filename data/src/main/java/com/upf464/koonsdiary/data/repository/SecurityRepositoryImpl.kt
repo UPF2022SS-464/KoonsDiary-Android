@@ -4,6 +4,7 @@ import com.upf464.koonsdiary.common.extension.errorMap
 import com.upf464.koonsdiary.data.error.ErrorData
 import com.upf464.koonsdiary.data.mapper.toDomain
 import com.upf464.koonsdiary.data.source.SecurityLocalDataSource
+import com.upf464.koonsdiary.domain.error.LockType
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import javax.inject.Inject
 
@@ -41,6 +42,15 @@ internal class SecurityRepositoryImpl @Inject constructor(
 
     override suspend fun setBiometric(isActive: Boolean): Result<Unit> {
         return local.setBiometric(isActive).errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
+
+    override suspend fun fetchLockType(): Result<LockType> {
+        return local.fetchLockType().map { type ->
+            type.toDomain()
+        }.errorMap { error ->
             if (error is ErrorData) error.toDomain()
             else Exception(error)
         }
