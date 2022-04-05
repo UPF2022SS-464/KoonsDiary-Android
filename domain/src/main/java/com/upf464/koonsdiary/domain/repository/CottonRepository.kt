@@ -12,5 +12,5 @@ interface CottonRepository {
 
     suspend fun fetchRandomAnswer(): Result<List<QuestionAnswer>>
 
-    suspend fun fetchReaction(): Result<Reaction>
+    suspend fun fetchReaction(): Result<List<Reaction>>
 }
