@@ -25,13 +25,13 @@ internal class SecurityLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPIN(): Result<String> = runCatching {
+    override suspend fun fetchPIN(): Result<String> = runCatching {
         withContext(Dispatchers.IO) {
             pref.getString(KEY_PIN, null) ?: throw SecurityErrorData.NoStoredPIN
         }
     }
 
-    override suspend fun getDisposableSalt(): Result<String> = runCatching {
+    override suspend fun fetchDisposableSalt(): Result<String> = runCatching {
         withContext(Dispatchers.IO) {
             pref.getString(KEY_UUID, null)
                 ?: UUID.randomUUID().toString().also { uuid ->

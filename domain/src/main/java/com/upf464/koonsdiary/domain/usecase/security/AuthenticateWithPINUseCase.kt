@@ -15,10 +15,10 @@ internal class AuthenticateWithPINUseCase @Inject constructor(
 ) : ResultUseCase<AuthenticateWithPINRequest, EmptyResponse> {
 
     override suspend fun invoke(request: AuthenticateWithPINRequest): Result<EmptyResponse> {
-        return securityRepository.getDisposableSalt().map { salt ->
+        return securityRepository.fetchDisposableSalt().map { salt ->
             hashGenerator.hashPasswordWithSalt(request.pin, salt)
         }.flatMap { hashedPIN ->
-            securityRepository.getPIN().flatMap { storedPIN ->
+            securityRepository.fetchPIN().flatMap { storedPIN ->
                 if (hashedPIN == storedPIN) Result.success(EmptyResponse)
                 else Result.failure(SecurityError.InvalidPIN)
             }

@@ -6,9 +6,9 @@ interface SecurityRepository {
 
     suspend fun setPIN(pin: String): Result<Unit>
 
-    suspend fun getPIN(): Result<String>
+    suspend fun fetchPIN(): Result<String>
 
-    suspend fun getDisposableSalt(): Result<String>
+    suspend fun fetchDisposableSalt(): Result<String>
 
     suspend fun clearPIN(): Result<Unit>
     

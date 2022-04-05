@@ -19,15 +19,15 @@ internal class SecurityRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPIN(): Result<String> {
-        return local.getPIN().errorMap { error ->
+    override suspend fun fetchPIN(): Result<String> {
+        return local.fetchPIN().errorMap { error ->
             if (error is ErrorData) error.toDomain()
             else Exception(error)
         }
     }
 
-    override suspend fun getDisposableSalt(): Result<String> {
-        return local.getDisposableSalt().errorMap { error ->
+    override suspend fun fetchDisposableSalt(): Result<String> {
+        return local.fetchDisposableSalt().errorMap { error ->
             if (error is ErrorData) error.toDomain()
             else Exception(error)
         }
