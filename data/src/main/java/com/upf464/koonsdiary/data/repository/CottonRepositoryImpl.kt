@@ -32,18 +32,18 @@ internal class CottonRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchRandomAnswer(): Result<List<QuestionAnswer>> {
-        return remote.fetchRandomAnswer().map { questionAnswer ->
-            questionAnswer.map { it.toDomain() }
+    override suspend fun fetchRandomAnswerList(): Result<List<QuestionAnswer>> {
+        return remote.fetchRandomAnswerList().map { questionAnswerList ->
+            questionAnswerList.map { it.toDomain() }
         }.errorMap { error ->
             if (error is ErrorData) error.toDomain()
             else Exception(error)
         }
     }
 
-    override suspend fun fetchReaction(): Result<List<Reaction>> {
-        return remote.fetchReaction().map { reaction ->
-            reaction.map { it.toDomain() }
+    override suspend fun fetchReactionList(): Result<List<Reaction>> {
+        return remote.fetchReactionList().map { reactionList ->
+            reactionList.map { it.toDomain() }
         }.errorMap { error ->
             if (error is ErrorData) error.toDomain()
             else Exception(error)

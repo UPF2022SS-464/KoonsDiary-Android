@@ -2,7 +2,7 @@ package com.upf464.koonsdiary.domain.usecase.cotton
 
 import com.upf464.koonsdiary.domain.model.Reaction
 import com.upf464.koonsdiary.domain.repository.CottonRepository
-import com.upf464.koonsdiary.domain.request.cotton.FetchReactionRequest
+import com.upf464.koonsdiary.domain.request.cotton.FetchReactionListRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -12,16 +12,16 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class FetchReactionUseCaseTest {
+class FetchReactionListUseCaseTest {
 
     @MockK
     private lateinit var cottonRepository: CottonRepository
-    private lateinit var useCase: FetchReactionUseCase
+    private lateinit var useCase: FetchReactionListUseCase
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        useCase = FetchReactionUseCase(
+        useCase = FetchReactionListUseCase(
             cottonRepository = cottonRepository
         )
     }
@@ -29,12 +29,12 @@ class FetchReactionUseCaseTest {
     @Test
     fun invoke_nothing_isSuccess(): Unit = runBlocking {
         coEvery {
-            cottonRepository.fetchReaction()
+            cottonRepository.fetchReactionList()
         } returns Result.success(emptyList())
 
-        val result = useCase(FetchReactionRequest)
+        val result = useCase(FetchReactionListRequest)
 
         assertTrue(result.isSuccess)
-        assertEquals(emptyList<Reaction>(), result.getOrNull()?.reaction)
+        assertEquals(emptyList<Reaction>(), result.getOrNull()?.reactionList)
     }
 }
