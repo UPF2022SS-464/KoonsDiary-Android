@@ -4,6 +4,7 @@ import com.upf464.koonsdiary.domain.common.HashGenerator
 import com.upf464.koonsdiary.domain.common.UserValidator
 import com.upf464.koonsdiary.domain.error.SignUpError
 import com.upf464.koonsdiary.domain.repository.MessageRepository
+import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.request.user.SignUpWithUsernameRequest
 import com.upf464.koonsdiary.domain.service.MessageService
@@ -24,6 +25,7 @@ class SignUpWithUsernameUseCaseTest {
     @MockK private lateinit var hashGenerator: HashGenerator
     @MockK private lateinit var messageService: MessageService
     @MockK private lateinit var messageRepository: MessageRepository
+    @MockK private lateinit var securityRepository: SecurityRepository
     private lateinit var useCase: SignUpWithUsernameUseCase
 
     @Before
@@ -34,7 +36,8 @@ class SignUpWithUsernameUseCaseTest {
             validator = validator,
             hashGenerator = hashGenerator,
             messageService = messageService,
-            messageRepository = messageRepository
+            messageRepository = messageRepository,
+            securityRepository = securityRepository
         )
     }
 
@@ -80,13 +83,17 @@ class SignUpWithUsernameUseCaseTest {
             messageRepository.registerFcmToken("token")
         } returns Result.success(Unit)
 
+        coEvery {
+            securityRepository.clearPIN()
+        } returns Result.success(Unit)
+
         val result = useCase(
             SignUpWithUsernameRequest(
-            email = "email",
-            username = "username",
-            password = "password",
-            nickname = "nickname"
-        )
+                email = "email",
+                username = "username",
+                password = "password",
+                nickname = "nickname"
+            )
         )
 
         assertTrue(result.isSuccess)
@@ -103,11 +110,11 @@ class SignUpWithUsernameUseCaseTest {
 
         val result = useCase(
             SignUpWithUsernameRequest(
-            email = "email",
-            username = "username",
-            password = "password",
-            nickname = "nickname"
-        )
+                email = "email",
+                username = "username",
+                password = "password",
+                nickname = "nickname"
+            )
         )
 
         assertFalse(result.isSuccess)
@@ -126,11 +133,11 @@ class SignUpWithUsernameUseCaseTest {
 
         val result = useCase(
             SignUpWithUsernameRequest(
-            email = "email",
-            username = "username",
-            password = "password",
-            nickname = "nickname"
-        )
+                email = "email",
+                username = "username",
+                password = "password",
+                nickname = "nickname"
+            )
         )
 
         assertFalse(result.isSuccess)
@@ -153,11 +160,11 @@ class SignUpWithUsernameUseCaseTest {
 
         val result = useCase(
             SignUpWithUsernameRequest(
-            email = "email",
-            username = "username",
-            password = "password",
-            nickname = "nickname"
-        )
+                email = "email",
+                username = "username",
+                password = "password",
+                nickname = "nickname"
+            )
         )
 
         assertFalse(result.isSuccess)
@@ -184,11 +191,11 @@ class SignUpWithUsernameUseCaseTest {
 
         val result = useCase(
             SignUpWithUsernameRequest(
-            email = "email",
-            username = "username",
-            password = "password",
-            nickname = "nickname"
-        )
+                email = "email",
+                username = "username",
+                password = "password",
+                nickname = "nickname"
+            )
         )
 
         assertFalse(result.isSuccess)
