@@ -15,4 +15,15 @@ internal class CottonRemoteDevDataSourceImpl @Inject constructor(
     override suspend fun addQuestionAnswer(questionAnswer: QuestionAnswerData): Result<Int> {
         return Result.success(0)
     }
+
+    override suspend fun fetchRandomAnswer(answerId: Int): Result<QuestionAnswerData> {
+        return Result.success(
+            QuestionAnswerData(
+                id = 1,
+                writerId = 1,
+                content = "content",
+                questionId = QuestionData(id = 1, korean = "", english = "")
+            )
+        )
+    }
 }

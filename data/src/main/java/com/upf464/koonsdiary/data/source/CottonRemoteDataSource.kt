@@ -8,4 +8,6 @@ interface CottonRemoteDataSource {
     suspend fun fetchRandomQuestion(): Result<QuestionData>
 
     suspend fun addQuestionAnswer(questionAnswer: QuestionAnswerData): Result<Int>
+
+    suspend fun fetchRandomAnswer(answerId: Int): Result<QuestionAnswerData>
 }
