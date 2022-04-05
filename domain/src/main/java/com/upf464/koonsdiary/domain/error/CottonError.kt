@@ -7,4 +7,5 @@ sealed class CottonError(
 
     object EmptyContent : CottonError()
 
+    object InvalidAnswerId : CottonError()
 }
