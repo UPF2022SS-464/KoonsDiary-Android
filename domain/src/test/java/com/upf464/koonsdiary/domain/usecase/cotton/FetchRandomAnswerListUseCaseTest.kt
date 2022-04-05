@@ -2,7 +2,7 @@ package com.upf464.koonsdiary.domain.usecase.cotton
 
 import com.upf464.koonsdiary.domain.model.QuestionAnswer
 import com.upf464.koonsdiary.domain.repository.CottonRepository
-import com.upf464.koonsdiary.domain.request.cotton.FetchRandomAnswerRequest
+import com.upf464.koonsdiary.domain.request.cotton.FetchRandomAnswerListRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -12,16 +12,16 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class FetchRandomAnswerUseCaseTest {
+class FetchRandomAnswerListUseCaseTest {
 
     @MockK
     private lateinit var cottonRepository: CottonRepository
-    private lateinit var useCase: FetchRandomAnswerUseCase
+    private lateinit var useCase: FetchRandomAnswerListUseCase
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
-        useCase = FetchRandomAnswerUseCase(
+        useCase = FetchRandomAnswerListUseCase(
             cottonRepository = cottonRepository
         )
     }
@@ -29,12 +29,12 @@ class FetchRandomAnswerUseCaseTest {
     @Test
     fun invoke_nothing_isSuccess(): Unit = runBlocking {
         coEvery {
-            cottonRepository.fetchRandomAnswer()
+            cottonRepository.fetchRandomAnswerList()
         } returns Result.success(emptyList())
 
-        val result = useCase(FetchRandomAnswerRequest)
+        val result = useCase(FetchRandomAnswerListRequest)
 
         assertTrue(result.isSuccess)
-        assertEquals(emptyList<QuestionAnswer>(), result.getOrNull()?.questionAnswer)
+        assertEquals(emptyList<QuestionAnswer>(), result.getOrNull()?.questionAnswerList)
     }
 }

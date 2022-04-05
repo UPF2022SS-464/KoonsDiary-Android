@@ -17,11 +17,11 @@ internal class CottonRemoteDevDataSourceImpl @Inject constructor(
         return Result.success(0)
     }
 
-    override suspend fun fetchRandomAnswer(): Result<List<QuestionAnswerData>> {
+    override suspend fun fetchRandomAnswerList(): Result<List<QuestionAnswerData>> {
         return Result.success(emptyList())
     }
 
-    override suspend fun fetchReaction(): Result<List<ReactionData>> {
+    override suspend fun fetchReactionList(): Result<List<ReactionData>> {
         return Result.success(emptyList())
     }
 }
