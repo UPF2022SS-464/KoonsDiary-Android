@@ -11,3 +11,12 @@ internal fun QuestionAnswer.toData() = QuestionAnswerData(
     content = content,
     reactionList = reactionList
 )
+
+internal fun QuestionAnswerData.toDomain() = QuestionAnswer(
+    id = id,
+    writerId = writerId,
+    createdDate = createdDate,
+    questionId = questionId.toDomain(),
+    content = content,
+    reactionList = reactionList
+)
