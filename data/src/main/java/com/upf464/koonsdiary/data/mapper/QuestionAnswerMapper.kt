@@ -9,7 +9,7 @@ internal fun QuestionAnswer.toData() = QuestionAnswerData(
     createdDate = createdDate,
     questionId = questionId.toData(),
     content = content,
-    reactionList = reactionList
+    reactionMap = reactionMap
 )
 
 internal fun QuestionAnswerData.toDomain() = QuestionAnswer(
@@ -18,5 +18,5 @@ internal fun QuestionAnswerData.toDomain() = QuestionAnswer(
     createdDate = createdDate,
     questionId = questionId.toDomain(),
     content = content,
-    reactionList = reactionList
+    reactionMap = reactionMap
 )

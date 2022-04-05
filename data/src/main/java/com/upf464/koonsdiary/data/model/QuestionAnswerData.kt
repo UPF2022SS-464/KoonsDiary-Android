@@ -9,5 +9,5 @@ data class QuestionAnswerData(
     val createdDate: LocalDateTime = LocalDateTime.now(),
     val questionId: QuestionData,
     val content: String = "",
-    val reactionList: Map<Reaction, Int> = emptyMap()
+    val reactionMap: Map<Reaction, Int> = emptyMap()
 )
