@@ -3,6 +3,7 @@ package com.upf464.koonsdiary.domain.usecase.user
 import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.repository.MessageRepository
+import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.request.user.SignUpWithKakaoRequest
 import com.upf464.koonsdiary.domain.service.KakaoService
@@ -22,6 +23,7 @@ class SignUpWithKakaoUseCaseTest {
     @MockK private lateinit var userRepository: UserRepository
     @MockK private lateinit var messageService: MessageService
     @MockK private lateinit var messageRepository: MessageRepository
+    @MockK private lateinit var securityRepository: SecurityRepository
     private lateinit var useCase: SignUpWithKakaoUseCase
 
     @Before
@@ -31,7 +33,8 @@ class SignUpWithKakaoUseCaseTest {
             kakaoService = kakaoService,
             userRepository = userRepository,
             messageService = messageService,
-            messageRepository = messageRepository
+            messageRepository = messageRepository,
+            securityRepository = securityRepository
         )
     }
 
@@ -63,6 +66,10 @@ class SignUpWithKakaoUseCaseTest {
             messageRepository.registerFcmToken("token")
         } returns Result.success(Unit)
 
+        coEvery {
+            securityRepository.clearPIN()
+        } returns Result.success(Unit)
+
         val result = useCase(SignUpWithKakaoRequest("username", "nickname"))
 
         assertTrue(result.isSuccess)
@@ -87,6 +94,10 @@ class SignUpWithKakaoUseCaseTest {
 
             Result.success(Unit)
         }
+
+        coEvery {
+            securityRepository.clearPIN()
+        } returns Result.success(Unit)
 
         coEvery {
             userRepository.signUpWithKakao(
