@@ -1,11 +1,11 @@
 package com.upf464.koonsdiary.data.repository
 
 
+import com.upf464.koonsdiary.common.extension.errorMap
 import com.upf464.koonsdiary.data.error.ErrorData
 import com.upf464.koonsdiary.data.mapper.toData
 import com.upf464.koonsdiary.data.mapper.toDomain
 import com.upf464.koonsdiary.data.source.CottonRemoteDataSource
-import com.upf464.koonsdiary.domain.common.errorMap
 import com.upf464.koonsdiary.domain.model.Question
 import com.upf464.koonsdiary.domain.model.QuestionAnswer
 import com.upf464.koonsdiary.domain.model.Reaction
