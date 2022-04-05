@@ -20,7 +20,7 @@ internal class SavePINUseCase @Inject constructor(
             return Result.failure(SecurityError.InvalidPIN)
         }
 
-        return securityRepository.getDisposableSalt().flatMap { salt ->
+        return securityRepository.fetchDisposableSalt().flatMap { salt ->
             val hashedPIN = hashGenerator.hashPasswordWithSalt(pin, salt)
             securityRepository.setPIN(hashedPIN)
         }.map {
