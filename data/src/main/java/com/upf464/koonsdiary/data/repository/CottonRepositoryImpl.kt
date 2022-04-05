@@ -32,9 +32,9 @@ internal class CottonRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchRandomAnswer(answerId: Int): Result<QuestionAnswer> {
-        return remote.fetchRandomAnswer(answerId).map { questionAnswer ->
-            questionAnswer.toDomain()
+    override suspend fun fetchRandomAnswer(): Result<List<QuestionAnswer>> {
+        return remote.fetchRandomAnswer().map { questionAnswer ->
+            questionAnswer.map { it.toDomain() }
         }.errorMap { error ->
             if (error is ErrorData) error.toDomain()
             else Exception(error)

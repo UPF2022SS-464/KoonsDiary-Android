@@ -7,7 +7,7 @@ internal fun QuestionAnswer.toData() = QuestionAnswerData(
     id = id,
     writerId = writerId,
     createdDate = createdDate,
-    questionId = questionId.toData(),
+    question = question.toData(),
     content = content,
     reactionMap = reactionMap
 )
@@ -16,7 +16,7 @@ internal fun QuestionAnswerData.toDomain() = QuestionAnswer(
     id = id,
     writerId = writerId,
     createdDate = createdDate,
-    questionId = questionId.toDomain(),
+    question = question.toDomain(),
     content = content,
     reactionMap = reactionMap
 )
