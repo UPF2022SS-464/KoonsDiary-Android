@@ -33,8 +33,8 @@ internal class CottonRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchRandomAnswer(answerId: Int): Result<QuestionAnswer> {
-        return remote.fetchRandomAnswer(answerId).map { questionAnswerData ->
-            questionAnswerData.toDomain()
+        return remote.fetchRandomAnswer(answerId).map { questionAnswer ->
+            questionAnswer.toDomain()
         }.errorMap { error ->
             if (error is ErrorData) error.toDomain()
             else Exception(error)
@@ -42,8 +42,8 @@ internal class CottonRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchReaction(): Result<Reaction> {
-        return remote.fetchReaction().map { reactionData ->
-            reactionData.toDomain()
+        return remote.fetchReaction().map { reaction ->
+            reaction.toDomain()
         }.errorMap { error ->
             if (error is ErrorData) error.toDomain()
             else Exception(error)
