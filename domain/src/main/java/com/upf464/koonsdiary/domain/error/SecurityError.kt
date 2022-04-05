@@ -11,4 +11,18 @@ sealed class SecurityError(
     ) : SecurityError(message, cause)
 
     object InvalidPIN : SecurityError()
+
+    object Cancelled : SecurityError()
+
+    object HardwareUnavailable : SecurityError()
+
+    object Timeout : SecurityError()
+
+    object Lockout : SecurityError()
+
+    object NoCredential : SecurityError()
+
+    object Unknown : SecurityError()
+
+    object AuthenticateFailed : SecurityError()
 }
