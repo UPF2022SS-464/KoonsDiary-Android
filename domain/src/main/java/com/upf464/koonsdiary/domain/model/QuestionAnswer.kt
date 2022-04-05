@@ -8,5 +8,5 @@ data class QuestionAnswer(
     val createdDate: LocalDateTime = LocalDateTime.now(),
     val questionId: Question,
     val content: String = "",
-    val reactionList: Map<Reaction, Int> = emptyMap()
+    val reactionMap: Map<Reaction, Int> = emptyMap()
 )
