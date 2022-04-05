@@ -7,6 +7,7 @@ internal fun QuestionAnswer.toData() = QuestionAnswerData(
     id = id,
     writerId = writerId,
     createdDate = createdDate,
-    questionId = questionId,
-    content = content
+    questionId = questionId.toData(),
+    content = content,
+    reactionList = reactionList
 )
