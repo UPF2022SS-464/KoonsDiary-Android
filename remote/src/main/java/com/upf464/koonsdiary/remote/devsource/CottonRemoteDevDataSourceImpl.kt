@@ -2,6 +2,7 @@ package com.upf464.koonsdiary.remote.devsource
 
 import com.upf464.koonsdiary.data.model.QuestionAnswerData
 import com.upf464.koonsdiary.data.model.QuestionData
+import com.upf464.koonsdiary.data.model.ReactionData
 import com.upf464.koonsdiary.data.source.CottonRemoteDataSource
 import javax.inject.Inject
 
@@ -25,5 +26,9 @@ internal class CottonRemoteDevDataSourceImpl @Inject constructor(
                 questionId = QuestionData(id = 1, korean = "", english = "")
             )
         )
+    }
+
+    override suspend fun fetchReaction(): Result<ReactionData> {
+        return Result.success(ReactionData(id = 1, name = ""))
     }
 }
