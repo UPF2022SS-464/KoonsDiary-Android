@@ -7,3 +7,8 @@ internal fun Reaction.toData() = ReactionData(
     id = id,
     name = name
 )
+
+internal fun ReactionData.toDomain() = Reaction(
+    id = id,
+    name = name
+)
