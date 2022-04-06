@@ -1,0 +1,54 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "6c19976ac89ef45eaf70af1d040f632d",
+    "entities": [
+      {
+        "tableName": "DiarySentiment",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`sentiment` INTEGER NOT NULL, `date_year` INTEGER NOT NULL, `date_month` INTEGER NOT NULL, `date_day` INTEGER NOT NULL, PRIMARY KEY(`date_year`, `date_month`, `date_day`))",
+        "fields": [
+          {
+            "fieldPath": "sentiment",
+            "columnName": "sentiment",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date.year",
+            "columnName": "date_year",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date.month",
+            "columnName": "date_month",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date.day",
+            "columnName": "date_day",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "date_year",
+            "date_month",
+            "date_day"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6c19976ac89ef45eaf70af1d040f632d')"
+    ]
+  }
+}
