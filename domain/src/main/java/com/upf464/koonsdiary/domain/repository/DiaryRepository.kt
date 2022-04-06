@@ -3,6 +3,7 @@ package com.upf464.koonsdiary.domain.repository
 import com.upf464.koonsdiary.domain.model.Diary
 import com.upf464.koonsdiary.domain.model.DiaryPreview
 import com.upf464.koonsdiary.domain.model.Sentiment
+import kotlinx.coroutines.flow.Flow
 
 interface DiaryRepository {
 
@@ -18,5 +19,5 @@ interface DiaryRepository {
 
     suspend fun fetchDiaryPreview(diaryId: Int): Result<DiaryPreview>
 
-    suspend fun fetchMonthlySentiment(year: Int, month: Int): Result<List<Sentiment?>>
+    fun fetchMonthlySentimentFlow(year: Int, month: Int): Flow<Result<List<Sentiment?>>>
 }

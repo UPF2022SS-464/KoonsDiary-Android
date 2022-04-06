@@ -4,15 +4,20 @@ import com.upf464.koonsdiary.common.extension.errorMap
 import com.upf464.koonsdiary.data.error.ErrorData
 import com.upf464.koonsdiary.data.mapper.toData
 import com.upf464.koonsdiary.data.mapper.toDomain
+import com.upf464.koonsdiary.data.source.DiaryLocalDataSource
 import com.upf464.koonsdiary.data.source.DiaryRemoteDataSource
+import com.upf464.koonsdiary.domain.error.CacheError
 import com.upf464.koonsdiary.domain.model.Diary
 import com.upf464.koonsdiary.domain.model.DiaryPreview
 import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 internal class DiaryRepositoryImpl @Inject constructor(
-    private val remote: DiaryRemoteDataSource
+    private val remote: DiaryRemoteDataSource,
+    private val local: DiaryLocalDataSource
 ) : DiaryRepository {
 
     override suspend fun fetchSentimentOf(content: String): Result<Sentiment> {
@@ -63,14 +68,30 @@ internal class DiaryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchMonthlySentiment(year: Int, month: Int): Result<List<Sentiment?>> {
-        return remote.fetchMonthlySentiment(year, month).map { sentimentList ->
-            sentimentList.map { sentiment ->
-                sentiment?.let { Sentiment.values()[it] }
-            }
-        }.errorMap { error ->
-            if (error is ErrorData) error.toDomain()
-            else Exception(error)
+    override fun fetchMonthlySentimentFlow(year: Int, month: Int): Flow<Result<List<Sentiment?>>> {
+        return flow {
+            val localResult = local.fetchMonthlySentiment(year, month)
+                .map { sentimentList ->
+                    sentimentList.map { sentiment ->
+                        sentiment?.let { Sentiment.values()[it] }
+                    }
+                }.errorMap { error ->
+                    CacheError.Diary(null, error)
+                }
+            emit(localResult)
+
+            val remoteResult = remote.fetchMonthlySentiment(year, month)
+                .onSuccess { sentimentList ->
+                    local.saveMonthlySentiment(year, month, sentimentList)
+                }.map { sentimentList ->
+                    sentimentList.map { sentiment ->
+                        sentiment?.let { Sentiment.values()[it] }
+                    }
+                }.errorMap { error ->
+                    if (error is ErrorData) error.toDomain()
+                    else Exception(error)
+                }
+            emit(remoteResult)
         }
     }
 }
