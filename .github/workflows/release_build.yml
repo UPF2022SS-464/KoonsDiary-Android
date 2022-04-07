@@ -1,6 +1,10 @@
-name: Android Test and Build
+name: Release Build
 
-on: pull_request
+on:
+  pull_request:
+    branches:
+      - 'release/**'
+      - 'release'
 
 jobs:
   build:
@@ -8,12 +12,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Set up JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
-          java-version: 1.11
+          distribution: 'temurin'
+          java-version: '11'
 
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
@@ -29,9 +35,9 @@ jobs:
           touch app/google-services.json
           echo $GOOGLE_SERVICES_JSON > app/google-services.json
 
-      - name: Build Project
-        run: ./gradlew assemble
+      - name: Assemble Release
+        run: ./gradlew assembleRelease
 
-      - name: Run Tests
-        run: ./gradlew test
+      - name: Test Release
+        run: ./gradlew testRelease
 
