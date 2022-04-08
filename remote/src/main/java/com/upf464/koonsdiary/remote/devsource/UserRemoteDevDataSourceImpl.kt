@@ -38,4 +38,8 @@ internal class UserRemoteDevDataSourceImpl @Inject constructor(
     override suspend fun updateUser(nickname: String): Result<Unit> {
         return Result.success(Unit)
     }
+
+    override suspend fun fetchUserImageList(): Result<List<UserData.Image>> {
+        return Result.success(emptyList())
+    }
 }

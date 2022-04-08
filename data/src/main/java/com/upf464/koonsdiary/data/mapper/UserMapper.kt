@@ -16,3 +16,13 @@ internal fun UserData.toDomain() = User(
     email = email,
     nickname = nickname
 )
+
+internal fun User.Image.toData() = UserData.Image(
+    id = id,
+    path = path
+)
+
+internal fun UserData.Image.toDomain() = User.Image(
+    id = id,
+    path = path
+)

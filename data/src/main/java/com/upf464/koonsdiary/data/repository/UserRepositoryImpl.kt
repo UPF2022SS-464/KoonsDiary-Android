@@ -108,4 +108,13 @@ internal class UserRepositoryImpl @Inject constructor(
             else Exception(error)
         }
     }
+
+    override suspend fun fetchUserImageList(): Result<List<User.Image>> {
+        return remote.fetchUserImageList().map { imageList ->
+            imageList.map { it.toDomain() }
+        }.errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
 }
