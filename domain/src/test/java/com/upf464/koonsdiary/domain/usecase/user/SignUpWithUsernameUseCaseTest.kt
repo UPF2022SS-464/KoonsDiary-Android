@@ -92,7 +92,8 @@ class SignUpWithUsernameUseCaseTest {
                 email = "email",
                 username = "username",
                 password = "password",
-                nickname = "nickname"
+                nickname = "nickname",
+                imageId = 1
             )
         )
 
@@ -113,7 +114,8 @@ class SignUpWithUsernameUseCaseTest {
                 email = "email",
                 username = "username",
                 password = "password",
-                nickname = "nickname"
+                nickname = "nickname",
+                imageId = 1
             )
         )
 
@@ -136,7 +138,8 @@ class SignUpWithUsernameUseCaseTest {
                 email = "email",
                 username = "username",
                 password = "password",
-                nickname = "nickname"
+                nickname = "nickname",
+                imageId = 1
             )
         )
 
@@ -163,7 +166,8 @@ class SignUpWithUsernameUseCaseTest {
                 email = "email",
                 username = "username",
                 password = "password",
-                nickname = "nickname"
+                nickname = "nickname",
+                imageId = 1
             )
         )
 
@@ -194,7 +198,8 @@ class SignUpWithUsernameUseCaseTest {
                 email = "email",
                 username = "username",
                 password = "password",
-                nickname = "nickname"
+                nickname = "nickname",
+                imageId = 1
             )
         )
 
