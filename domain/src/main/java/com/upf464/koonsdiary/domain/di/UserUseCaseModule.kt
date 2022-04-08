@@ -2,6 +2,7 @@ package com.upf464.koonsdiary.domain.di
 
 import com.upf464.koonsdiary.domain.request.user.*
 import com.upf464.koonsdiary.domain.response.EmptyResponse
+import com.upf464.koonsdiary.domain.response.user.FetchUserImageListResponse
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import com.upf464.koonsdiary.domain.usecase.user.*
 import dagger.Binds
@@ -42,4 +43,9 @@ internal abstract class UserUseCaseModule {
     abstract fun bindUpdateUserUseCase(
         useCase: UpdateUserUseCase
     ) : ResultUseCase<UpdateUserRequest, EmptyResponse>
+
+    @Binds
+    abstract fun bindFetchUserImageListUseCase(
+        useCase: FetchUserImageListUseCase
+    ) : ResultUseCase<FetchUserImageListRequest, FetchUserImageListResponse>
 }

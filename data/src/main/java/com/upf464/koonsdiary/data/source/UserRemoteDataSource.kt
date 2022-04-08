@@ -15,8 +15,10 @@ interface UserRemoteDataSource {
     suspend fun signInWithToken(token: String): Result<String?>
 
     suspend fun generateSaltOf(username: String): Result<String>
-    
+
     suspend fun fetchSaltOf(username: String): Result<String>
 
     suspend fun updateUser(nickname: String): Result<Unit>
+
+    suspend fun fetchUserImageList(): Result<List<UserData.Image>>
 }

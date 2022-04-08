@@ -5,4 +5,10 @@ data class User(
     val username: String = "",
     val email: String? = null,
     val nickname: String = ""
-)
+) {
+
+    data class Image(
+        val id: Int,
+        val path: String
+    )
+}
