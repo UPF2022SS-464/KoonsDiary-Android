@@ -35,8 +35,22 @@ jobs:
           touch app/google-services.json
           echo $GOOGLE_SERVICES_JSON > app/google-services.json
 
+      - name: Assemble Library
+        run: |
+          ./gradlew :common:assemble
+          ./gradlew :data:assemble
+          ./gradlew :domain:assemble
+          ./gradlew :remote:assemble
+
       - name: Assemble Release
         run: ./gradlew assembleRelease
+
+      - name: Assemble Library
+        run: |
+          ./gradlew :common:test
+          ./gradlew :data:test
+          ./gradlew :domain:test
+          ./gradlew :remote:test
 
       - name: Test Release
         run: ./gradlew testRelease
