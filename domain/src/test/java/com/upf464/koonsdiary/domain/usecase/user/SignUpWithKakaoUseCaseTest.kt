@@ -1,7 +1,6 @@
 package com.upf464.koonsdiary.domain.usecase.user
 
 import com.upf464.koonsdiary.domain.error.SignInError
-import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
@@ -46,10 +45,7 @@ class SignUpWithKakaoUseCaseTest {
 
         coEvery {
             userRepository.signUpWithKakao(
-                user = User(
-                    username = "username",
-                    nickname = "nickname"
-                ),
+                user = any(),
                 token = "token"
             )
         } returns Result.success(Unit)
@@ -105,10 +101,7 @@ class SignUpWithKakaoUseCaseTest {
 
         coEvery {
             userRepository.signUpWithKakao(
-                user = User(
-                    username = "username",
-                    nickname = "nickname"
-                ),
+                user = any(),
                 token = "token"
             )
         } returns Result.success(Unit)
