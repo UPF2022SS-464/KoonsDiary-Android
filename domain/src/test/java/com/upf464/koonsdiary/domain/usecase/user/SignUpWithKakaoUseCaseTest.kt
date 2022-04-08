@@ -70,7 +70,11 @@ class SignUpWithKakaoUseCaseTest {
             securityRepository.clearPIN()
         } returns Result.success(Unit)
 
-        val result = useCase(SignUpWithKakaoRequest("username", "nickname"))
+        val result = useCase(SignUpWithKakaoRequest(
+            username = "username",
+            nickname = "nickname",
+            imageId = 1
+        ))
 
         assertTrue(result.isSuccess)
 
@@ -121,7 +125,11 @@ class SignUpWithKakaoUseCaseTest {
             messageRepository.registerFcmToken("token")
         } returns Result.success(Unit)
 
-        val result = useCase(SignUpWithKakaoRequest("username", "nickname"))
+        val result = useCase(SignUpWithKakaoRequest(
+            username = "username",
+            nickname = "nickname",
+            imageId = 1
+        ))
 
         assertTrue(result.isSuccess)
     }
