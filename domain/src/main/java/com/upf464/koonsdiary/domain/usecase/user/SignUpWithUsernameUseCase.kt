@@ -41,7 +41,8 @@ internal class SignUpWithUsernameUseCase @Inject constructor(
             val user = User(
                 username = request.username,
                 email = request.email,
-                nickname = request.nickname
+                nickname = request.nickname,
+                image = User.Image(id = request.imageId)
             )
 
             userRepository.signUpWithUsername(user, hashedPassword)

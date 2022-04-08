@@ -8,7 +8,7 @@ data class UserData(
 ) {
 
     data class Image(
-        val id: Int,
-        val path: String
+        val id: Int = 0,
+        val path: String = ""
     )
 }

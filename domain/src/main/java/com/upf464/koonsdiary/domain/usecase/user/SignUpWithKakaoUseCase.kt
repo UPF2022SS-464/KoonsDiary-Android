@@ -25,7 +25,8 @@ internal class SignUpWithKakaoUseCase @Inject constructor(
     override suspend fun invoke(request: SignUpWithKakaoRequest): Result<EmptyResponse> {
         val user = User(
             username = request.username,
-            nickname = request.nickname
+            nickname = request.nickname,
+            image = User.Image(id = request.imageId)
         )
 
         return trySignUpWithToken(user).handleWith { error ->
