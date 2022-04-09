@@ -1,3 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.upf464.koonsdiary.firebase">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.upf464.koonsdiary.firebase">
+
+    <application>
+        <service
+            android:name=".service.FirebaseMessagingServiceImpl"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+    </application>
 </manifest>
