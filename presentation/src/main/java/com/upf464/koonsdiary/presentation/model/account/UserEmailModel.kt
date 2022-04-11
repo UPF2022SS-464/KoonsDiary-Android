@@ -25,21 +25,19 @@ internal data class UserEmailModel(
     val nicknameFlow: MutableStateFlow<String> = MutableStateFlow("")
 ) {
 
-    @FlowPreview
     val emailValidFlow: Flow<State> = waitFirstFlow(emailFlow) {
         val error = useCase(ValidateSignUpRequest(ValidateSignUpRequest.Type.EMAIL, it))
             .exceptionOrNull() ?: return@waitFirstFlow State.SUCCESS
         (error as? SignUpError)?.toEmailSignUpState() ?: State.UNKNOWN
     }
 
-    @FlowPreview
     val usernameValidFlow: Flow<State> = waitFirstFlow(usernameFlow) {
         val error = useCase(ValidateSignUpRequest(ValidateSignUpRequest.Type.USERNAME, it))
             .exceptionOrNull() ?: return@waitFirstFlow State.SUCCESS
         (error as? SignUpError)?.toEmailSignUpState() ?: State.UNKNOWN
     }
 
-    @FlowPreview
+    @OptIn(FlowPreview::class)
     private fun waitFirstFlow(source: Flow<String>, mapBlock: suspend (String) -> State) =
         channelFlow {
             source.onEach {
