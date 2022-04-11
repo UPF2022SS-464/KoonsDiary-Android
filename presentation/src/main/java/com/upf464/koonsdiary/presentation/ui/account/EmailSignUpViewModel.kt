@@ -3,10 +3,12 @@ package com.upf464.koonsdiary.presentation.ui.account
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upf464.koonsdiary.domain.request.user.SignUpWithUsernameRequest
+import com.upf464.koonsdiary.domain.request.user.ValidateSignUpRequest
 import com.upf464.koonsdiary.domain.response.EmptyResponse
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import com.upf464.koonsdiary.presentation.model.account.UserEmailModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,11 +17,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
+@FlowPreview
 internal class EmailSignUpViewModel @Inject constructor(
     private val signUpUseCase: ResultUseCase<SignUpWithUsernameRequest, EmptyResponse>,
+    validateUseCase: ResultUseCase<ValidateSignUpRequest, EmptyResponse>
 ) : ViewModel() {
 
-    private val userModel = UserEmailModel()
+    private val userModel = UserEmailModel(validateUseCase)
     private val _pageFlow = MutableStateFlow(SignUpPage.EMAIL)
     val pageFlow = _pageFlow.asStateFlow()
 
