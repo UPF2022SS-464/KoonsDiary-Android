@@ -6,6 +6,10 @@ interface UserRemoteDataSource {
 
     suspend fun signUpWithUsername(user: UserData, password: String): Result<String>
 
+    suspend fun isUsernameDuplicated(username: String): Result<Unit>
+
+    suspend fun isEmailDuplicated(email: String): Result<Unit>
+
     suspend fun signUpWithKakao(user: UserData, token: String): Result<Unit>
 
     suspend fun signInWithUsername(username: String, password: String): Result<String>

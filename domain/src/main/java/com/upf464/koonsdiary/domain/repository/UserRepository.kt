@@ -7,6 +7,10 @@ interface UserRepository {
 
     suspend fun signUpWithUsername(user: User, password: String): Result<String>
 
+    suspend fun isUsernameDuplicated(username: String): Result<Unit>
+
+    suspend fun isEmailDuplicated(email: String): Result<Unit>
+
     suspend fun signUpWithKakao(user: User, token: String): Result<Unit>
 
     suspend fun signInWithUsername(username: String, password: String) : Result<String>

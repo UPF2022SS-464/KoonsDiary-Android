@@ -2,8 +2,6 @@ package com.upf464.koonsdiary.domain.usecase.user
 
 import com.upf464.koonsdiary.common.extension.flatMap
 import com.upf464.koonsdiary.domain.common.HashGenerator
-import com.upf464.koonsdiary.domain.common.UserValidator
-import com.upf464.koonsdiary.domain.error.SignUpError
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
@@ -17,24 +15,12 @@ import javax.inject.Inject
 internal class SignUpWithUsernameUseCase @Inject constructor(
     private val userRepository: UserRepository,
     private val securityRepository: SecurityRepository,
-    private val validator: UserValidator,
     private val hashGenerator: HashGenerator,
     private val messageService: MessageService,
     private val messageRepository: MessageRepository
 ) : ResultUseCase<SignUpWithUsernameRequest, EmptyResponse> {
 
     override suspend fun invoke(request: SignUpWithUsernameRequest): Result<EmptyResponse> {
-        when {
-            !validator.isEmailValid(request.email) ->
-                return Result.failure(SignUpError.InvalidEmail)
-            !validator.isUsernameValid(request.username) ->
-                return Result.failure(SignUpError.InvalidUsername)
-            !validator.isPasswordValid(request.password) ->
-                return Result.failure(SignUpError.InvalidPassword)
-            !validator.isNicknameValid(request.nickname) ->
-                return Result.failure(SignUpError.InvalidNickname)
-        }
-
         return userRepository.generateSaltOf(request.username).flatMap { salt ->
             val hashedPassword = hashGenerator.hashPasswordWithSalt(request.password, salt)
 

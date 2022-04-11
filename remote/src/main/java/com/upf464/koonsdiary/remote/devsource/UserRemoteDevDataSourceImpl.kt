@@ -15,6 +15,14 @@ internal class UserRemoteDevDataSourceImpl @Inject constructor(
         return Result.success("")
     }
 
+    override suspend fun isUsernameDuplicated(username: String): Result<Unit> {
+        return Result.success(Unit)
+    }
+
+    override suspend fun isEmailDuplicated(email: String): Result<Unit> {
+        return Result.success(Unit)
+    }
+
     override suspend fun signInWithKakao(token: String): Result<Unit> {
         return Result.success(Unit)
     }

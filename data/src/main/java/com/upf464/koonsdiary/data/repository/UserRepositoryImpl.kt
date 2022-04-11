@@ -16,6 +16,20 @@ internal class UserRepositoryImpl @Inject constructor(
     private val local: UserLocalDataSource
 ) : UserRepository {
 
+    override suspend fun isUsernameDuplicated(username: String): Result<Unit> {
+        return remote.isUsernameDuplicated(username).errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
+
+    override suspend fun isEmailDuplicated(email: String): Result<Unit> {
+        return remote.isEmailDuplicated(email).errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
+
     override suspend fun signInWithUsername(username: String, password: String): Result<String> {
         return remote.signInWithUsername(username, password).errorMap { error ->
             if (error is ErrorData) error.toDomain()
