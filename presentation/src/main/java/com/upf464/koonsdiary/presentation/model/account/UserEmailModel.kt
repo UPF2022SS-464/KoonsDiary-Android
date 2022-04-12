@@ -1,7 +1,6 @@
 package com.upf464.koonsdiary.presentation.model.account
 
 import com.upf464.koonsdiary.domain.error.SignUpError
-import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.request.user.ValidateSignUpRequest
 import com.upf464.koonsdiary.domain.response.EmptyResponse
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
@@ -21,7 +20,7 @@ internal data class UserEmailModel(
     val emailFlow: MutableStateFlow<String> = MutableStateFlow(""),
     val passwordFlow: MutableStateFlow<String> = MutableStateFlow(""),
     val passwordConfirmFlow: MutableStateFlow<String> = MutableStateFlow(""),
-    val imageFlow: MutableStateFlow<User.Image?> = MutableStateFlow(null),
+    val imageFlow: MutableStateFlow<UserImageModel?> = MutableStateFlow(null),
     val nicknameFlow: MutableStateFlow<String> = MutableStateFlow("")
 ) {
 
@@ -61,6 +60,10 @@ internal data class UserEmailModel(
             else State.DIFFERENT_CONFIRM
         }
 
+    val imageValidFlow: Flow<State> = imageFlow.map { image ->
+        if (image != null) State.SUCCESS else State.UNSELECTED_IMAGE
+    }
+
     val nicknameValidFlow: Flow<State> = nicknameFlow.map {
         val error = useCase(ValidateSignUpRequest(ValidateSignUpRequest.Type.NICKNAME, it))
             .exceptionOrNull() ?: return@map State.SUCCESS
@@ -73,6 +76,7 @@ internal data class UserEmailModel(
         INVALID_USERNAME,
         INVALID_PASSWORD,
         DIFFERENT_CONFIRM,
+        UNSELECTED_IMAGE,
         INVALID_EMAIL,
         INVALID_NICKNAME,
         DUPLICATED_EMAIL,
