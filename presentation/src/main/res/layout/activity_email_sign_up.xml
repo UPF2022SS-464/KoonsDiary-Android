@@ -22,12 +22,28 @@
         tools:context=".ui.account.EmailSignUpActivity">
 
         <TextView
-            android:id="@+id/textView_signUpEmail_stepName"
-            android:layout_width="wrap_content"
+            android:id="@+id/textView_signUpEmail_pageName"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{vm.pageFlow.name()}"
-            app:layout_constraintBottom_toTopOf="@id/editText_signUpEmail_field1"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="이메일" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_signUpEmail_field1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="@{vm.pageFlow != SignUpPage.IMAGE ? View.VISIBLE : View.GONE}"
+            app:constraint_referenced_ids="editText_signUpEmail_field1, textView_signUpEmail_warning1" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_signUpEmail_field2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="@{vm.pageFlow == SignUpPage.PASSWORD ? View.VISIBLE : View.GONE}"
+            app:constraint_referenced_ids="editText_signUpEmail_field2, textView_signUpEmail_warning2" />
 
         <EditText
             android:id="@+id/editText_signUpEmail_field1"
@@ -36,41 +52,60 @@
             android:importantForAutofill="no"
             android:inputType="@{vm.pageFlow == SignUpPage.PASSWORD ? InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD : InputType.TYPE_CLASS_TEXT}"
             android:text="@={vm.firstFieldFlow}"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/textView_signUpEmail_warning1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="TextFields" />
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:ignore="TextFields"
+            tools:text="내용" />
 
         <TextView
             android:id="@+id/textView_signUpEmail_warning1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{vm.firstValidationFlow.name()}"
+            app:layout_constraintBottom_toTopOf="@id/editText_signUpEmail_field2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editText_signUpEmail_field1" />
+            app:layout_constraintTop_toBottomOf="@id/editText_signUpEmail_field1"
+            tools:text="필드1 알림" />
 
         <EditText
             android:id="@+id/editText_signUpEmail_field2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:importantForAutofill="no"
-            android:inputType="textPassword"
+            android:inputType="@{InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD}"
             android:text="@={vm.secondFieldFlow}"
-            android:visibility="@{vm.pageFlow == SignUpPage.PASSWORD ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@id/textView_signUpEmail_warning2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textView_signUpEmail_warning1"
-            tools:ignore="TextFields" />
+            tools:ignore="TextFields"
+            tools:text="password" />
 
         <TextView
             android:id="@+id/textView_signUpEmail_warning2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{vm.secondValidationFlow.name()}"
-            android:visibility="@{vm.pageFlow == SignUpPage.PASSWORD ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editText_signUpEmail_field2" />
+            app:layout_constraintTop_toBottomOf="@id/editText_signUpEmail_field2"
+            tools:text="필드2 알림" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_signUpEmail_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="@{vm.pageFlow == SignUpPage.IMAGE ? View.VISIBLE : View.GONE}"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:submitList="@{vm.imageListFlow}"
+            app:spanCount="2" />
 
         <Button
             android:id="@+id/button_signUpEmail_prev"

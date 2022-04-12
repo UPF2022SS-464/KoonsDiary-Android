@@ -2,11 +2,15 @@ package com.upf464.koonsdiary.presentation.ui.account
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.upf464.koonsdiary.domain.request.user.FetchUserImageListRequest
 import com.upf464.koonsdiary.domain.request.user.SignUpWithUsernameRequest
 import com.upf464.koonsdiary.domain.request.user.ValidateSignUpRequest
 import com.upf464.koonsdiary.domain.response.EmptyResponse
+import com.upf464.koonsdiary.domain.response.user.FetchUserImageListResponse
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
+import com.upf464.koonsdiary.presentation.mapper.toPresentation
 import com.upf464.koonsdiary.presentation.model.account.UserEmailModel
+import com.upf464.koonsdiary.presentation.model.account.UserImageModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,8 +20,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,6 +30,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class EmailSignUpViewModel @Inject constructor(
     private val signUpUseCase: ResultUseCase<SignUpWithUsernameRequest, EmptyResponse>,
+    private val fetchImageListUseCase: ResultUseCase<FetchUserImageListRequest, FetchUserImageListResponse>,
     validateUseCase: ResultUseCase<ValidateSignUpRequest, EmptyResponse>
 ) : ViewModel() {
 
@@ -36,19 +42,20 @@ internal class EmailSignUpViewModel @Inject constructor(
         EMAIL,
         USERNAME,
         PASSWORD,
-        PROFILE,
+        IMAGE,
         NICKNAME
     }
 
     val firstFieldFlow = MutableStateFlow("")
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val firstValidationFlow = pageFlow.flatMapLatest { page ->
         when (page) {
             SignUpPage.EMAIL -> userModel.emailValidFlow
             SignUpPage.USERNAME -> userModel.usernameValidFlow
             SignUpPage.PASSWORD -> userModel.passwordValidFlow
+            SignUpPage.IMAGE -> userModel.imageValidFlow
             SignUpPage.NICKNAME -> userModel.nicknameValidFlow
-            else -> flow {}
         }
     }.stateIn(viewModelScope, SharingStarted.Lazily, UserEmailModel.State.WAITING)
 
@@ -56,10 +63,10 @@ internal class EmailSignUpViewModel @Inject constructor(
     val secondValidationFlow = userModel.passwordConfirmValidFlow
         .stateIn(viewModelScope, SharingStarted.Lazily, UserEmailModel.State.WAITING)
 
-    private val isNextAvailable
-        get() = firstValidationFlow.value == UserEmailModel.State.SUCCESS &&
-                (pageFlow.value != SignUpPage.PASSWORD ||
-                        secondValidationFlow.value == UserEmailModel.State.SUCCESS)
+    private val _imageListFlow = MutableStateFlow(listOf<UserImageModel>())
+    val imageListFlow = _imageListFlow.asStateFlow()
+
+    private val imageIndexFlow = MutableStateFlow(0)
 
     private val _eventFlow = MutableSharedFlow<SignUpEvent>(extraBufferCapacity = 1)
     val eventFlow: Flow<SignUpEvent> = _eventFlow
@@ -81,13 +88,29 @@ internal class EmailSignUpViewModel @Inject constructor(
                     SignUpPage.USERNAME -> userModel.usernameFlow
                     SignUpPage.PASSWORD -> userModel.passwordFlow
                     SignUpPage.NICKNAME -> userModel.nicknameFlow
-                    SignUpPage.PROFILE -> return@collect
+                    SignUpPage.IMAGE -> return@collect
                 }
                 job = connectFieldFlow(targetFlow, firstFieldFlow, this)
             }
         }
 
         connectFieldFlow(userModel.passwordConfirmFlow, secondFieldFlow, viewModelScope)
+
+        viewModelScope.launch {
+            combine(imageListFlow, imageIndexFlow) { imageList, index ->
+                imageList.mapIndexed { i, model ->
+                    model.selectedFlow.value = i == index
+                }
+
+                userModel.imageFlow.value = imageList.getOrNull(index)
+            }.collect()
+        }
+
+        viewModelScope.launch {
+            fetchImageListUseCase(FetchUserImageListRequest).onSuccess { response ->
+                _imageListFlow.value = response.imageList.map { it.toPresentation() }
+            }
+        }
     }
 
     private fun connectFieldFlow(
@@ -103,8 +126,12 @@ internal class EmailSignUpViewModel @Inject constructor(
         }
     }
 
+    fun selectImageAt(index: Int) {
+        imageIndexFlow.value = index
+    }
+
     fun nextPage() {
-        if (!isNextAvailable) return
+        if (!isNextAvailable()) return
 
         val lastPageIdx = SignUpPage.values().size - 1
         val currentPageIdx = _pageFlow.value.ordinal
@@ -114,6 +141,12 @@ internal class EmailSignUpViewModel @Inject constructor(
         } else {
             _pageFlow.value = SignUpPage.values()[currentPageIdx + 1]
         }
+    }
+
+    private fun isNextAvailable(): Boolean {
+        return firstValidationFlow.value == UserEmailModel.State.SUCCESS &&
+            (pageFlow.value != SignUpPage.PASSWORD ||
+                    secondValidationFlow.value == UserEmailModel.State.SUCCESS)
     }
 
     fun prevPage() {
@@ -140,6 +173,7 @@ internal class EmailSignUpViewModel @Inject constructor(
             }
         }
     }
+
 
     private fun setEvent(event: SignUpEvent) {
         _eventFlow.tryEmit(event)

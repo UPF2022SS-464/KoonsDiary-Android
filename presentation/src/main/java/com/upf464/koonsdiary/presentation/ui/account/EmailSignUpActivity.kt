@@ -1,6 +1,9 @@
 package com.upf464.koonsdiary.presentation.ui.account
 
+import android.content.Context
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -27,11 +30,53 @@ class EmailSignUpActivity : AppCompatActivity() {
     private fun setBinding() {
         binding.vm = viewModel
         binding.lifecycleOwner = this
+
+        binding.recyclerViewSignUpEmailImage.adapter = UserImageListAdapter { index ->
+            viewModel.selectImageAt(index)
+        }
     }
 
     private fun setListeners() {
         lifecycleScope.launch {
-            viewModel.eventFlow.collect { }
+            viewModel.eventFlow.collect { event ->
+                when (event) {
+                    EmailSignUpViewModel.SignUpEvent.Success ->
+                        Toast.makeText(
+                            this@EmailSignUpActivity,
+                            "회원가입 완료",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    EmailSignUpViewModel.SignUpEvent.NoImageSelected ->
+                        Toast.makeText(
+                            this@EmailSignUpActivity,
+                            "이미지 선택 안함",
+                            Toast.LENGTH_LONG
+                        ).show()
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            val inputMethod = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            binding.editTextSignUpEmailField1.setOnFocusChangeListener { v, hasFocus ->
+                if (hasFocus) inputMethod.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT)
+            }
+
+            viewModel.pageFlow.collect { page ->
+                when (page) {
+                    EmailSignUpViewModel.SignUpPage.IMAGE -> {
+                        inputMethod.hideSoftInputFromWindow(
+                            binding.editTextSignUpEmailField1.windowToken,
+                            InputMethodManager.HIDE_IMPLICIT_ONLY
+                        )
+                        inputMethod.hideSoftInputFromWindow(
+                            binding.editTextSignUpEmailField2.windowToken,
+                            InputMethodManager.HIDE_IMPLICIT_ONLY
+                        )
+                    }
+                    else -> binding.editTextSignUpEmailField1.requestFocus()
+                }
+            }
         }
     }
 }
