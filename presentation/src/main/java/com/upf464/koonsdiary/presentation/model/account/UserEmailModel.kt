@@ -4,6 +4,7 @@ import com.upf464.koonsdiary.domain.error.SignUpError
 import com.upf464.koonsdiary.domain.request.user.ValidateSignUpRequest
 import com.upf464.koonsdiary.domain.response.EmptyResponse
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
+import com.upf464.koonsdiary.presentation.common.Constants
 import com.upf464.koonsdiary.presentation.mapper.toEmailSignUpState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -24,68 +25,49 @@ internal data class UserEmailModel(
     val nicknameFlow: MutableStateFlow<String> = MutableStateFlow("")
 ) {
 
-    val emailValidFlow: Flow<State> = waitFirstFlow(emailFlow) {
+    val emailValidFlow: Flow<SignUpState> = waitFirstFlow(emailFlow) {
         val error = useCase(ValidateSignUpRequest(ValidateSignUpRequest.Type.EMAIL, it))
-            .exceptionOrNull() ?: return@waitFirstFlow State.SUCCESS
-        (error as? SignUpError)?.toEmailSignUpState() ?: State.UNKNOWN
+            .exceptionOrNull() ?: return@waitFirstFlow SignUpState.SUCCESS
+        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpState.UNKNOWN
     }
 
-    val usernameValidFlow: Flow<State> = waitFirstFlow(usernameFlow) {
+    val usernameValidFlow: Flow<SignUpState> = waitFirstFlow(usernameFlow) {
         val error = useCase(ValidateSignUpRequest(ValidateSignUpRequest.Type.USERNAME, it))
-            .exceptionOrNull() ?: return@waitFirstFlow State.SUCCESS
-        (error as? SignUpError)?.toEmailSignUpState() ?: State.UNKNOWN
+            .exceptionOrNull() ?: return@waitFirstFlow SignUpState.SUCCESS
+        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpState.UNKNOWN
     }
 
     @OptIn(FlowPreview::class)
-    private fun waitFirstFlow(source: Flow<String>, mapBlock: suspend (String) -> State) =
+    private fun waitFirstFlow(source: Flow<String>, mapBlock: suspend (String) -> SignUpState) =
         channelFlow {
             source.onEach {
-                send(State.WAITING)
-            }.debounce(DEBOUNCE_TIME)
+                send(SignUpState.WAITING)
+            }.debounce(Constants.SIGN_UP_DEBOUNCE_TIME)
                 .map(mapBlock)
                 .collect {
                     send(it)
                 }
         }
 
-    val passwordValidFlow: Flow<State> = passwordFlow.map {
+    val passwordValidFlow: Flow<SignUpState> = passwordFlow.map {
         val error = useCase(ValidateSignUpRequest(ValidateSignUpRequest.Type.PASSWORD, it))
-            .exceptionOrNull() ?: return@map State.SUCCESS
-        (error as? SignUpError)?.toEmailSignUpState() ?: State.UNKNOWN
+            .exceptionOrNull() ?: return@map SignUpState.SUCCESS
+        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpState.UNKNOWN
     }
 
-    val passwordConfirmValidFlow: Flow<State> =
+    val passwordConfirmValidFlow: Flow<SignUpState> =
         combine(passwordFlow, passwordConfirmFlow) { password, confirm ->
-            if (password == confirm) State.SUCCESS
-            else State.DIFFERENT_CONFIRM
+            if (password == confirm) SignUpState.SUCCESS
+            else SignUpState.DIFFERENT_CONFIRM
         }
 
-    val imageValidFlow: Flow<State> = imageFlow.map { image ->
-        if (image != null) State.SUCCESS else State.UNSELECTED_IMAGE
+    val imageValidFlow: Flow<SignUpState> = imageFlow.map { image ->
+        if (image != null) SignUpState.SUCCESS else SignUpState.UNSELECTED_IMAGE
     }
 
-    val nicknameValidFlow: Flow<State> = nicknameFlow.map {
+    val nicknameValidFlow: Flow<SignUpState> = nicknameFlow.map {
         val error = useCase(ValidateSignUpRequest(ValidateSignUpRequest.Type.NICKNAME, it))
-            .exceptionOrNull() ?: return@map State.SUCCESS
-        (error as? SignUpError)?.toEmailSignUpState() ?: State.UNKNOWN
-    }
-
-    enum class State {
-        WAITING,
-        SUCCESS,
-        INVALID_USERNAME,
-        INVALID_PASSWORD,
-        DIFFERENT_CONFIRM,
-        UNSELECTED_IMAGE,
-        INVALID_EMAIL,
-        INVALID_NICKNAME,
-        DUPLICATED_EMAIL,
-        DUPLICATED_USERNAME,
-        UNKNOWN
-    }
-
-    companion object {
-
-        private const val DEBOUNCE_TIME = 1000L
+            .exceptionOrNull() ?: return@map SignUpState.SUCCESS
+        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpState.UNKNOWN
     }
 }

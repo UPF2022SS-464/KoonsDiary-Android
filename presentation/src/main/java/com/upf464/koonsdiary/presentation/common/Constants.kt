@@ -7,4 +7,6 @@ object Constants {
 
     const val ERROR_AUTHENTICATE_FAILED = 20
     const val ERROR_UNKNOWN = -1
+
+    const val SIGN_UP_DEBOUNCE_TIME = 1000L
 }
