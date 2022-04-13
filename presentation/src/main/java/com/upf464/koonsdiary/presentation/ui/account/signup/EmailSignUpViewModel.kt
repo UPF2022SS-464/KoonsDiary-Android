@@ -10,6 +10,7 @@ import com.upf464.koonsdiary.domain.response.EmptyResponse
 import com.upf464.koonsdiary.domain.response.user.FetchUserImageListResponse
 import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import com.upf464.koonsdiary.presentation.mapper.toPresentation
+import com.upf464.koonsdiary.presentation.model.account.SignUpState
 import com.upf464.koonsdiary.presentation.model.account.UserEmailModel
 import com.upf464.koonsdiary.presentation.model.account.UserImageModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -58,11 +59,11 @@ internal class EmailSignUpViewModel @Inject constructor(
             SignUpPage.IMAGE -> userModel.imageValidFlow
             SignUpPage.NICKNAME -> userModel.nicknameValidFlow
         }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, UserEmailModel.State.WAITING)
+    }.stateIn(viewModelScope, SharingStarted.Lazily, SignUpState.WAITING)
 
     val secondFieldFlow = MutableStateFlow("")
     val secondValidationFlow = userModel.passwordConfirmValidFlow
-        .stateIn(viewModelScope, SharingStarted.Lazily, UserEmailModel.State.WAITING)
+        .stateIn(viewModelScope, SharingStarted.Lazily, SignUpState.WAITING)
 
     private val _imageListFlow = MutableStateFlow(listOf<UserImageModel>())
     val imageListFlow = _imageListFlow.asStateFlow()
@@ -151,9 +152,9 @@ internal class EmailSignUpViewModel @Inject constructor(
     }
 
     private fun isNextAvailable(): Boolean {
-        return firstValidationFlow.value == UserEmailModel.State.SUCCESS &&
+        return firstValidationFlow.value == SignUpState.SUCCESS &&
                 (pageFlow.value != SignUpPage.PASSWORD ||
-                        secondValidationFlow.value == UserEmailModel.State.SUCCESS)
+                        secondValidationFlow.value == SignUpState.SUCCESS)
     }
 
     fun prevPage() {
