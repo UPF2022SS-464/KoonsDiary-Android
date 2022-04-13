@@ -7,19 +7,19 @@
 
         <variable
             name="vm"
-            type="com.upf464.koonsdiary.presentation.ui.account.EmailSignUpViewModel" />
+            type="com.upf464.koonsdiary.presentation.ui.account.signup.EmailSignUpViewModel" />
 
         <import type="android.view.View" />
 
         <import type="android.text.InputType" />
 
-        <import type="com.upf464.koonsdiary.presentation.ui.account.EmailSignUpViewModel.SignUpPage" />
+        <import type="com.upf464.koonsdiary.presentation.ui.account.signup.EmailSignUpViewModel.SignUpPage" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.account.EmailSignUpActivity">
+        tools:context=".ui.account.signup.EmailSignUpActivity">
 
         <TextView
             android:id="@+id/textView_signUpEmail_pageName"

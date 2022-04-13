@@ -6,7 +6,7 @@
 
     <application>
         <activity
-            android:name=".ui.account.EmailSignUpActivity"
+            android:name=".ui.account.signup.EmailSignUpActivity"
             android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity

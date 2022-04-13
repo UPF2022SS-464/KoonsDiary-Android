@@ -1,4 +1,4 @@
-package com.upf464.koonsdiary.presentation.ui.account
+package com.upf464.koonsdiary.presentation.ui.account.signup
 
 import android.content.Context
 import android.os.Bundle
