@@ -2,6 +2,7 @@ package com.upf464.koonsdiary.presentation.ui.account.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.upf464.koonsdiary.domain.error.CommonError
 import com.upf464.koonsdiary.domain.request.user.FetchUserImageListRequest
 import com.upf464.koonsdiary.domain.request.user.SignUpWithUsernameRequest
 import com.upf464.koonsdiary.domain.request.user.ValidateSignUpRequest
@@ -76,6 +77,10 @@ internal class EmailSignUpViewModel @Inject constructor(
         object NoImageSelected : SignUpEvent()
 
         object Success : SignUpEvent()
+
+        object NetworkDisconnected : SignUpEvent()
+
+        object UnknownError : SignUpEvent()
     }
 
     init {
@@ -109,6 +114,8 @@ internal class EmailSignUpViewModel @Inject constructor(
         viewModelScope.launch {
             fetchImageListUseCase(FetchUserImageListRequest).onSuccess { response ->
                 _imageListFlow.value = response.imageList.map { it.toPresentation() }
+            }.onFailure { error ->
+                handleError(error)
             }
         }
     }
@@ -145,8 +152,8 @@ internal class EmailSignUpViewModel @Inject constructor(
 
     private fun isNextAvailable(): Boolean {
         return firstValidationFlow.value == UserEmailModel.State.SUCCESS &&
-            (pageFlow.value != SignUpPage.PASSWORD ||
-                    secondValidationFlow.value == UserEmailModel.State.SUCCESS)
+                (pageFlow.value != SignUpPage.PASSWORD ||
+                        secondValidationFlow.value == UserEmailModel.State.SUCCESS)
     }
 
     fun prevPage() {
@@ -170,10 +177,18 @@ internal class EmailSignUpViewModel @Inject constructor(
                 )
             ).onSuccess {
                 setEvent(SignUpEvent.Success)
+            }.onFailure { error ->
+                handleError(error)
             }
         }
     }
 
+    private fun handleError(error: Throwable) {
+        when (error) {
+            CommonError.NetworkDisconnected -> setEvent(SignUpEvent.NetworkDisconnected)
+            else -> setEvent(SignUpEvent.UnknownError)
+        }
+    }
 
     private fun setEvent(event: SignUpEvent) {
         _eventFlow.tryEmit(event)
