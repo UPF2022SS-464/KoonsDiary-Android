@@ -1,8 +1,6 @@
 package com.upf464.koonsdiary.domain.usecase.user
 
 import com.upf464.koonsdiary.domain.common.HashGenerator
-import com.upf464.koonsdiary.domain.common.UserValidator
-import com.upf464.koonsdiary.domain.error.SignUpError
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
@@ -14,14 +12,13 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class SignUpWithUsernameUseCaseTest {
 
     @MockK private lateinit var userRepository: UserRepository
-    @MockK private lateinit var validator: UserValidator
     @MockK private lateinit var hashGenerator: HashGenerator
     @MockK private lateinit var messageService: MessageService
     @MockK private lateinit var messageRepository: MessageRepository
@@ -33,7 +30,6 @@ class SignUpWithUsernameUseCaseTest {
         MockKAnnotations.init(this)
         useCase = SignUpWithUsernameUseCase(
             userRepository = userRepository,
-            validator = validator,
             hashGenerator = hashGenerator,
             messageService = messageService,
             messageRepository = messageRepository,
@@ -43,22 +39,6 @@ class SignUpWithUsernameUseCaseTest {
 
     @Test
     fun invoke_validInput_isSuccess(): Unit = runBlocking {
-        every {
-            validator.isEmailValid(any())
-        } returns true
-
-        every {
-            validator.isPasswordValid(any())
-        } returns true
-
-        every {
-            validator.isUsernameValid(any())
-        } returns true
-
-        every {
-            validator.isNicknameValid(any())
-        } returns true
-
         coEvery {
             userRepository.generateSaltOf("username")
         } returns Result.success("salt")
@@ -101,109 +81,5 @@ class SignUpWithUsernameUseCaseTest {
         coVerify {
             userRepository.setAutoSignInWithToken("token")
         }
-    }
-
-    @Test
-    fun invoke_invalidEmail_isFailure(): Unit = runBlocking {
-        every {
-            validator.isEmailValid(any())
-        } returns false
-
-        val result = useCase(
-            SignUpWithUsernameRequest(
-                email = "email",
-                username = "username",
-                password = "password",
-                nickname = "nickname",
-                imageId = 1
-            )
-        )
-
-        assertFalse(result.isSuccess)
-        assertEquals(SignUpError.InvalidEmail, result.exceptionOrNull())
-    }
-
-    @Test
-    fun invoke_invalidUsername_isFailure(): Unit = runBlocking {
-        every {
-            validator.isEmailValid(any())
-        } returns true
-
-        every {
-            validator.isUsernameValid(any())
-        } returns false
-
-        val result = useCase(
-            SignUpWithUsernameRequest(
-                email = "email",
-                username = "username",
-                password = "password",
-                nickname = "nickname",
-                imageId = 1
-            )
-        )
-
-        assertFalse(result.isSuccess)
-        assertEquals(SignUpError.InvalidUsername, result.exceptionOrNull())
-    }
-
-    @Test
-    fun invoke_invalidPassword_isFailure(): Unit = runBlocking {
-        every {
-            validator.isEmailValid(any())
-        } returns true
-
-        every {
-            validator.isUsernameValid(any())
-        } returns true
-
-        every {
-            validator.isPasswordValid(any())
-        } returns false
-
-        val result = useCase(
-            SignUpWithUsernameRequest(
-                email = "email",
-                username = "username",
-                password = "password",
-                nickname = "nickname",
-                imageId = 1
-            )
-        )
-
-        assertFalse(result.isSuccess)
-        assertEquals(SignUpError.InvalidPassword, result.exceptionOrNull())
-    }
-
-    @Test
-    fun invoke_invalidNickname_isFailure(): Unit = runBlocking {
-        every {
-            validator.isEmailValid(any())
-        } returns true
-
-        every {
-            validator.isUsernameValid(any())
-        } returns true
-
-        every {
-            validator.isPasswordValid(any())
-        } returns true
-
-        every {
-            validator.isNicknameValid(any())
-        } returns false
-
-        val result = useCase(
-            SignUpWithUsernameRequest(
-                email = "email",
-                username = "username",
-                password = "password",
-                nickname = "nickname",
-                imageId = 1
-            )
-        )
-
-        assertFalse(result.isSuccess)
-        assertEquals(SignUpError.InvalidNickname, result.exceptionOrNull())
     }
 }
