@@ -1,4 +1,4 @@
-package com.upf464.koonsdiary.presentation.ui.account
+package com.upf464.koonsdiary.presentation.ui.account.signup
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -3,7 +3,7 @@ package com.upf464.koonsdiary.presentation
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.upf464.koonsdiary.presentation.ui.account.EmailSignUpActivity
+import com.upf464.koonsdiary.presentation.ui.account.signup.EmailSignUpActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
