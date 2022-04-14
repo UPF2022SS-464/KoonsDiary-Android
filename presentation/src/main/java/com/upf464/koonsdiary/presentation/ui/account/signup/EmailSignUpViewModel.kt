@@ -22,8 +22,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -68,8 +66,6 @@ internal class EmailSignUpViewModel @Inject constructor(
     private val _imageListFlow = MutableStateFlow(listOf<UserImageModel>())
     val imageListFlow = _imageListFlow.asStateFlow()
 
-    private val imageIndexFlow = MutableStateFlow(0)
-
     private val _eventFlow = MutableSharedFlow<SignUpEvent>(extraBufferCapacity = 1)
     val eventFlow: Flow<SignUpEvent> = _eventFlow
 
@@ -103,18 +99,12 @@ internal class EmailSignUpViewModel @Inject constructor(
         connectFieldFlow(userModel.passwordConfirmFlow, secondFieldFlow, viewModelScope)
 
         viewModelScope.launch {
-            combine(imageListFlow, imageIndexFlow) { imageList, index ->
-                imageList.mapIndexed { i, model ->
-                    model.selectedFlow.value = i == index
-                }
-
-                userModel.imageFlow.value = imageList.getOrNull(index)
-            }.collect()
-        }
-
-        viewModelScope.launch {
             fetchImageListUseCase(FetchUserImageListRequest).onSuccess { response ->
-                _imageListFlow.value = response.imageList.map { it.toPresentation() }
+                _imageListFlow.value = response.imageList
+                    .map { it.toPresentation(userModel.imageFlow, this) }
+                    .also {
+                        userModel.imageFlow.value = it.firstOrNull()
+                    }
             }.onFailure { error ->
                 handleError(error)
             }
@@ -135,7 +125,7 @@ internal class EmailSignUpViewModel @Inject constructor(
     }
 
     fun selectImageAt(index: Int) {
-        imageIndexFlow.value = index
+        userModel.imageFlow.value = imageListFlow.value[index]
     }
 
     fun nextPage() {

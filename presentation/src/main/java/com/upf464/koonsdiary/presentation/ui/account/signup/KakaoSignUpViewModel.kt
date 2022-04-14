@@ -90,8 +90,10 @@ internal class KakaoSignUpViewModel @Inject constructor(
             viewModelScope.launch {
                 fetchImageListUseCase(FetchUserImageListRequest).onSuccess { response ->
                     _imageListFlow.value = response.imageList
-                        .map { it.toPresentation() }
-                        .apply { firstOrNull()?.selectedFlow?.value = true }
+                        .map { it.toPresentation(userModel.imageFlow, this) }
+                        .also {
+                            userModel.imageFlow.value = it.firstOrNull()
+                        }
                 }.onFailure { error ->
                     handleError(error)
                 }
@@ -113,10 +115,6 @@ internal class KakaoSignUpViewModel @Inject constructor(
     }
 
     fun selectImageAt(index: Int) {
-        imageListFlow.value.mapIndexed { i, model ->
-            model.selectedFlow.value = i == index
-        }
-
         userModel.imageFlow.value = imageListFlow.value[index]
     }
 
