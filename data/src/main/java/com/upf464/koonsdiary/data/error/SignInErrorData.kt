@@ -6,4 +6,6 @@ sealed class SignInErrorData(
 ) : ErrorData(message, cause) {
 
     object IncorrectUsernameOrPassword : SignInErrorData()
+
+    object NoSuchKakaoUser : SignInErrorData()
 }
