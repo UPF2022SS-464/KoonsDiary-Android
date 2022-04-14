@@ -1,5 +1,6 @@
 package com.upf464.koonsdiary.remote.devsource
 
+import com.upf464.koonsdiary.data.error.SignInErrorData
 import com.upf464.koonsdiary.data.model.UserData
 import com.upf464.koonsdiary.data.source.UserRemoteDataSource
 import javax.inject.Inject
@@ -24,7 +25,7 @@ internal class UserRemoteDevDataSourceImpl @Inject constructor(
     }
 
     override suspend fun signInWithKakao(token: String): Result<Unit> {
-        return Result.success(Unit)
+        return Result.failure(SignInErrorData.NoSuchKakaoUser)
     }
 
     override suspend fun signInWithToken(token: String): Result<String?> {
