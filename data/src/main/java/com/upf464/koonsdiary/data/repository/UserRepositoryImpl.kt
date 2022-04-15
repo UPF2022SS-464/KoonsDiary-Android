@@ -30,15 +30,15 @@ internal class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun signInWithUsername(username: String, password: String): Result<String> {
-        return remote.signInWithUsername(username, password).errorMap { error ->
+    override suspend fun signInWithAccount(account: String, password: String): Result<String> {
+        return remote.signInWithAccount(account, password).errorMap { error ->
             if (error is ErrorData) error.toDomain()
             else Exception(error)
         }
     }
 
-    override suspend fun signUpWithUsername(user: User, password: String): Result<String> {
-        return remote.signUpWithUsername(user.toData(), password).errorMap { error ->
+    override suspend fun signUpWithAccount(user: User, password: String): Result<String> {
+        return remote.signUpWithAccount(user.toData(), password).errorMap { error ->
             if (error is ErrorData) error.toDomain()
             else Exception(error)
         }

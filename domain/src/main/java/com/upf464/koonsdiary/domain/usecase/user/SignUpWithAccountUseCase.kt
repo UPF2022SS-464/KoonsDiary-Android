@@ -2,13 +2,14 @@ package com.upf464.koonsdiary.domain.usecase.user
 
 import com.upf464.koonsdiary.common.extension.flatMap
 import com.upf464.koonsdiary.domain.common.HashGenerator
+import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.service.MessageService
 import javax.inject.Inject
 
-class SignInWithUsernameUseCase @Inject constructor(
+class SignUpWithAccountUseCase @Inject constructor(
     private val userRepository: UserRepository,
     private val securityRepository: SecurityRepository,
     private val hashGenerator: HashGenerator,
@@ -17,11 +18,17 @@ class SignInWithUsernameUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(request: Request): Result<Unit> {
-        return userRepository.fetchSaltOf(request.username).flatMap { salt ->
-            userRepository.signInWithUsername(
-                request.username,
-                hashGenerator.hashPasswordWithSalt(request.password, salt)
+        return userRepository.generateSaltOf(request.username).flatMap { salt ->
+            val hashedPassword = hashGenerator.hashPasswordWithSalt(request.password, salt)
+
+            val user = User(
+                username = request.username,
+                email = request.email,
+                nickname = request.nickname,
+                image = User.Image(id = request.imageId)
             )
+
+            userRepository.signUpWithAccount(user, hashedPassword)
         }.onSuccess { token ->
             userRepository.setAutoSignInWithToken(token)
             securityRepository.clearPIN()
@@ -33,7 +40,10 @@ class SignInWithUsernameUseCase @Inject constructor(
     }
 
     data class Request(
+        val email: String,
         val username: String,
-        val password: String
+        val password: String,
+        val nickname: String,
+        val imageId: Int
     )
 }

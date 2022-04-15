@@ -12,9 +12,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class EmailSignUpActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<EmailSignUpViewModel>()
+    private val viewModel by viewModels<SignUpViewModel>()
 
     private lateinit var binding: ActivityEmailSignUpBinding
 
@@ -40,15 +40,15 @@ class EmailSignUpActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.eventFlow.collect { event ->
                 when (event) {
-                    EmailSignUpViewModel.SignUpEvent.Success ->
+                    SignUpViewModel.SignUpEvent.Success ->
                         Toast.makeText(
-                            this@EmailSignUpActivity,
+                            this@SignUpActivity,
                             "회원가입 완료",
                             Toast.LENGTH_LONG
                         ).show()
-                    EmailSignUpViewModel.SignUpEvent.NoImageSelected ->
+                    SignUpViewModel.SignUpEvent.NoImageSelected ->
                         Toast.makeText(
-                            this@EmailSignUpActivity,
+                            this@SignUpActivity,
                             "이미지 선택 안함",
                             Toast.LENGTH_LONG
                         ).show()
@@ -64,7 +64,7 @@ class EmailSignUpActivity : AppCompatActivity() {
 
             viewModel.pageFlow.collect { page ->
                 when (page) {
-                    EmailSignUpViewModel.SignUpPage.IMAGE -> {
+                    SignUpViewModel.SignUpPage.IMAGE -> {
                         inputMethod.hideSoftInputFromWindow(
                             binding.editTextSignUpEmailField1.windowToken,
                             InputMethodManager.HIDE_IMPLICIT_ONLY

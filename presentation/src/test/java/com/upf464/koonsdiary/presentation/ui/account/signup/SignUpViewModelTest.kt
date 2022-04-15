@@ -2,7 +2,7 @@ package com.upf464.koonsdiary.presentation.ui.account.signup
 
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.usecase.user.FetchUserImageListUseCase
-import com.upf464.koonsdiary.domain.usecase.user.SignUpWithUsernameUseCase
+import com.upf464.koonsdiary.domain.usecase.user.SignUpWithAccountUseCase
 import com.upf464.koonsdiary.domain.usecase.user.ValidateSignUpUseCase
 import com.upf464.koonsdiary.presentation.model.account.SignUpState
 import io.mockk.MockKAnnotations
@@ -27,14 +27,14 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class EmailSignUpViewModelTest {
+class SignUpViewModelTest {
     @MockK
-    private lateinit var signUpUseCase: SignUpWithUsernameUseCase
+    private lateinit var signUpUseCase: SignUpWithAccountUseCase
 
     @MockK
     private lateinit var fetchImageListUseCase: FetchUserImageListUseCase
     @MockK private lateinit var validateUseCase: ValidateSignUpUseCase
-    private lateinit var viewModel: EmailSignUpViewModel
+    private lateinit var viewModel: SignUpViewModel
 
     private val dispatcher = StandardTestDispatcher()
     private val scope = TestScope(dispatcher)
@@ -44,7 +44,7 @@ class EmailSignUpViewModelTest {
         Dispatchers.setMain(dispatcher)
 
         MockKAnnotations.init(this)
-        viewModel = EmailSignUpViewModel(
+        viewModel = SignUpViewModel(
             signUpUseCase = signUpUseCase,
             fetchImageListUseCase = fetchImageListUseCase,
             validateUseCase = validateUseCase
@@ -120,7 +120,7 @@ class EmailSignUpViewModelTest {
         waitForValidationSuccess()
         viewModel.nextPage()
 
-        assertEquals(EmailSignUpViewModel.SignUpEvent.Success, eventDeferred.await())
+        assertEquals(SignUpViewModel.SignUpEvent.Success, eventDeferred.await())
         coVerify { signUpUseCase(any()) }
     }
 
