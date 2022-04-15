@@ -116,7 +116,7 @@ class KakaoSignUpViewModelTest {
         waitForValidationChange()
         viewModel.nextPage()
 
-        assertEquals(KakaoSignUpViewModel.SignUpPage.USERNAME, viewModel.pageFlow.value)
+        assertEquals(KakaoSignUpViewModel.KakaoSignUpPage.USERNAME, viewModel.pageFlow.value)
     }
 
     private suspend fun waitForValidationSuccess() {

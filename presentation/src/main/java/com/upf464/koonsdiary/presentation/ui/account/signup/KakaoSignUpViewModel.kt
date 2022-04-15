@@ -32,10 +32,10 @@ internal class KakaoSignUpViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val userModel = UserKakaoModel(validateUseCase)
-    private val _pageFlow = MutableStateFlow(SignUpPage.USERNAME)
+    private val _pageFlow = MutableStateFlow(KakaoSignUpPage.USERNAME)
     val pageFlow = _pageFlow.asStateFlow()
 
-    enum class SignUpPage {
+    enum class KakaoSignUpPage {
         USERNAME,
         IMAGE,
         NICKNAME
@@ -46,9 +46,9 @@ internal class KakaoSignUpViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val validationFlow = pageFlow.flatMapLatest { page ->
         when (page) {
-            SignUpPage.USERNAME -> userModel.usernameValidFlow
-            SignUpPage.IMAGE -> userModel.imageValidFlow
-            SignUpPage.NICKNAME -> userModel.nicknameValidFlow
+            KakaoSignUpPage.USERNAME -> userModel.usernameValidFlow
+            KakaoSignUpPage.IMAGE -> userModel.imageValidFlow
+            KakaoSignUpPage.NICKNAME -> userModel.nicknameValidFlow
         }
     }.stateIn(viewModelScope, SharingStarted.Lazily, SignUpState.WAITING)
 
@@ -76,9 +76,9 @@ internal class KakaoSignUpViewModel @Inject constructor(
                 pageFlow.collect { page ->
                     job?.cancel()
                     val targetFlow = when (page) {
-                        SignUpPage.USERNAME -> userModel.usernameFlow
-                        SignUpPage.NICKNAME -> userModel.nicknameFlow
-                        SignUpPage.IMAGE -> return@collect
+                        KakaoSignUpPage.USERNAME -> userModel.usernameFlow
+                        KakaoSignUpPage.NICKNAME -> userModel.nicknameFlow
+                        KakaoSignUpPage.IMAGE -> return@collect
                     }
                     job = connectFieldFlow(targetFlow, fieldFlow, this)
                 }
@@ -118,13 +118,13 @@ internal class KakaoSignUpViewModel @Inject constructor(
     fun nextPage() {
         if (!isNextAvailable()) return
 
-        val lastPageIdx = SignUpPage.values().size - 1
+        val lastPageIdx = KakaoSignUpPage.values().size - 1
         val currentPageIdx = _pageFlow.value.ordinal
 
         if (currentPageIdx == lastPageIdx) {
             signUp()
         } else {
-            _pageFlow.value = SignUpPage.values()[currentPageIdx + 1]
+            _pageFlow.value = KakaoSignUpPage.values()[currentPageIdx + 1]
         }
     }
 
@@ -161,7 +161,7 @@ internal class KakaoSignUpViewModel @Inject constructor(
     fun prevPage() {
         val currentPageIdx = _pageFlow.value.ordinal
         if (currentPageIdx == 0) return
-        _pageFlow.value = SignUpPage.values()[currentPageIdx - 1]
+        _pageFlow.value = KakaoSignUpPage.values()[currentPageIdx - 1]
     }
 
     private fun setEvent(event: SignUpEvent) {

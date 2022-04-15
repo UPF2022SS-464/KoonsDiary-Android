@@ -2,14 +2,13 @@ package com.upf464.koonsdiary.domain.usecase.user
 
 import com.upf464.koonsdiary.common.extension.flatMap
 import com.upf464.koonsdiary.domain.common.HashGenerator
-import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
 import com.upf464.koonsdiary.domain.service.MessageService
 import javax.inject.Inject
 
-class SignUpWithUsernameUseCase @Inject constructor(
+class SignInWithAccountUseCase @Inject constructor(
     private val userRepository: UserRepository,
     private val securityRepository: SecurityRepository,
     private val hashGenerator: HashGenerator,
@@ -18,17 +17,11 @@ class SignUpWithUsernameUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(request: Request): Result<Unit> {
-        return userRepository.generateSaltOf(request.username).flatMap { salt ->
-            val hashedPassword = hashGenerator.hashPasswordWithSalt(request.password, salt)
-
-            val user = User(
-                username = request.username,
-                email = request.email,
-                nickname = request.nickname,
-                image = User.Image(id = request.imageId)
+        return userRepository.fetchSaltOf(request.username).flatMap { salt ->
+            userRepository.signInWithAccount(
+                request.username,
+                hashGenerator.hashPasswordWithSalt(request.password, salt)
             )
-
-            userRepository.signUpWithUsername(user, hashedPassword)
         }.onSuccess { token ->
             userRepository.setAutoSignInWithToken(token)
             securityRepository.clearPIN()
@@ -40,10 +33,7 @@ class SignUpWithUsernameUseCase @Inject constructor(
     }
 
     data class Request(
-        val email: String,
         val username: String,
-        val password: String,
-        val nickname: String,
-        val imageId: Int
+        val password: String
     )
 }

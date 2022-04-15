@@ -8,7 +8,7 @@
             name="vm"
             type="com.upf464.koonsdiary.presentation.ui.account.signup.KakaoSignUpViewModel" />
 
-        <import type="com.upf464.koonsdiary.presentation.ui.account.signup.KakaoSignUpViewModel.SignUpPage" />
+        <import type="com.upf464.koonsdiary.presentation.ui.account.signup.KakaoSignUpViewModel.KakaoSignUpPage" />
         <import type="android.view.View" />
     </data>
 
@@ -31,7 +31,7 @@
             android:id="@+id/group_signUpKakao_field"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="@{vm.pageFlow != SignUpPage.IMAGE ? View.VISIBLE : View.GONE}"
+            android:visibility="@{vm.pageFlow != KakaoSignUpPage.IMAGE ? View.VISIBLE : View.GONE}"
             app:constraint_referenced_ids="editText_signUpKakao_field, textView_signUpKakao_warning" />
 
         <EditText
@@ -62,7 +62,7 @@
             android:id="@+id/recyclerView_signUpKakao_image"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="@{vm.pageFlow == SignUpPage.IMAGE ? View.VISIBLE : View.GONE}"
+            android:visibility="@{vm.pageFlow == KakaoSignUpPage.IMAGE ? View.VISIBLE : View.GONE}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upf464.koonsdiary.domain.error.CommonError
 import com.upf464.koonsdiary.domain.usecase.user.FetchUserImageListUseCase
-import com.upf464.koonsdiary.domain.usecase.user.SignUpWithUsernameUseCase
+import com.upf464.koonsdiary.domain.usecase.user.SignUpWithAccountUseCase
 import com.upf464.koonsdiary.domain.usecase.user.ValidateSignUpUseCase
 import com.upf464.koonsdiary.presentation.mapper.toPresentation
 import com.upf464.koonsdiary.presentation.model.account.SignUpState
@@ -25,8 +25,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class EmailSignUpViewModel @Inject constructor(
-    private val signUpUseCase: SignUpWithUsernameUseCase,
+internal class SignUpViewModel @Inject constructor(
+    private val signUpUseCase: SignUpWithAccountUseCase,
     private val fetchImageListUseCase: FetchUserImageListUseCase,
     validateUseCase: ValidateSignUpUseCase
 ) : ViewModel() {
@@ -151,7 +151,7 @@ internal class EmailSignUpViewModel @Inject constructor(
     private fun signUp() {
         viewModelScope.launch {
             signUpUseCase(
-                SignUpWithUsernameUseCase.Request(
+                SignUpWithAccountUseCase.Request(
                     email = userModel.emailFlow.value,
                     username = userModel.usernameFlow.value,
                     password = userModel.passwordFlow.value,

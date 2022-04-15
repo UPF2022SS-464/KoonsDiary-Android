@@ -64,7 +64,7 @@ class KakaoSignUpActivity : AppCompatActivity() {
 
             viewModel.pageFlow.collect { page ->
                 when (page) {
-                    KakaoSignUpViewModel.SignUpPage.IMAGE -> {
+                    KakaoSignUpViewModel.KakaoSignUpPage.IMAGE -> {
                         inputMethod.hideSoftInputFromWindow(
                             binding.editTextSignUpKakaoField.windowToken,
                             InputMethodManager.HIDE_IMPLICIT_ONLY
