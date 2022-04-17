@@ -6,6 +6,9 @@
 
     <application>
         <activity
+            android:name=".ui.account.signin.SignInActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.account.signup.KakaoSignUpActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
