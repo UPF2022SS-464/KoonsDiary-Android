@@ -9,6 +9,7 @@ buildscript {
         coroutine_version = "1.6.0"
         kakao_version = "2.8.6"
         firebase_bom_version = "29.1.0"
+        compose_version = '1.1.1'
     }
 
     dependencies {
@@ -21,7 +22,7 @@ buildscript {
 plugins {
     id 'com.android.application' version '7.1.1' apply false
     id 'com.android.library' version '7.1.1' apply false
-    id 'org.jetbrains.kotlin.android' version '1.6.20' apply false
+    id 'org.jetbrains.kotlin.android' version '1.6.10' apply false
     id 'org.jetbrains.kotlin.jvm' version '1.6.10' apply false
     id 'org.jlleitschuh.gradle.ktlint' version '10.2.1' apply true
 }
