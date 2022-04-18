@@ -4,7 +4,7 @@ import java.time.LocalDate
 
 interface ReportRemoteDataSource {
 
-    suspend fun fetchAllSentiment(refresh: Boolean = false): Result<Map<LocalDate, Int>>
+    suspend fun fetchAllSentiment(): Result<Map<LocalDate, Int>>
 
     suspend fun fetchKoonsMention(sentiment: Int): Result<String>
 }
