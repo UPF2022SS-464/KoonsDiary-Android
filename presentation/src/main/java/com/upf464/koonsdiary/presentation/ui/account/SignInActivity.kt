@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.upf464.koonsdiary.presentation.ui.account.signin.SignInHomeScreen
 import com.upf464.koonsdiary.presentation.ui.account.signup.KakaoSignUpScreen
+import com.upf464.koonsdiary.presentation.ui.account.signup.SignUpScreen
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsDiaryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,7 +37,7 @@ class SignInActivity : ComponentActivity() {
                             KakaoSignUpScreen()
                         }
                         composable(route = SignInScreen.SIGN_UP_EMAIL.route) {
-
+                            SignUpScreen()
                         }
                     }
                 }
