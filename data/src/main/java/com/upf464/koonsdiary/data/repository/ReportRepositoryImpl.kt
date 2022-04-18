@@ -37,6 +37,9 @@ internal class ReportRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchKoonsMention(sentiment: Sentiment): Result<String> {
-        return remote.fetchKoonsMention(sentiment.ordinal)
+        return remote.fetchKoonsMention(sentiment.ordinal).errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
     }
 }
