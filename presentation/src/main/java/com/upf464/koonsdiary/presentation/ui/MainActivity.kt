@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.upf464.koonsdiary.presentation.R
-import com.upf464.koonsdiary.presentation.ui.account.signup.KakaoSignUpActivity
+import com.upf464.koonsdiary.presentation.ui.account.SignInActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -13,6 +13,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        startActivity(Intent(this, KakaoSignUpActivity::class.java))
+        startActivity(Intent(this, SignInActivity::class.java))
     }
 }
