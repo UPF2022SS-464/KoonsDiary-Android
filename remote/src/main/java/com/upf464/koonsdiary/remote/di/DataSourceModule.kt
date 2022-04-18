@@ -35,4 +35,9 @@ internal abstract class DataSourceModule {
     abstract fun bindMessageRemoteDataSource(
         source: MessageRemoteDevDataSourceImpl
     ): MessageRemoteDataSource
+
+    @Binds
+    abstract fun bindReportRemoteDataSource(
+        source: ReportRemoteDevDataSourceImpl
+    ): ReportRemoteDataSource
 }

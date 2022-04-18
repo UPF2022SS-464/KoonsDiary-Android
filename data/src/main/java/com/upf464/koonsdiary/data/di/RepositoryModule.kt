@@ -40,4 +40,9 @@ internal abstract class RepositoryModule {
     abstract fun bindSecurityRepository(
         repository: SecurityRepositoryImpl
     ): SecurityRepository
+
+    @Binds
+    abstract fun bindReportRepository(
+        repository: ReportRepositoryImpl
+    ): ReportRepository
 }
