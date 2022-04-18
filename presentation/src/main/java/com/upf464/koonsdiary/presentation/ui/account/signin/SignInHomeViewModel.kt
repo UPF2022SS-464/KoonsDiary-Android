@@ -3,9 +3,7 @@ package com.upf464.koonsdiary.presentation.ui.account.signin
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upf464.koonsdiary.domain.error.SignInError
-import com.upf464.koonsdiary.domain.request.user.SignInWithKakaoRequest
-import com.upf464.koonsdiary.domain.response.EmptyResponse
-import com.upf464.koonsdiary.domain.usecase.ResultUseCase
+import com.upf464.koonsdiary.domain.usecase.user.SignInWithKakaoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -14,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class SignInHomeViewModel @Inject constructor(
-    private val kakaoSignInUseCase: ResultUseCase<SignInWithKakaoRequest, EmptyResponse>
+    private val kakaoSignInUseCase: SignInWithKakaoUseCase
 ) : ViewModel() {
 
     private val _eventFlow = MutableSharedFlow<SignInEvent>(extraBufferCapacity = 1)
@@ -39,7 +37,7 @@ internal class SignInHomeViewModel @Inject constructor(
 
     fun signInWithKakao() {
         viewModelScope.launch {
-            kakaoSignInUseCase(SignInWithKakaoRequest).onSuccess {
+            kakaoSignInUseCase().onSuccess {
                 setEvent(SignInEvent.KakaoSignInSuccess)
             }.onFailure { error ->
                 when (error) {
