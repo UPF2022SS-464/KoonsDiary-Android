@@ -40,15 +40,15 @@ internal class GetReportUseCase @Inject constructor(
             val graphList = (1..dateTerm.term).map { index ->
                 val sentimentScoreList = filteredSentiment.filter { (date, _) ->
                     when (dateTerm.type) {
-                        DateTerm.Type.DAY -> startDate.plusDays(index - 1) <= date && date < startDate.plusDays(
-                            index
-                        )
-                        DateTerm.Type.WEEK -> startDate.plusWeeks(index - 1) <= date && date < startDate.plusWeeks(
-                            index
-                        )
-                        DateTerm.Type.MONTH -> startDate.plusMonths(index - 1) <= date && date < startDate.plusMonths(
-                            index
-                        )
+                        DateTerm.Type.DAY ->
+                            startDate.plusDays(index - 1) <= date &&
+                                    date < startDate.plusDays(index)
+                        DateTerm.Type.WEEK ->
+                            startDate.plusWeeks(index - 1) <= date &&
+                                    date < startDate.plusWeeks(index)
+                        DateTerm.Type.MONTH ->
+                            startDate.plusMonths(index - 1) <= date &&
+                                    date < startDate.plusMonths(index)
                     }
                 }.values.map { it.ordinal }
 
@@ -59,10 +59,6 @@ internal class GetReportUseCase @Inject constructor(
             reportRepository.fetchKoonsMention(mostSentiment).map { mention ->
                 GetReportResponse(graphList, sentimentPercentageMap, mostSentiment, mention)
             }
-
-
         }
-
-
     }
 }

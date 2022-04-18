@@ -7,7 +7,7 @@ import javax.inject.Inject
 internal class ReportRemoteDevDataSourceImpl @Inject constructor(
 ) : ReportRemoteDataSource {
 
-    override suspend fun fetchAllSentiment(refresh: Boolean): Result<Map<LocalDate, Int>> {
+    override suspend fun fetchAllSentiment(): Result<Map<LocalDate, Int>> {
         return Result.success(emptyMap())
     }
 
