@@ -7,5 +7,5 @@ interface ReportRepository {
 
     suspend fun fetchAllSentiment(refresh: Boolean = false): Result<Map<LocalDate, Sentiment>>
 
-    suspend fun fetchKoonsMention(sentiment: Sentiment): Result<String>
+    suspend fun fetchKoonsMention(mostSentimentSet: Set<Sentiment>): Result<String>
 }

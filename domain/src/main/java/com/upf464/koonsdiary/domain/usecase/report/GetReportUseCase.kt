@@ -34,8 +34,12 @@ internal class GetReportUseCase @Inject constructor(
 
             val sentimentPercentageMap = sentimentCountMap.mapValues { it.value * 100 / totalDays }
 
-            val mostSentiment = sentimentCountMap.maxByOrNull { it.value }?.key
+            val mostCount = sentimentCountMap.maxByOrNull { it.value }?.value
                 ?: return Result.failure(ReportError.NoSentiment)
+
+            val mostSentimentSet = sentimentCountMap.filter { (_, count) ->
+                count == mostCount
+            }.keys
 
             val graphList = (1..dateTerm.term).map { index ->
                 val sentimentScoreList = filteredSentiment.filter { (date, _) ->
@@ -56,8 +60,8 @@ internal class GetReportUseCase @Inject constructor(
                 else sentimentScoreList.sum().toDouble() / sentimentScoreList.size
             }
 
-            reportRepository.fetchKoonsMention(mostSentiment).map { mention ->
-                GetReportResponse(graphList, sentimentPercentageMap, mostSentiment, mention)
+            reportRepository.fetchKoonsMention(mostSentimentSet).map { mention ->
+                GetReportResponse(graphList, sentimentPercentageMap, mostSentimentSet, mention)
             }
         }
     }

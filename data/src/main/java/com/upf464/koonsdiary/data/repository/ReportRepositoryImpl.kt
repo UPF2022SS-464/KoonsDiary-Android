@@ -36,10 +36,11 @@ internal class ReportRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchKoonsMention(sentiment: Sentiment): Result<String> {
-        return remote.fetchKoonsMention(sentiment.ordinal).errorMap { error ->
-            if (error is ErrorData) error.toDomain()
-            else Exception(error)
-        }
+    override suspend fun fetchKoonsMention(mostSentimentSet: Set<Sentiment>): Result<String> {
+        return remote.fetchKoonsMention(mostSentimentSet.map { it.ordinal }.toSet())
+            .errorMap { error ->
+                if (error is ErrorData) error.toDomain()
+                else Exception(error)
+            }
     }
 }
