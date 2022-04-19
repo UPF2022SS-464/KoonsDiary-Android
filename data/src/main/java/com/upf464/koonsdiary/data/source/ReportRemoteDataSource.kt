@@ -6,5 +6,5 @@ interface ReportRemoteDataSource {
 
     suspend fun fetchAllSentiment(): Result<Map<LocalDate, Int>>
 
-    suspend fun fetchKoonsMention(sentiment: Int): Result<String>
+    suspend fun fetchKoonsMention(sentimentSet: Set<Int>): Result<String>
 }

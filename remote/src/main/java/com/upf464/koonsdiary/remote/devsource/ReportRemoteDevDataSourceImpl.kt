@@ -11,7 +11,7 @@ internal class ReportRemoteDevDataSourceImpl @Inject constructor(
         return Result.success(emptyMap())
     }
 
-    override suspend fun fetchKoonsMention(sentiment: Int): Result<String> {
+    override suspend fun fetchKoonsMention(sentimentSet: Set<Int>): Result<String> {
         return Result.success("")
     }
 }

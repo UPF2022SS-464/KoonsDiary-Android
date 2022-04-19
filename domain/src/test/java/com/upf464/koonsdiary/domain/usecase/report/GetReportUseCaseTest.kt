@@ -21,6 +21,8 @@ class GetReportUseCaseTest {
     private lateinit var reportRepository: ReportRepository
     private lateinit var useCase: GetReportUseCase
 
+    private val sentimentSet = setOf(Sentiment.NORMAL)
+
     @Before
     fun setup() {
         MockKAnnotations.init(this)
@@ -38,18 +40,17 @@ class GetReportUseCaseTest {
                 LocalDate.of(2022, 4, 11) to Sentiment.NORMAL,
                 LocalDate.of(2022, 4, 18) to Sentiment.NORMAL,
                 LocalDate.of(2022, 5, 11) to Sentiment.NORMAL,
-                LocalDate.of(2022, 5, 18) to Sentiment.NORMAL,
-                LocalDate.of(2022, 5, 25) to Sentiment.NORMAL,
+                LocalDate.of(2022, 5, 30) to Sentiment.NORMAL,
+                LocalDate.of(2022, 10, 11) to Sentiment.NORMAL,
             )
         )
-
     }
 
     @Test
     fun invoke_dayReport_isSuccess(): Unit = runBlocking {
 
         coEvery {
-            reportRepository.fetchKoonsMention(sentiment = Sentiment.NORMAL)
+            reportRepository.fetchKoonsMention(mostSentimentSet = sentimentSet)
         } returns Result.success("")
 
         val result = useCase(GetReportRequest(DateTerm.DAY_7, LocalDate.of(2022, 4, 11)))
@@ -61,10 +62,10 @@ class GetReportUseCaseTest {
     fun invoke_weekReport_isSuccess(): Unit = runBlocking {
 
         coEvery {
-            reportRepository.fetchKoonsMention(sentiment = Sentiment.NORMAL)
+            reportRepository.fetchKoonsMention(mostSentimentSet = sentimentSet)
         } returns Result.success("")
 
-        val result = useCase(GetReportRequest(DateTerm.WEEK_14, LocalDate.of(2022, 4, 11)))
+        val result = useCase(GetReportRequest(DateTerm.WEEK_8, LocalDate.of(2022, 4, 11)))
 
         assertTrue(result.isSuccess)
     }
@@ -73,10 +74,10 @@ class GetReportUseCaseTest {
     fun invoke_monthReport_isSuccess(): Unit = runBlocking {
 
         coEvery {
-            reportRepository.fetchKoonsMention(sentiment = Sentiment.NORMAL)
+            reportRepository.fetchKoonsMention(mostSentimentSet = sentimentSet)
         } returns Result.success("")
 
-        val result = useCase(GetReportRequest(DateTerm.MONTH_28, LocalDate.of(2022, 4, 11)))
+        val result = useCase(GetReportRequest(DateTerm.MONTH_6, LocalDate.of(2022, 4, 11)))
 
         assertTrue(result.isSuccess)
     }
@@ -88,7 +89,7 @@ class GetReportUseCaseTest {
             reportRepository.fetchKoonsMention(any())
         } returns Result.failure(ReportError.NoSentiment)
 
-        val result = useCase(GetReportRequest(DateTerm.MONTH_28, LocalDate.of(2022, 4, 11)))
+        val result = useCase(GetReportRequest(DateTerm.MONTH_6, LocalDate.of(2022, 4, 11)))
 
         assertTrue(result.isFailure)
         assertEquals(ReportError.NoSentiment, result.exceptionOrNull())
