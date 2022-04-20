@@ -6,8 +6,7 @@ import com.upf464.koonsdiary.data.model.ReactionData
 import com.upf464.koonsdiary.data.source.CottonRemoteDataSource
 import javax.inject.Inject
 
-internal class CottonRemoteDevDataSourceImpl @Inject constructor(
-): CottonRemoteDataSource {
+internal class CottonRemoteDevDataSourceImpl @Inject constructor() : CottonRemoteDataSource {
 
     override suspend fun fetchRandomQuestion(): Result<QuestionData> {
         return Result.success(QuestionData(id = 1, korean = "", english = ""))

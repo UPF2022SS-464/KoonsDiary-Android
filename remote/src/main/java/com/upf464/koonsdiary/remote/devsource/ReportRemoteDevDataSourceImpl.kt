@@ -4,8 +4,7 @@ import com.upf464.koonsdiary.data.source.ReportRemoteDataSource
 import java.time.LocalDate
 import javax.inject.Inject
 
-internal class ReportRemoteDevDataSourceImpl @Inject constructor(
-) : ReportRemoteDataSource {
+internal class ReportRemoteDevDataSourceImpl @Inject constructor() : ReportRemoteDataSource {
 
     override suspend fun fetchAllSentiment(): Result<Map<LocalDate, Int>> {
         return Result.success(emptyMap())

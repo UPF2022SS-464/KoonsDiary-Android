@@ -6,8 +6,7 @@ import com.upf464.koonsdiary.data.source.DiaryRemoteDataSource
 import java.time.LocalDate
 import javax.inject.Inject
 
-internal class DiaryRemoteDevDataSourceImpl @Inject constructor(
-) : DiaryRemoteDataSource {
+internal class DiaryRemoteDevDataSourceImpl @Inject constructor() : DiaryRemoteDataSource {
 
     override suspend fun fetchSentimentOf(content: String): Result<Int> {
         return Result.success(0)
@@ -26,20 +25,24 @@ internal class DiaryRemoteDevDataSourceImpl @Inject constructor(
     }
 
     override suspend fun fetchDiary(diaryId: Int): Result<DiaryData> {
-        return Result.success(DiaryData(
-            date = LocalDate.of(2022, 3, 30),
-            content = "content",
-            sentiment = 1,
-            imageList = emptyList()
-        ))
+        return Result.success(
+            DiaryData(
+                date = LocalDate.of(2022, 3, 30),
+                content = "content",
+                sentiment = 1,
+                imageList = emptyList()
+            )
+        )
     }
 
     override suspend fun fetchDiaryPreview(diaryId: Int): Result<DiaryPreviewData> {
-        return Result.success(DiaryPreviewData(
-            id = 1,
-            content = "",
-            imagePath = ""
-        ))
+        return Result.success(
+            DiaryPreviewData(
+                id = 1,
+                content = "",
+                imagePath = ""
+            )
+        )
     }
 
     override suspend fun fetchMonthlySentiment(year: Int, month: Int): Result<List<Int>> {

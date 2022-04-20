@@ -42,6 +42,6 @@ internal abstract class DomainModule {
     companion object {
 
         @Provides
-        fun provideMessageDigest() : MessageDigest = MessageDigest.getInstance("SHA-256")
+        fun provideMessageDigest(): MessageDigest = MessageDigest.getInstance("SHA-256")
     }
 }

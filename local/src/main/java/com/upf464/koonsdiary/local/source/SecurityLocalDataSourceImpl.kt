@@ -9,7 +9,7 @@ import com.upf464.koonsdiary.data.source.SecurityLocalDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 
 internal class SecurityLocalDataSourceImpl @Inject constructor(

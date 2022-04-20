@@ -1,7 +1,17 @@
 package com.upf464.koonsdiary.remote.di
 
-import com.upf464.koonsdiary.data.source.*
-import com.upf464.koonsdiary.remote.devsource.*
+import com.upf464.koonsdiary.data.source.CottonRemoteDataSource
+import com.upf464.koonsdiary.data.source.DiaryRemoteDataSource
+import com.upf464.koonsdiary.data.source.MessageRemoteDataSource
+import com.upf464.koonsdiary.data.source.ReportRemoteDataSource
+import com.upf464.koonsdiary.data.source.ShareRemoteDataSource
+import com.upf464.koonsdiary.data.source.UserRemoteDataSource
+import com.upf464.koonsdiary.remote.devsource.CottonRemoteDevDataSourceImpl
+import com.upf464.koonsdiary.remote.devsource.DiaryRemoteDevDataSourceImpl
+import com.upf464.koonsdiary.remote.devsource.MessageRemoteDevDataSourceImpl
+import com.upf464.koonsdiary.remote.devsource.ReportRemoteDevDataSourceImpl
+import com.upf464.koonsdiary.remote.devsource.ShareRemoteDevDataSourceImpl
+import com.upf464.koonsdiary.remote.devsource.UserRemoteDevDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

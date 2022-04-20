@@ -44,14 +44,11 @@ class GetReportUseCase @Inject constructor(
                 val sentimentScoreList = filteredSentiment.filter { (date, _) ->
                     when (dateTerm.type) {
                         DateTerm.Type.DAY ->
-                            startDate.plusDays(index - 1) <= date &&
-                                    date < startDate.plusDays(index)
+                            startDate.plusDays(index - 1) <= date && date < startDate.plusDays(index)
                         DateTerm.Type.WEEK ->
-                            startDate.plusWeeks(index - 1) <= date &&
-                                    date < startDate.plusWeeks(index)
+                            startDate.plusWeeks(index - 1) <= date && date < startDate.plusWeeks(index)
                         DateTerm.Type.MONTH ->
-                            startDate.plusMonths(index - 1) <= date &&
-                                    date < startDate.plusMonths(index)
+                            startDate.plusMonths(index - 1) <= date && date < startDate.plusMonths(index)
                     }
                 }.values.map { it.ordinal }
 

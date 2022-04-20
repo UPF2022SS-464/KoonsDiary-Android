@@ -26,34 +26,40 @@ internal class BiometricActivity : AppCompatActivity() {
     private fun authenticate(resultReceiver: ResultReceiver) {
         var prompt: BiometricPrompt? = null
         var failedCount = 0
-        prompt = BiometricPrompt(this, object : BiometricPrompt.AuthenticationCallback() {
+        prompt = BiometricPrompt(
+            this,
+            object : BiometricPrompt.AuthenticationCallback() {
 
-            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                super.onAuthenticationSucceeded(result)
-                resultReceiver.send(Activity.RESULT_OK, null)
-                finish()
-            }
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    super.onAuthenticationSucceeded(result)
+                    resultReceiver.send(Activity.RESULT_OK, null)
+                    finish()
+                }
 
-            override fun onAuthenticationFailed() {
-                super.onAuthenticationFailed()
-                failedCount++
+                override fun onAuthenticationFailed() {
+                    super.onAuthenticationFailed()
+                    failedCount++
 
-                if (failedCount >= 2) {
-                    prompt?.cancelAuthentication()
+                    if (failedCount >= 2) {
+                        prompt?.cancelAuthentication()
+                    }
+                }
+
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                    super.onAuthenticationError(errorCode, errString)
+                    resultReceiver.send(
+                        Activity.RESULT_OK,
+                        Bundle().apply {
+                            putParcelable(
+                                Constants.KEY_BIOMETRIC_ERROR,
+                                BiometricViewError(errorCode, errString.toString())
+                            )
+                        }
+                    )
+                    finish()
                 }
             }
-
-            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                super.onAuthenticationError(errorCode, errString)
-                resultReceiver.send(Activity.RESULT_OK, Bundle().apply {
-                    putParcelable(
-                        Constants.KEY_BIOMETRIC_ERROR,
-                        BiometricViewError(errorCode, errString.toString())
-                    )
-                })
-                finish()
-            }
-        })
+        )
 
         val promptInfoBuilder = BiometricPrompt.PromptInfo.Builder()
             .setTitle(getString(R.string.biometric_title))
@@ -63,8 +69,7 @@ internal class BiometricActivity : AppCompatActivity() {
         // 안면 인식
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             promptInfoBuilder.setAllowedAuthenticators(
-                BiometricManager.Authenticators.BIOMETRIC_STRONG
-                        or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+                BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL
             )
         }
 
