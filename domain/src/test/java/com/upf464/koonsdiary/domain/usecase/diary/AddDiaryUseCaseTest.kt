@@ -4,13 +4,14 @@ import com.upf464.koonsdiary.domain.common.DiaryValidator
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.diary.AddDiaryRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.time.LocalDate
@@ -41,12 +42,12 @@ class AddDiaryUseCaseTest {
         } returns true
 
         val result = useCase(
-            AddDiaryRequest(
-            date = LocalDate.of(2022, 3, 25),
-            content = "content",
-            sentiment = Sentiment.GOOD,
-            imageList = emptyList()
-        )
+            AddDiaryUseCase.Request(
+                date = LocalDate.of(2022, 3, 25),
+                content = "content",
+                sentiment = Sentiment.GOOD,
+                imageList = emptyList()
+            )
         )
 
         assertTrue(result.isSuccess)
@@ -60,12 +61,12 @@ class AddDiaryUseCaseTest {
         } returns false
 
         val result = useCase(
-            AddDiaryRequest(
-            date = LocalDate.of(2022, 3, 25),
-            content = "",
-            sentiment = Sentiment.GOOD,
-            imageList = emptyList()
-        )
+            AddDiaryUseCase.Request(
+                date = LocalDate.of(2022, 3, 25),
+                content = "",
+                sentiment = Sentiment.GOOD,
+                imageList = emptyList()
+            )
         )
 
         assertFalse(result.isSuccess)

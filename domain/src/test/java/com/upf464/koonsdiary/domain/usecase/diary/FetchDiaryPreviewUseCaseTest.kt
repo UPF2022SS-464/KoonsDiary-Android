@@ -3,7 +3,6 @@ package com.upf464.koonsdiary.domain.usecase.diary
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.model.DiaryPreview
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.diary.FetchDiaryPreviewRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -30,7 +29,7 @@ class FetchDiaryPreviewUseCaseTest {
             diaryRepository.fetchDiaryPreview(any())
         } returns Result.success(DiaryPreview(1, "", ""))
 
-        val result = useCase(FetchDiaryPreviewRequest(1))
+        val result = useCase(FetchDiaryPreviewUseCase.Request(1))
 
         assertTrue(result.isSuccess)
         assertEquals(1, result.getOrNull()?.preview?.id)
@@ -42,7 +41,7 @@ class FetchDiaryPreviewUseCaseTest {
             diaryRepository.fetchDiaryPreview(any())
         } returns Result.failure(DiaryError.InvalidDiaryId)
 
-        val result = useCase(FetchDiaryPreviewRequest(1))
+        val result = useCase(FetchDiaryPreviewUseCase.Request(1))
 
         assertTrue(result.isFailure)
         assertEquals(DiaryError.InvalidDiaryId, result.exceptionOrNull())

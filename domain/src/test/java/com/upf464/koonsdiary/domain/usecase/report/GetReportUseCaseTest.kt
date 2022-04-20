@@ -4,7 +4,6 @@ import com.upf464.koonsdiary.domain.error.ReportError
 import com.upf464.koonsdiary.domain.model.DateTerm
 import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.ReportRepository
-import com.upf464.koonsdiary.domain.request.report.GetReportRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -49,7 +48,7 @@ class GetReportUseCaseTest {
             reportRepository.fetchKoonsMention(mostSentimentSet = setOf(Sentiment.NORMAL))
         } returns Result.success("")
 
-        val result = useCase(GetReportRequest(DateTerm.DAY_7, LocalDate.of(2022, 4, 11)))
+        val result = useCase(GetReportUseCase.Request(DateTerm.DAY_7, LocalDate.of(2022, 4, 11)))
 
         assertTrue(result.isSuccess)
         assertEquals(setOf(Sentiment.NORMAL), result.getOrNull()?.mostSentimentSet)
@@ -61,7 +60,7 @@ class GetReportUseCaseTest {
             reportRepository.fetchKoonsMention(mostSentimentSet = setOf(Sentiment.NORMAL))
         } returns Result.success("")
 
-        val result = useCase(GetReportRequest(DateTerm.WEEK_8, LocalDate.of(2022, 4, 11)))
+        val result = useCase(GetReportUseCase.Request(DateTerm.WEEK_8, LocalDate.of(2022, 4, 11)))
 
         assertTrue(result.isSuccess)
         assertEquals(setOf(Sentiment.NORMAL), result.getOrNull()?.mostSentimentSet)
@@ -73,7 +72,7 @@ class GetReportUseCaseTest {
             reportRepository.fetchKoonsMention(mostSentimentSet = setOf(Sentiment.NORMAL))
         } returns Result.success("")
 
-        val result = useCase(GetReportRequest(DateTerm.MONTH_6, LocalDate.of(2022, 4, 11)))
+        val result = useCase(GetReportUseCase.Request(DateTerm.MONTH_6, LocalDate.of(2022, 4, 11)))
 
         assertTrue(result.isSuccess)
         assertEquals(setOf(Sentiment.NORMAL), result.getOrNull()?.mostSentimentSet)
@@ -86,7 +85,7 @@ class GetReportUseCaseTest {
             reportRepository.fetchKoonsMention(any())
         } returns Result.failure(ReportError.NoSentiment)
 
-        val result = useCase(GetReportRequest(DateTerm.MONTH_6, LocalDate.of(2023, 4, 11)))
+        val result = useCase(GetReportUseCase.Request(DateTerm.MONTH_6, LocalDate.of(2023, 4, 11)))
 
         assertTrue(result.isFailure)
         assertEquals(ReportError.NoSentiment, result.exceptionOrNull())

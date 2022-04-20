@@ -4,7 +4,6 @@ import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.model.Diary
 import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.diary.FetchDiaryRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -41,7 +40,7 @@ class FetchDiaryUseCaseTest {
             diaryRepository.fetchDiary(1)
         } returns Result.success(fetchedDiary)
 
-        val result = useCase(FetchDiaryRequest(1))
+        val result = useCase(FetchDiaryUseCase.Request(1))
 
         assertTrue(result.isSuccess)
         assertEquals(fetchedDiary, result.getOrNull()?.diary)
@@ -53,7 +52,7 @@ class FetchDiaryUseCaseTest {
             diaryRepository.fetchDiary(1)
         } returns Result.failure(DiaryError.InvalidDiaryId)
 
-        val result = useCase(FetchDiaryRequest(1))
+        val result = useCase(FetchDiaryUseCase.Request(1))
 
         assertTrue(result.isFailure)
         assertEquals(DiaryError.InvalidDiaryId, result.exceptionOrNull())

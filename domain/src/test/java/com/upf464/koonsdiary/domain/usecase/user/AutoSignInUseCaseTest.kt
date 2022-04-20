@@ -4,7 +4,6 @@ import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.model.SignInType
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.request.user.AutoSignInRequest
 import com.upf464.koonsdiary.domain.service.KakaoService
 import com.upf464.koonsdiary.domain.service.MessageService
 import io.mockk.MockKAnnotations
@@ -58,7 +57,7 @@ class AutoSignInUseCaseTest {
             messageRepository.registerFcmToken("token")
         } returns Result.success(Unit)
 
-        val result = useCase(AutoSignInRequest)
+        val result = useCase()
 
         assertTrue(result.isSuccess)
     }
@@ -89,7 +88,7 @@ class AutoSignInUseCaseTest {
             messageRepository.registerFcmToken("token")
         } returns Result.success(Unit)
 
-        val result = useCase(AutoSignInRequest)
+        val result = useCase()
 
         assertTrue(result.isSuccess)
         coVerify { userRepository.setAutoSignInWithToken("new token") }
@@ -109,7 +108,7 @@ class AutoSignInUseCaseTest {
             userRepository.clearAutoSignIn()
         } returns Result.success(Unit)
 
-        val result = useCase(AutoSignInRequest)
+        val result = useCase()
 
         assertTrue(result.isFailure)
         coVerify { userRepository.clearAutoSignIn() }
@@ -121,7 +120,7 @@ class AutoSignInUseCaseTest {
             userRepository.getAutoSignIn()
         } returns Result.failure(SignInError.NoAutoSignIn)
 
-        val result = useCase(AutoSignInRequest)
+        val result = useCase()
 
         assertTrue(result.isFailure)
         assertEquals(SignInError.NoAutoSignIn, result.exceptionOrNull())

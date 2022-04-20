@@ -2,7 +2,6 @@ package com.upf464.koonsdiary.domain.usecase.security
 
 import com.upf464.koonsdiary.domain.error.SecurityError
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
-import com.upf464.koonsdiary.domain.request.security.SetBiometricRequest
 import com.upf464.koonsdiary.domain.service.SecurityService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -39,7 +38,7 @@ class SetBiometricUseCaseTest {
             securityRepository.setBiometric(true)
         } returns Result.success(Unit)
 
-        val result = useCase(SetBiometricRequest(true))
+        val result = useCase(SetBiometricUseCase.Request(true))
 
         assertTrue(result.isSuccess)
         coVerify { securityService.authenticateWithBiometric() }
@@ -51,7 +50,7 @@ class SetBiometricUseCaseTest {
             securityRepository.setBiometric(false)
         } returns Result.success(Unit)
 
-        val result = useCase(SetBiometricRequest(false))
+        val result = useCase(SetBiometricUseCase.Request(false))
 
         assertTrue(result.isSuccess)
         coVerify(exactly = 0) { securityService.authenticateWithBiometric() }
@@ -67,7 +66,7 @@ class SetBiometricUseCaseTest {
             securityRepository.setBiometric(true)
         } returns Result.failure(SecurityError.AuthenticateFailed)
 
-        val result = useCase(SetBiometricRequest(true))
+        val result = useCase(SetBiometricUseCase.Request(true))
 
         assertTrue(result.isFailure)
         assertEquals(SecurityError.AuthenticateFailed, result.exceptionOrNull())

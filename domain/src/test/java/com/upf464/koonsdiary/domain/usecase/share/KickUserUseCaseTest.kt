@@ -2,7 +2,6 @@ package com.upf464.koonsdiary.domain.usecase.share
 
 import com.upf464.koonsdiary.domain.error.ShareError
 import com.upf464.koonsdiary.domain.repository.ShareRepository
-import com.upf464.koonsdiary.domain.request.share.KickUserRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -29,7 +28,7 @@ class KickUserUseCaseTest {
             shareRepository.kickUser(any(), any())
         } returns Result.success(Unit)
 
-        val result = useCase(KickUserRequest(1, 1))
+        val result = useCase(KickUserUseCase.Request(1, 1))
 
         assertTrue(result.isSuccess)
     }
@@ -40,7 +39,7 @@ class KickUserUseCaseTest {
             shareRepository.kickUser(any(), any())
         } returns Result.failure(ShareError.InvalidGroupId)
 
-        val result = useCase(KickUserRequest(1, 1))
+        val result = useCase(KickUserUseCase.Request(1, 1))
 
         assertTrue(result.isFailure)
         assertEquals(ShareError.InvalidGroupId, result.exceptionOrNull())
@@ -52,7 +51,7 @@ class KickUserUseCaseTest {
             shareRepository.kickUser(any(), any())
         } returns Result.failure(ShareError.InvalidUserId)
 
-        val result = useCase(KickUserRequest(1, 1))
+        val result = useCase(KickUserUseCase.Request(1, 1))
 
         assertTrue(result.isFailure)
         assertEquals(ShareError.InvalidUserId, result.exceptionOrNull())

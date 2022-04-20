@@ -1,7 +1,6 @@
 package com.upf464.koonsdiary.domain.usecase.security
 
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
-import com.upf464.koonsdiary.domain.request.security.DeletePINRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -27,7 +26,7 @@ class DeletePINUseCaseTest {
             securityRepository.clearPIN()
         } returns Result.success(Unit)
 
-        val result = deletePINUseCase(DeletePINRequest)
+        val result = deletePINUseCase()
 
         assertTrue(result.isSuccess)
     }

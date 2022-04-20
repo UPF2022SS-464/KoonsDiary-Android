@@ -5,14 +5,15 @@ import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.request.user.SignInWithUsernameRequest
 import com.upf464.koonsdiary.domain.service.MessageService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -67,7 +68,7 @@ class SignInWithUsernameUseCaseTest {
             securityRepository.clearPIN()
         } returns Result.success(Unit)
 
-        val result = useCase(SignInWithUsernameRequest("username", "password"))
+        val result = useCase(SignInWithUsernameUseCase.Request("username", "password"))
 
         assertTrue(result.isSuccess)
     }
@@ -86,7 +87,7 @@ class SignInWithUsernameUseCaseTest {
             userRepository.signInWithUsername("username", "passwordWithSalt")
         } returns Result.failure(SignInError.IncorrectUsernameOrPassword)
 
-        val result = useCase(SignInWithUsernameRequest("username", "password"))
+        val result = useCase(SignInWithUsernameUseCase.Request("username", "password"))
 
         assertFalse(result.isSuccess)
         assertEquals(SignInError.IncorrectUsernameOrPassword, result.exceptionOrNull())

@@ -2,7 +2,6 @@ package com.upf464.koonsdiary.domain.usecase.security
 
 import com.upf464.koonsdiary.domain.error.LockType
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
-import com.upf464.koonsdiary.domain.request.security.FetchLockTypeRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -28,7 +27,7 @@ class FetchLockTypeUseCaseTest {
             securityRepository.fetchLockType()
         } returns Result.success(LockType.NONE)
 
-        val result = useCase(FetchLockTypeRequest)
+        val result = useCase()
 
         assertTrue(result.isSuccess)
     }

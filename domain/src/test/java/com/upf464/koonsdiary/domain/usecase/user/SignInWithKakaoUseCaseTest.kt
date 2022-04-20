@@ -4,7 +4,6 @@ import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.request.user.SignInWithKakaoRequest
 import com.upf464.koonsdiary.domain.service.KakaoService
 import com.upf464.koonsdiary.domain.service.MessageService
 import io.mockk.MockKAnnotations
@@ -64,7 +63,7 @@ class SignInWithKakaoUseCaseTest {
             securityRepository.clearPIN()
         } returns Result.success(Unit)
 
-        val result = useCase(SignInWithKakaoRequest)
+        val result = useCase()
 
         assertTrue(result.isSuccess)
 
@@ -82,7 +81,7 @@ class SignInWithKakaoUseCaseTest {
             userRepository.signInWithKakao("token")
         } returns Result.failure(SignInError.KakaoSignInCancel())
 
-        val result = useCase(SignInWithKakaoRequest)
+        val result = useCase()
 
         assertFalse(result.isSuccess)
     }

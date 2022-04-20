@@ -3,7 +3,6 @@ package com.upf464.koonsdiary.domain.usecase.user
 import com.upf464.koonsdiary.domain.common.UserValidator
 import com.upf464.koonsdiary.domain.error.SignUpError
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.request.user.UpdateUserRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
@@ -39,7 +38,7 @@ class UpdateUserUseCaseTest {
             userRepository.updateUser("nickname")
         } returns Result.success(Unit)
 
-        val result = useCase(UpdateUserRequest("nickname"))
+        val result = useCase(UpdateUserUseCase.Request("nickname"))
 
         assertTrue(result.isSuccess)
     }
@@ -50,7 +49,7 @@ class UpdateUserUseCaseTest {
             validator.isNicknameValid("nickname")
         } returns false
 
-        val result = useCase(UpdateUserRequest("nickname"))
+        val result = useCase(UpdateUserUseCase.Request("nickname"))
 
         assertTrue(result.isFailure)
         assertEquals(SignUpError.InvalidNickname, result.exceptionOrNull())
