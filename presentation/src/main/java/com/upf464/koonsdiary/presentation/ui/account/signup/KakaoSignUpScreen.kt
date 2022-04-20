@@ -13,11 +13,11 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.upf464.koonsdiary.presentation.model.account.SignUpPage
 import com.upf464.koonsdiary.presentation.ui.account.signup.components.UserImageListItem
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -30,26 +30,22 @@ internal fun KakaoSignUpScreen(
     val validationState = viewModel.validationFlow.collectAsState()
     val imageListState = viewModel.imageListFlow.collectAsState()
     val context = LocalContext.current
+    val state = viewModel.stateFlow.collectAsState()
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.eventFlow.collect { event ->
-            when (event) {
-                KakaoSignUpViewModel.SignUpEvent.NetworkDisconnected ->
-                    Toast.makeText(context, "네트워크 오류", Toast.LENGTH_LONG).show()
-                KakaoSignUpViewModel.SignUpEvent.NoImageSelected ->
-                    Toast.makeText(context, "이미지 미선택 오류", Toast.LENGTH_LONG).show()
-                KakaoSignUpViewModel.SignUpEvent.Success ->
-                    Toast.makeText(context, "회원가입 성공", Toast.LENGTH_LONG).show()
-                KakaoSignUpViewModel.SignUpEvent.UnknownError ->
-                    Toast.makeText(context, "오류", Toast.LENGTH_LONG).show()
-            }
-        }
+    when (state.value) {
+        SignUpState.NoNetwork ->
+            Toast.makeText(context, "네트워크 오류", Toast.LENGTH_LONG).show()
+        SignUpState.Success ->
+            Toast.makeText(context, "회원가입 성공", Toast.LENGTH_LONG).show()
+        SignUpState.Failure ->
+            Toast.makeText(context, "오류", Toast.LENGTH_LONG).show()
+        SignUpState.None -> {}
     }
 
     Column {
         Text(text = pageState.value.name)
 
-        if (pageState.value == KakaoSignUpViewModel.KakaoSignUpPage.IMAGE) {
+        if (pageState.value == SignUpPage.IMAGE) {
             LazyVerticalGrid(
                 cells = GridCells.Fixed(2),
                 modifier = Modifier.weight(1f)

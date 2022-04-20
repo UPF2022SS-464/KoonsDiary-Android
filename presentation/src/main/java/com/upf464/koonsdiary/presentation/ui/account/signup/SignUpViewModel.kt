@@ -7,19 +7,19 @@ import com.upf464.koonsdiary.domain.usecase.user.FetchUserImageListUseCase
 import com.upf464.koonsdiary.domain.usecase.user.SignUpWithAccountUseCase
 import com.upf464.koonsdiary.domain.usecase.user.ValidateSignUpUseCase
 import com.upf464.koonsdiary.presentation.mapper.toPresentation
-import com.upf464.koonsdiary.presentation.model.account.SignUpState
+import com.upf464.koonsdiary.presentation.model.account.SignUpPage
+import com.upf464.koonsdiary.presentation.model.account.SignUpValidationState
 import com.upf464.koonsdiary.presentation.model.account.UserEmailModel
 import com.upf464.koonsdiary.presentation.model.account.UserImageModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,16 +32,19 @@ internal class SignUpViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val userModel = UserEmailModel(validateUseCase)
-    private val _pageFlow = MutableStateFlow(SignUpPage.EMAIL)
-    val pageFlow = _pageFlow.asStateFlow()
 
-    enum class SignUpPage {
-        EMAIL,
-        USERNAME,
-        PASSWORD,
-        IMAGE,
-        NICKNAME
-    }
+    private val pageList = listOf(
+        SignUpPage.USERNAME,
+        SignUpPage.EMAIL,
+        SignUpPage.PASSWORD,
+        SignUpPage.IMAGE,
+        SignUpPage.NICKNAME
+    )
+
+    private val _pageIndexFlow = MutableStateFlow(0)
+    val pageFlow = _pageIndexFlow.map { index ->
+        pageList[index]
+    }.stateIn(viewModelScope, SharingStarted.Lazily, pageList[0])
 
     val firstFieldFlow = MutableStateFlow("")
 
@@ -54,28 +57,17 @@ internal class SignUpViewModel @Inject constructor(
             SignUpPage.IMAGE -> userModel.imageValidFlow
             SignUpPage.NICKNAME -> userModel.nicknameValidFlow
         }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, SignUpState.WAITING)
+    }.stateIn(viewModelScope, SharingStarted.Lazily, SignUpValidationState.WAITING)
 
     val secondFieldFlow = MutableStateFlow("")
     val secondValidationFlow = userModel.passwordConfirmValidFlow
-        .stateIn(viewModelScope, SharingStarted.Lazily, SignUpState.WAITING)
+        .stateIn(viewModelScope, SharingStarted.Lazily, SignUpValidationState.WAITING)
 
     private val _imageListFlow = MutableStateFlow(listOf<UserImageModel>())
     val imageListFlow = _imageListFlow.asStateFlow()
 
-    private val _eventFlow = MutableSharedFlow<SignUpEvent>(extraBufferCapacity = 1)
-    val eventFlow: Flow<SignUpEvent> = _eventFlow
-
-    sealed class SignUpEvent {
-
-        object NoImageSelected : SignUpEvent()
-
-        object Success : SignUpEvent()
-
-        object NetworkDisconnected : SignUpEvent()
-
-        object UnknownError : SignUpEvent()
-    }
+    private val _stateFlow = MutableStateFlow<SignUpState>(SignUpState.None)
+    val stateFlow = _stateFlow.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -128,24 +120,24 @@ internal class SignUpViewModel @Inject constructor(
     fun nextPage() {
         if (!isNextAvailable()) return
 
-        val lastPageIdx = SignUpPage.values().size - 1
-        val currentPageIdx = _pageFlow.value.ordinal
+        val lastPageIdx = pageList.size - 1
+        val currentPageIdx = _pageIndexFlow.value
 
         if (currentPageIdx == lastPageIdx) {
             signUp()
         } else {
-            _pageFlow.value = SignUpPage.values()[currentPageIdx + 1]
+            _pageIndexFlow.value = currentPageIdx + 1
         }
     }
 
     private fun isNextAvailable(): Boolean {
-        return firstValidationFlow.value == SignUpState.SUCCESS && (pageFlow.value != SignUpPage.PASSWORD || secondValidationFlow.value == SignUpState.SUCCESS)
+        return firstValidationFlow.value == SignUpValidationState.SUCCESS && (pageFlow.value != SignUpPage.PASSWORD || secondValidationFlow.value == SignUpValidationState.SUCCESS)
     }
 
     fun prevPage() {
-        val currentPageIdx = _pageFlow.value.ordinal
+        val currentPageIdx = _pageIndexFlow.value
         if (currentPageIdx == 0) return
-        _pageFlow.value = SignUpPage.values()[currentPageIdx - 1]
+        _pageIndexFlow.value = currentPageIdx - 1
     }
 
     private fun signUp() {
@@ -156,13 +148,10 @@ internal class SignUpViewModel @Inject constructor(
                     username = userModel.usernameFlow.value,
                     password = userModel.passwordFlow.value,
                     nickname = userModel.nicknameFlow.value,
-                    imageId = userModel.imageFlow.value?.id ?: run {
-                        setEvent(SignUpEvent.NoImageSelected)
-                        return@launch
-                    }
+                    imageId = userModel.imageFlow.value?.id ?: return@launch
                 )
             ).onSuccess {
-                setEvent(SignUpEvent.Success)
+                _stateFlow.value = SignUpState.Success
             }.onFailure { error ->
                 handleError(error)
             }
@@ -171,12 +160,8 @@ internal class SignUpViewModel @Inject constructor(
 
     private fun handleError(error: Throwable) {
         when (error) {
-            CommonError.NetworkDisconnected -> setEvent(SignUpEvent.NetworkDisconnected)
-            else -> setEvent(SignUpEvent.UnknownError)
+            CommonError.NetworkDisconnected -> _stateFlow.value = SignUpState.NoNetwork
+            else -> _stateFlow.value = SignUpState.Failure
         }
-    }
-
-    private fun setEvent(event: SignUpEvent) {
-        _eventFlow.tryEmit(event)
     }
 }

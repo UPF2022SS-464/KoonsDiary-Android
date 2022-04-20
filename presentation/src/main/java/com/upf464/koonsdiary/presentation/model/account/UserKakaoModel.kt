@@ -19,18 +19,18 @@ internal data class UserKakaoModel(
     val nicknameFlow: MutableStateFlow<String> = MutableStateFlow("")
 ) {
 
-    val usernameValidFlow: Flow<SignUpState> = waitFirstFlow(usernameFlow) {
+    val usernameValidFlow: Flow<SignUpValidationState> = waitFirstFlow(usernameFlow) {
         val error = validateUseCase(
             ValidateSignUpUseCase.Request(ValidateSignUpUseCase.Request.Type.USERNAME, it)
-        ).exceptionOrNull() ?: return@waitFirstFlow SignUpState.SUCCESS
-        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpState.UNKNOWN
+        ).exceptionOrNull() ?: return@waitFirstFlow SignUpValidationState.SUCCESS
+        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpValidationState.UNKNOWN
     }
 
     @OptIn(FlowPreview::class)
-    private fun waitFirstFlow(source: Flow<String>, mapBlock: suspend (String) -> SignUpState) =
+    private fun waitFirstFlow(source: Flow<String>, mapBlock: suspend (String) -> SignUpValidationState) =
         channelFlow {
             source.onEach {
-                send(SignUpState.WAITING)
+                send(SignUpValidationState.WAITING)
             }.debounce(Constants.SIGN_UP_DEBOUNCE_TIME)
                 .map(mapBlock)
                 .collect {
@@ -38,14 +38,14 @@ internal data class UserKakaoModel(
                 }
         }
 
-    val imageValidFlow: Flow<SignUpState> = imageFlow.map { image ->
-        if (image != null) SignUpState.SUCCESS else SignUpState.UNSELECTED_IMAGE
+    val imageValidFlow: Flow<SignUpValidationState> = imageFlow.map { image ->
+        if (image != null) SignUpValidationState.SUCCESS else SignUpValidationState.UNSELECTED_IMAGE
     }
 
-    val nicknameValidFlow: Flow<SignUpState> = nicknameFlow.map {
+    val nicknameValidFlow: Flow<SignUpValidationState> = nicknameFlow.map {
         val error = validateUseCase(
             ValidateSignUpUseCase.Request(ValidateSignUpUseCase.Request.Type.NICKNAME, it)
-        ).exceptionOrNull() ?: return@map SignUpState.SUCCESS
-        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpState.UNKNOWN
+        ).exceptionOrNull() ?: return@map SignUpValidationState.SUCCESS
+        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpValidationState.UNKNOWN
     }
 }
