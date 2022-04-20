@@ -23,25 +23,25 @@ internal data class UserEmailModel(
     val nicknameFlow: MutableStateFlow<String> = MutableStateFlow("")
 ) {
 
-    val emailValidFlow: Flow<SignUpState> = waitFirstFlow(emailFlow) {
+    val emailValidFlow: Flow<SignUpValidationState> = waitFirstFlow(emailFlow) {
         val error = validateUseCase(
             ValidateSignUpUseCase.Request(ValidateSignUpUseCase.Request.Type.EMAIL, it)
-        ).exceptionOrNull() ?: return@waitFirstFlow SignUpState.SUCCESS
-        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpState.UNKNOWN
+        ).exceptionOrNull() ?: return@waitFirstFlow SignUpValidationState.SUCCESS
+        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpValidationState.UNKNOWN
     }
 
-    val usernameValidFlow: Flow<SignUpState> = waitFirstFlow(usernameFlow) {
+    val usernameValidFlow: Flow<SignUpValidationState> = waitFirstFlow(usernameFlow) {
         val error = validateUseCase(
             ValidateSignUpUseCase.Request(ValidateSignUpUseCase.Request.Type.USERNAME, it)
-        ).exceptionOrNull() ?: return@waitFirstFlow SignUpState.SUCCESS
-        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpState.UNKNOWN
+        ).exceptionOrNull() ?: return@waitFirstFlow SignUpValidationState.SUCCESS
+        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpValidationState.UNKNOWN
     }
 
     @OptIn(FlowPreview::class)
-    private fun waitFirstFlow(source: Flow<String>, mapBlock: suspend (String) -> SignUpState) =
+    private fun waitFirstFlow(source: Flow<String>, mapBlock: suspend (String) -> SignUpValidationState) =
         channelFlow {
             source.onEach {
-                send(SignUpState.WAITING)
+                send(SignUpValidationState.WAITING)
             }.debounce(Constants.SIGN_UP_DEBOUNCE_TIME)
                 .map(mapBlock)
                 .collect {
@@ -49,27 +49,27 @@ internal data class UserEmailModel(
                 }
         }
 
-    val passwordValidFlow: Flow<SignUpState> = passwordFlow.map {
+    val passwordValidFlow: Flow<SignUpValidationState> = passwordFlow.map {
         val error = validateUseCase(
             ValidateSignUpUseCase.Request(ValidateSignUpUseCase.Request.Type.PASSWORD, it)
-        ).exceptionOrNull() ?: return@map SignUpState.SUCCESS
-        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpState.UNKNOWN
+        ).exceptionOrNull() ?: return@map SignUpValidationState.SUCCESS
+        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpValidationState.UNKNOWN
     }
 
-    val passwordConfirmValidFlow: Flow<SignUpState> =
+    val passwordConfirmValidFlow: Flow<SignUpValidationState> =
         combine(passwordFlow, passwordConfirmFlow) { password, confirm ->
-            if (password == confirm) SignUpState.SUCCESS
-            else SignUpState.DIFFERENT_CONFIRM
+            if (password == confirm) SignUpValidationState.SUCCESS
+            else SignUpValidationState.DIFFERENT_CONFIRM
         }
 
-    val imageValidFlow: Flow<SignUpState> = imageFlow.map { image ->
-        if (image != null) SignUpState.SUCCESS else SignUpState.UNSELECTED_IMAGE
+    val imageValidFlow: Flow<SignUpValidationState> = imageFlow.map { image ->
+        if (image != null) SignUpValidationState.SUCCESS else SignUpValidationState.UNSELECTED_IMAGE
     }
 
-    val nicknameValidFlow: Flow<SignUpState> = nicknameFlow.map {
+    val nicknameValidFlow: Flow<SignUpValidationState> = nicknameFlow.map {
         val error = validateUseCase(
             ValidateSignUpUseCase.Request(ValidateSignUpUseCase.Request.Type.NICKNAME, it)
-        ).exceptionOrNull() ?: return@map SignUpState.SUCCESS
-        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpState.UNKNOWN
+        ).exceptionOrNull() ?: return@map SignUpValidationState.SUCCESS
+        (error as? SignUpError)?.toEmailSignUpState() ?: SignUpValidationState.UNKNOWN
     }
 }

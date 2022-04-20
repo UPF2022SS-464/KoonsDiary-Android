@@ -1,6 +1,6 @@
 package com.upf464.koonsdiary.presentation.model.account
 
-enum class SignUpState {
+enum class SignUpValidationState {
     WAITING,
     SUCCESS,
     INVALID_USERNAME,
