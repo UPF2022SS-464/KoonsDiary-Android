@@ -36,21 +36,18 @@ jobs:
 
       - name: Assemble Library
         run: |
-          ./gradlew :common:assemble
-          ./gradlew :data:assemble
-          ./gradlew :domain:assemble
-          ./gradlew :remote:assemble
+          ./gradlew :common:assemble :data:assemble :domain:assemble :remote:assemble
 
       - name: Assemble Debug
         run: |
           ./gradlew assembleDebug
 
+      - name: Check KtLint
+        run: ./gradlew ktlintCheck
+
       - name: Test Library
         run: |
-          ./gradlew :common:test
-          ./gradlew :data:test
-          ./gradlew :domain:test
-          ./gradlew :remote:test
+          ./gradlew :common:test :data:test :domain:test :remote:test
 
       - name: Test Debug
         run: ./gradlew testDebug
