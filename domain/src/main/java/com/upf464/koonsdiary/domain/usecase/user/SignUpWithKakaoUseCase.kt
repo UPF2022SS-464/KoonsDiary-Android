@@ -7,22 +7,19 @@ import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.request.user.SignUpWithKakaoRequest
-import com.upf464.koonsdiary.domain.response.EmptyResponse
 import com.upf464.koonsdiary.domain.service.KakaoService
 import com.upf464.koonsdiary.domain.service.MessageService
-import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import javax.inject.Inject
 
-internal class SignUpWithKakaoUseCase @Inject constructor(
+class SignUpWithKakaoUseCase @Inject constructor(
     private val kakaoService: KakaoService,
     private val userRepository: UserRepository,
     private val securityRepository: SecurityRepository,
     private val messageService: MessageService,
     private val messageRepository: MessageRepository
-) : ResultUseCase<SignUpWithKakaoRequest, EmptyResponse> {
+) {
 
-    override suspend fun invoke(request: SignUpWithKakaoRequest): Result<EmptyResponse> {
+    suspend operator fun invoke(request: Request): Result<Unit> {
         val user = User(
             username = request.username,
             nickname = request.nickname,
@@ -38,8 +35,6 @@ internal class SignUpWithKakaoUseCase @Inject constructor(
             messageService.getToken()
         }.flatMap { token ->
             messageRepository.registerFcmToken(token)
-        }.map {
-            EmptyResponse
         }.onSuccess {
             userRepository.setAutoSignInWithKakao()
             securityRepository.clearPIN()
@@ -50,4 +45,10 @@ internal class SignUpWithKakaoUseCase @Inject constructor(
         kakaoService.getAccessToken().flatMap { token ->
             userRepository.signUpWithKakao(user, token)
         }
+
+    data class Request(
+        val username: String,
+        val nickname: String,
+        val imageId: Int
+    )
 }

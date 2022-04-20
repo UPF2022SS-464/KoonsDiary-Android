@@ -1,6 +1,6 @@
 package com.upf464.koonsdiary.domain.common
 
-internal interface UserValidator {
+interface UserValidator {
 
     fun isEmailValid(email: String): Boolean
 

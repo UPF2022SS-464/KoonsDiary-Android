@@ -2,24 +2,30 @@ package com.upf464.koonsdiary.domain.usecase.diary
 
 import com.upf464.koonsdiary.domain.common.DiaryValidator
 import com.upf464.koonsdiary.domain.error.DiaryError
+import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.diary.AnalyzeSentimentRequest
-import com.upf464.koonsdiary.domain.response.diary.AnalyzeSentimentResponse
-import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import javax.inject.Inject
 
-internal class AnalyzeSentimentUseCase @Inject constructor(
+class AnalyzeSentimentUseCase @Inject constructor(
     private val diaryRepository: DiaryRepository,
     private val validator: DiaryValidator
-) : ResultUseCase<AnalyzeSentimentRequest, AnalyzeSentimentResponse> {
+) {
 
-    override suspend fun invoke(request: AnalyzeSentimentRequest): Result<AnalyzeSentimentResponse> {
+    suspend operator fun invoke(request: Request): Result<Response> {
         if (!validator.validateContent(request.content)) {
             return Result.failure(DiaryError.EmptyContent)
         }
 
         return diaryRepository.fetchSentimentOf(request.content).map { sentiment ->
-            AnalyzeSentimentResponse(sentiment)
+            Response(sentiment)
         }
     }
+
+    data class Request(
+        val content: String
+    )
+
+    data class Response(
+        val sentiment: Sentiment
+    )
 }

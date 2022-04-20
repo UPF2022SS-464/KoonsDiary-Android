@@ -3,17 +3,16 @@ package com.upf464.koonsdiary.domain.usecase.report
 import com.upf464.koonsdiary.common.extension.flatMap
 import com.upf464.koonsdiary.domain.error.ReportError
 import com.upf464.koonsdiary.domain.model.DateTerm
+import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.ReportRepository
-import com.upf464.koonsdiary.domain.request.report.GetReportRequest
-import com.upf464.koonsdiary.domain.response.report.GetReportResponse
-import com.upf464.koonsdiary.domain.usecase.ResultUseCase
+import java.time.LocalDate
 import javax.inject.Inject
 
-internal class GetReportUseCase @Inject constructor(
+class GetReportUseCase @Inject constructor(
     private val reportRepository: ReportRepository
-) : ResultUseCase<GetReportRequest, GetReportResponse> {
+) {
 
-    override suspend fun invoke(request: GetReportRequest): Result<GetReportResponse> {
+    suspend operator fun invoke(request: Request): Result<Response> {
 
         val startDate = request.startDate
         val dateTerm = request.dateTerm
@@ -61,8 +60,20 @@ internal class GetReportUseCase @Inject constructor(
             }
 
             reportRepository.fetchKoonsMention(mostSentimentSet).map { mention ->
-                GetReportResponse(graphList, sentimentPercentageMap, mostSentimentSet, mention)
+                Response(graphList, sentimentPercentageMap, mostSentimentSet, mention)
             }
         }
     }
+
+    data class Request(
+        val dateTerm: DateTerm,
+        val startDate: LocalDate,
+    )
+
+    data class Response(
+        val graphList: List<Double?> = emptyList(),
+        val sentimentPercentageMap: Map<Sentiment, Int> = emptyMap(),
+        val mostSentimentSet: Set<Sentiment>,
+        val koonsMention: String
+    )
 }

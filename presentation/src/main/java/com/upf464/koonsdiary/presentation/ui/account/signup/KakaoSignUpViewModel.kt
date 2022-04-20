@@ -3,12 +3,9 @@ package com.upf464.koonsdiary.presentation.ui.account.signup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upf464.koonsdiary.domain.error.CommonError
-import com.upf464.koonsdiary.domain.request.user.FetchUserImageListRequest
-import com.upf464.koonsdiary.domain.request.user.SignUpWithKakaoRequest
-import com.upf464.koonsdiary.domain.request.user.ValidateSignUpRequest
-import com.upf464.koonsdiary.domain.response.EmptyResponse
-import com.upf464.koonsdiary.domain.response.user.FetchUserImageListResponse
-import com.upf464.koonsdiary.domain.usecase.ResultUseCase
+import com.upf464.koonsdiary.domain.usecase.user.FetchUserImageListUseCase
+import com.upf464.koonsdiary.domain.usecase.user.SignUpWithKakaoUseCase
+import com.upf464.koonsdiary.domain.usecase.user.ValidateSignUpUseCase
 import com.upf464.koonsdiary.presentation.mapper.toPresentation
 import com.upf464.koonsdiary.presentation.model.account.SignUpState
 import com.upf464.koonsdiary.presentation.model.account.UserImageModel
@@ -29,9 +26,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class KakaoSignUpViewModel @Inject constructor(
-    private val signUpUseCase: ResultUseCase<SignUpWithKakaoRequest, EmptyResponse>,
-    private val fetchImageListUseCase: ResultUseCase<FetchUserImageListRequest, FetchUserImageListResponse>,
-    validateUseCase: ResultUseCase<ValidateSignUpRequest, EmptyResponse>
+    private val signUpUseCase: SignUpWithKakaoUseCase,
+    private val fetchImageListUseCase: FetchUserImageListUseCase,
+    validateUseCase: ValidateSignUpUseCase
 ) : ViewModel() {
 
     private val userModel = UserKakaoModel(validateUseCase)
@@ -88,7 +85,7 @@ internal class KakaoSignUpViewModel @Inject constructor(
             }
 
             viewModelScope.launch {
-                fetchImageListUseCase(FetchUserImageListRequest).onSuccess { response ->
+                fetchImageListUseCase().onSuccess { response ->
                     _imageListFlow.value = response.imageList
                         .map { it.toPresentation(userModel.imageFlow, this) }
                         .also {
@@ -138,7 +135,7 @@ internal class KakaoSignUpViewModel @Inject constructor(
     private fun signUp() {
         viewModelScope.launch {
             signUpUseCase(
-                SignUpWithKakaoRequest(
+                SignUpWithKakaoUseCase.Request(
                     username = userModel.usernameFlow.value,
                     nickname = userModel.nicknameFlow.value,
                     imageId = userModel.imageFlow.value?.id ?: run {

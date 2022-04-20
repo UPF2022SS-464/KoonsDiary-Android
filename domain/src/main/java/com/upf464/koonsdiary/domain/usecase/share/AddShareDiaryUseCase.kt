@@ -1,19 +1,17 @@
 package com.upf464.koonsdiary.domain.usecase.share
 
 import com.upf464.koonsdiary.domain.error.ShareError
+import com.upf464.koonsdiary.domain.model.DiaryImage
 import com.upf464.koonsdiary.domain.model.ShareDiary
 import com.upf464.koonsdiary.domain.model.ShareGroup
 import com.upf464.koonsdiary.domain.repository.ShareRepository
-import com.upf464.koonsdiary.domain.request.share.AddShareDiaryRequest
-import com.upf464.koonsdiary.domain.response.share.AddShareDiaryResponse
-import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import javax.inject.Inject
 
-internal class AddShareDiaryUseCase @Inject constructor(
+class AddShareDiaryUseCase @Inject constructor(
     private val shareRepository: ShareRepository
-) : ResultUseCase<AddShareDiaryRequest, AddShareDiaryResponse> {
+) {
 
-    override suspend fun invoke(request: AddShareDiaryRequest): Result<AddShareDiaryResponse> {
+    suspend operator fun invoke(request: Request): Result<Response> {
         if (request.content.isBlank()) {
             return Result.failure(ShareError.EmptyContent)
         }
@@ -25,7 +23,17 @@ internal class AddShareDiaryUseCase @Inject constructor(
         )
 
         return shareRepository.addDiary(diary).map { diaryId ->
-            AddShareDiaryResponse(diaryId)
+            Response(diaryId)
         }
     }
+
+    data class Request(
+        val groupId: Int,
+        val content: String,
+        val imageList: List<DiaryImage>
+    )
+
+    data class Response(
+        val diaryId: Int
+    )
 }

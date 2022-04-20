@@ -6,21 +6,18 @@ import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.request.user.SignUpWithUsernameRequest
-import com.upf464.koonsdiary.domain.response.EmptyResponse
 import com.upf464.koonsdiary.domain.service.MessageService
-import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import javax.inject.Inject
 
-internal class SignUpWithUsernameUseCase @Inject constructor(
+class SignUpWithUsernameUseCase @Inject constructor(
     private val userRepository: UserRepository,
     private val securityRepository: SecurityRepository,
     private val hashGenerator: HashGenerator,
     private val messageService: MessageService,
     private val messageRepository: MessageRepository
-) : ResultUseCase<SignUpWithUsernameRequest, EmptyResponse> {
+) {
 
-    override suspend fun invoke(request: SignUpWithUsernameRequest): Result<EmptyResponse> {
+    suspend operator fun invoke(request: Request): Result<Unit> {
         return userRepository.generateSaltOf(request.username).flatMap { salt ->
             val hashedPassword = hashGenerator.hashPasswordWithSalt(request.password, salt)
 
@@ -39,8 +36,14 @@ internal class SignUpWithUsernameUseCase @Inject constructor(
             messageService.getToken()
         }.flatMap { token ->
             messageRepository.registerFcmToken(token)
-        }.map {
-            EmptyResponse
         }
     }
+
+    data class Request(
+        val email: String,
+        val username: String,
+        val password: String,
+        val nickname: String,
+        val imageId: Int
+    )
 }

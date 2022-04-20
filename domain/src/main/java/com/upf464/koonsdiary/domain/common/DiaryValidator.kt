@@ -1,6 +1,6 @@
 package com.upf464.koonsdiary.domain.common
 
-internal interface DiaryValidator {
+interface DiaryValidator {
 
     fun validateContent(content: String): Boolean
 }
