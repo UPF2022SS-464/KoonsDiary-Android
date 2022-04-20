@@ -1,9 +1,7 @@
 package com.upf464.koonsdiary.presentation.model.account
 
 import com.upf464.koonsdiary.domain.error.SignUpError
-import com.upf464.koonsdiary.domain.request.user.ValidateSignUpRequest
-import com.upf464.koonsdiary.domain.response.EmptyResponse
-import com.upf464.koonsdiary.domain.usecase.ResultUseCase
+import com.upf464.koonsdiary.domain.usecase.user.ValidateSignUpUseCase
 import com.upf464.koonsdiary.presentation.common.Constants
 import com.upf464.koonsdiary.presentation.mapper.toEmailSignUpState
 import kotlinx.coroutines.FlowPreview
@@ -16,7 +14,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 internal data class UserEmailModel(
-    val useCase: ResultUseCase<ValidateSignUpRequest, EmptyResponse>,
+    val validateUseCase: ValidateSignUpUseCase,
     val usernameFlow: MutableStateFlow<String> = MutableStateFlow(""),
     val emailFlow: MutableStateFlow<String> = MutableStateFlow(""),
     val passwordFlow: MutableStateFlow<String> = MutableStateFlow(""),
@@ -26,14 +24,16 @@ internal data class UserEmailModel(
 ) {
 
     val emailValidFlow: Flow<SignUpState> = waitFirstFlow(emailFlow) {
-        val error = useCase(ValidateSignUpRequest(ValidateSignUpRequest.Type.EMAIL, it))
-            .exceptionOrNull() ?: return@waitFirstFlow SignUpState.SUCCESS
+        val error = validateUseCase(
+            ValidateSignUpUseCase.Request(ValidateSignUpUseCase.Request.Type.EMAIL, it)
+        ).exceptionOrNull() ?: return@waitFirstFlow SignUpState.SUCCESS
         (error as? SignUpError)?.toEmailSignUpState() ?: SignUpState.UNKNOWN
     }
 
     val usernameValidFlow: Flow<SignUpState> = waitFirstFlow(usernameFlow) {
-        val error = useCase(ValidateSignUpRequest(ValidateSignUpRequest.Type.USERNAME, it))
-            .exceptionOrNull() ?: return@waitFirstFlow SignUpState.SUCCESS
+        val error = validateUseCase(
+            ValidateSignUpUseCase.Request(ValidateSignUpUseCase.Request.Type.USERNAME, it)
+        ).exceptionOrNull() ?: return@waitFirstFlow SignUpState.SUCCESS
         (error as? SignUpError)?.toEmailSignUpState() ?: SignUpState.UNKNOWN
     }
 
@@ -50,8 +50,9 @@ internal data class UserEmailModel(
         }
 
     val passwordValidFlow: Flow<SignUpState> = passwordFlow.map {
-        val error = useCase(ValidateSignUpRequest(ValidateSignUpRequest.Type.PASSWORD, it))
-            .exceptionOrNull() ?: return@map SignUpState.SUCCESS
+        val error = validateUseCase(
+            ValidateSignUpUseCase.Request(ValidateSignUpUseCase.Request.Type.PASSWORD, it)
+        ).exceptionOrNull() ?: return@map SignUpState.SUCCESS
         (error as? SignUpError)?.toEmailSignUpState() ?: SignUpState.UNKNOWN
     }
 
@@ -66,8 +67,9 @@ internal data class UserEmailModel(
     }
 
     val nicknameValidFlow: Flow<SignUpState> = nicknameFlow.map {
-        val error = useCase(ValidateSignUpRequest(ValidateSignUpRequest.Type.NICKNAME, it))
-            .exceptionOrNull() ?: return@map SignUpState.SUCCESS
+        val error = validateUseCase(
+            ValidateSignUpUseCase.Request(ValidateSignUpUseCase.Request.Type.NICKNAME, it)
+        ).exceptionOrNull() ?: return@map SignUpState.SUCCESS
         (error as? SignUpError)?.toEmailSignUpState() ?: SignUpState.UNKNOWN
     }
 }

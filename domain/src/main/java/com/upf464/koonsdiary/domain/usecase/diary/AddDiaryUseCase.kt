@@ -3,18 +3,18 @@ package com.upf464.koonsdiary.domain.usecase.diary
 import com.upf464.koonsdiary.domain.common.DiaryValidator
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.model.Diary
+import com.upf464.koonsdiary.domain.model.DiaryImage
+import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.diary.AddDiaryRequest
-import com.upf464.koonsdiary.domain.response.diary.AddDiaryResponse
-import com.upf464.koonsdiary.domain.usecase.ResultUseCase
+import java.time.LocalDate
 import javax.inject.Inject
 
-internal class AddDiaryUseCase @Inject constructor(
+class AddDiaryUseCase @Inject constructor(
     private val validator: DiaryValidator,
     private val diaryRepository: DiaryRepository
-) : ResultUseCase<AddDiaryRequest, AddDiaryResponse> {
+) {
 
-    override suspend fun invoke(request: AddDiaryRequest): Result<AddDiaryResponse> {
+    suspend operator fun invoke(request: Request): Result<Response> {
         if (!validator.validateContent(request.content)) {
             return Result.failure(DiaryError.EmptyContent)
         }
@@ -27,7 +27,18 @@ internal class AddDiaryUseCase @Inject constructor(
         )
 
         return diaryRepository.addDiary(diary).map { diaryId ->
-            AddDiaryResponse(diaryId)
+            Response(diaryId)
         }
     }
+
+    data class Request(
+        val date: LocalDate,
+        val content: String,
+        val sentiment: Sentiment,
+        val imageList: List<DiaryImage>
+    )
+
+    data class Response(
+        val diaryId: Int
+    )
 }

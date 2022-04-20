@@ -3,12 +3,9 @@ package com.upf464.koonsdiary.presentation.ui.account.signup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upf464.koonsdiary.domain.error.CommonError
-import com.upf464.koonsdiary.domain.request.user.FetchUserImageListRequest
-import com.upf464.koonsdiary.domain.request.user.SignUpWithUsernameRequest
-import com.upf464.koonsdiary.domain.request.user.ValidateSignUpRequest
-import com.upf464.koonsdiary.domain.response.EmptyResponse
-import com.upf464.koonsdiary.domain.response.user.FetchUserImageListResponse
-import com.upf464.koonsdiary.domain.usecase.ResultUseCase
+import com.upf464.koonsdiary.domain.usecase.user.FetchUserImageListUseCase
+import com.upf464.koonsdiary.domain.usecase.user.SignUpWithUsernameUseCase
+import com.upf464.koonsdiary.domain.usecase.user.ValidateSignUpUseCase
 import com.upf464.koonsdiary.presentation.mapper.toPresentation
 import com.upf464.koonsdiary.presentation.model.account.SignUpState
 import com.upf464.koonsdiary.presentation.model.account.UserEmailModel
@@ -29,9 +26,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class EmailSignUpViewModel @Inject constructor(
-    private val signUpUseCase: ResultUseCase<SignUpWithUsernameRequest, EmptyResponse>,
-    private val fetchImageListUseCase: ResultUseCase<FetchUserImageListRequest, FetchUserImageListResponse>,
-    validateUseCase: ResultUseCase<ValidateSignUpRequest, EmptyResponse>
+    private val signUpUseCase: SignUpWithUsernameUseCase,
+    private val fetchImageListUseCase: FetchUserImageListUseCase,
+    validateUseCase: ValidateSignUpUseCase
 ) : ViewModel() {
 
     private val userModel = UserEmailModel(validateUseCase)
@@ -99,7 +96,7 @@ internal class EmailSignUpViewModel @Inject constructor(
         connectFieldFlow(userModel.passwordConfirmFlow, secondFieldFlow, viewModelScope)
 
         viewModelScope.launch {
-            fetchImageListUseCase(FetchUserImageListRequest).onSuccess { response ->
+            fetchImageListUseCase().onSuccess { response ->
                 _imageListFlow.value = response.imageList
                     .map { it.toPresentation(userModel.imageFlow, this) }
                     .also {
@@ -156,7 +153,7 @@ internal class EmailSignUpViewModel @Inject constructor(
     private fun signUp() {
         viewModelScope.launch {
             signUpUseCase(
-                SignUpWithUsernameRequest(
+                SignUpWithUsernameUseCase.Request(
                     email = userModel.emailFlow.value,
                     username = userModel.usernameFlow.value,
                     password = userModel.passwordFlow.value,

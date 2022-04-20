@@ -2,19 +2,21 @@ package com.upf464.koonsdiary.firebase.service
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.upf464.koonsdiary.domain.request.message.RegisterFcmTokenRequest
-import com.upf464.koonsdiary.domain.response.EmptyResponse
 import com.upf464.koonsdiary.domain.service.MessageService
-import com.upf464.koonsdiary.domain.usecase.ResultUseCase
+import com.upf464.koonsdiary.domain.usecase.message.RegisterFcmTokenUseCase
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
 
     @Inject lateinit var messageService: MessageService
-    @Inject lateinit var registerTokenUseCase: ResultUseCase<RegisterFcmTokenRequest, EmptyResponse>
+    @Inject lateinit var registerTokenUseCase: RegisterFcmTokenUseCase
     private val scope = CoroutineScope(Dispatchers.Main + Job())
     private var registerJob: Job? = null
 
@@ -27,7 +29,7 @@ internal class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
 
         registerJob?.cancel()
         registerJob = scope.launch {
-            registerTokenUseCase(RegisterFcmTokenRequest(token))
+            registerTokenUseCase(RegisterFcmTokenUseCase.Request(token))
         }
     }
 

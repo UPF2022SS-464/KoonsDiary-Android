@@ -1,18 +1,24 @@
 package com.upf464.koonsdiary.domain.usecase.share
 
+import com.upf464.koonsdiary.domain.model.ShareDiary
 import com.upf464.koonsdiary.domain.repository.ShareRepository
-import com.upf464.koonsdiary.domain.request.share.FetchShareDiaryListRequest
-import com.upf464.koonsdiary.domain.response.share.FetchShareDiaryListResponse
-import com.upf464.koonsdiary.domain.usecase.ResultUseCase
 import javax.inject.Inject
 
-internal class FetchShareDiaryListUseCase @Inject constructor(
+class FetchShareDiaryListUseCase @Inject constructor(
     private val shareRepository: ShareRepository
-) : ResultUseCase<FetchShareDiaryListRequest, FetchShareDiaryListResponse> {
+) {
 
-    override suspend fun invoke(request: FetchShareDiaryListRequest): Result<FetchShareDiaryListResponse> {
+    suspend operator fun invoke(request: Request): Result<Response> {
         return shareRepository.fetchDiaryList(request.groupId).map { diaryList ->
-            FetchShareDiaryListResponse(diaryList)
+            Response(diaryList)
         }
     }
+
+    data class Request(
+        val groupId: Int
+    )
+
+    data class Response(
+        val diaryList: List<ShareDiary>
+    )
 }
