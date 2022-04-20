@@ -2,7 +2,6 @@ package com.upf464.koonsdiary.domain.usecase.share
 
 import com.upf464.koonsdiary.domain.error.ShareError
 import com.upf464.koonsdiary.domain.repository.ShareRepository
-import com.upf464.koonsdiary.domain.request.share.UpdateShareDiaryRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -30,7 +29,7 @@ class UpdateShareDiaryUseCaseTest {
         } returns Result.success(1)
 
         val result = useCase(
-            UpdateShareDiaryRequest(
+            UpdateShareDiaryUseCase.Request(
                 diaryId = 1,
                 content = "content",
                 imageList = emptyList()
@@ -45,7 +44,7 @@ class UpdateShareDiaryUseCaseTest {
     fun invoke_emptyContent_isFailure(): Unit = runBlocking {
 
         val result = useCase(
-            UpdateShareDiaryRequest(
+            UpdateShareDiaryUseCase.Request(
                 diaryId = 1,
                 content = "",
                 imageList = emptyList()
@@ -63,7 +62,7 @@ class UpdateShareDiaryUseCaseTest {
         } returns Result.failure(ShareError.InvalidDiaryId)
 
         val result = useCase(
-            UpdateShareDiaryRequest(
+            UpdateShareDiaryUseCase.Request(
                 diaryId = 1,
                 content = "content",
                 imageList = emptyList()

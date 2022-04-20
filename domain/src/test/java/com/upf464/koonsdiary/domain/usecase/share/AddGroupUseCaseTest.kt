@@ -3,7 +3,6 @@ package com.upf464.koonsdiary.domain.usecase.share
 import com.upf464.koonsdiary.domain.common.GroupValidator
 import com.upf464.koonsdiary.domain.error.ShareError
 import com.upf464.koonsdiary.domain.repository.ShareRepository
-import com.upf464.koonsdiary.domain.request.share.AddGroupRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
@@ -36,7 +35,7 @@ class AddGroupUseCaseTest {
             shareRepository.addGroup(any(), any())
         } returns Result.success(1)
 
-        val result = useCase(AddGroupRequest("name", null, emptyList()))
+        val result = useCase(AddGroupUseCase.Request("name", null, emptyList()))
 
         assertTrue(result.isSuccess)
         assertEquals(1, result.getOrNull()?.groupId)
@@ -48,7 +47,7 @@ class AddGroupUseCaseTest {
             groupValidator.isGroupNameValid(any())
         } returns false
 
-        val result = useCase(AddGroupRequest("invalid name", null, emptyList()))
+        val result = useCase(AddGroupUseCase.Request("invalid name", null, emptyList()))
 
         assertTrue(result.isFailure)
         assertEquals(ShareError.InvalidGroupName, result.exceptionOrNull())

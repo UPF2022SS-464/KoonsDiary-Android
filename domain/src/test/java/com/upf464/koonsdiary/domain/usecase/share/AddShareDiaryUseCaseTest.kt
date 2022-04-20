@@ -2,7 +2,6 @@ package com.upf464.koonsdiary.domain.usecase.share
 
 import com.upf464.koonsdiary.domain.error.ShareError
 import com.upf464.koonsdiary.domain.repository.ShareRepository
-import com.upf464.koonsdiary.domain.request.share.AddShareDiaryRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -29,11 +28,13 @@ class AddShareDiaryUseCaseTest {
             shareRepository.addDiary(any())
         } returns Result.success(1)
 
-        val result = useCase(AddShareDiaryRequest(
-            groupId = 1,
-            content = "content",
-            imageList = emptyList()
-        ))
+        val result = useCase(
+            AddShareDiaryUseCase.Request(
+                groupId = 1,
+                content = "content",
+                imageList = emptyList()
+            )
+        )
 
         assertTrue(result.isSuccess)
         assertEquals(1, result.getOrNull()?.diaryId)
@@ -45,11 +46,13 @@ class AddShareDiaryUseCaseTest {
             shareRepository.addDiary(any())
         } returns Result.failure(ShareError.EmptyContent)
 
-        val result = useCase(AddShareDiaryRequest(
-            groupId = 1,
-            content = "",
-            imageList = emptyList()
-        ))
+        val result = useCase(
+            AddShareDiaryUseCase.Request(
+                groupId = 1,
+                content = "",
+                imageList = emptyList()
+            )
+        )
 
         assertTrue(result.isFailure)
         assertEquals(ShareError.EmptyContent, result.exceptionOrNull())
@@ -61,11 +64,13 @@ class AddShareDiaryUseCaseTest {
             shareRepository.addDiary(any())
         } returns Result.failure(ShareError.InvalidGroupId)
 
-        val result = useCase(AddShareDiaryRequest(
-            groupId = 1,
-            content = "content",
-            imageList = emptyList()
-        ))
+        val result = useCase(
+            AddShareDiaryUseCase.Request(
+                groupId = 1,
+                content = "content",
+                imageList = emptyList()
+            )
+        )
 
         assertTrue(result.isFailure)
         assertEquals(ShareError.InvalidGroupId, result.exceptionOrNull())

@@ -2,12 +2,9 @@ package com.upf464.koonsdiary.presentation.ui.account.signup
 
 import com.upf464.koonsdiary.domain.error.SignUpError
 import com.upf464.koonsdiary.domain.model.User
-import com.upf464.koonsdiary.domain.request.user.FetchUserImageListRequest
-import com.upf464.koonsdiary.domain.request.user.SignUpWithKakaoRequest
-import com.upf464.koonsdiary.domain.request.user.ValidateSignUpRequest
-import com.upf464.koonsdiary.domain.response.EmptyResponse
-import com.upf464.koonsdiary.domain.response.user.FetchUserImageListResponse
-import com.upf464.koonsdiary.domain.usecase.ResultUseCase
+import com.upf464.koonsdiary.domain.usecase.user.FetchUserImageListUseCase
+import com.upf464.koonsdiary.domain.usecase.user.SignUpWithKakaoUseCase
+import com.upf464.koonsdiary.domain.usecase.user.ValidateSignUpUseCase
 import com.upf464.koonsdiary.presentation.model.account.SignUpState
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -32,10 +29,9 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class KakaoSignUpViewModelTest {
 
-    @MockK private lateinit var signUpUseCase: ResultUseCase<SignUpWithKakaoRequest, EmptyResponse>
-    @MockK private lateinit var fetchImageListUseCase:
-            ResultUseCase<FetchUserImageListRequest, FetchUserImageListResponse>
-    @MockK private lateinit var validateUseCase: ResultUseCase<ValidateSignUpRequest, EmptyResponse>
+    @MockK private lateinit var signUpUseCase: SignUpWithKakaoUseCase
+    @MockK private lateinit var fetchImageListUseCase: FetchUserImageListUseCase
+    @MockK private lateinit var validateUseCase: ValidateSignUpUseCase
     private lateinit var viewModel: KakaoSignUpViewModel
 
     private val dispatcher = StandardTestDispatcher()
@@ -53,9 +49,9 @@ class KakaoSignUpViewModelTest {
         )
 
         coEvery {
-            fetchImageListUseCase(FetchUserImageListRequest)
+            fetchImageListUseCase()
         } returns Result.success(
-            FetchUserImageListResponse(
+            FetchUserImageListUseCase.Response(
                 listOf(
                     User.Image(id = 1, path = "path1"),
                     User.Image(id = 2, path = "path2"),
@@ -74,16 +70,26 @@ class KakaoSignUpViewModelTest {
     @Test
     fun nextPage_validInputs_signUpSuccess(): Unit = scope.runTest {
         coEvery {
-            validateUseCase(ValidateSignUpRequest(ValidateSignUpRequest.Type.USERNAME, ""))
-        } returns Result.success(EmptyResponse)
+            validateUseCase(
+                ValidateSignUpUseCase.Request(
+                    ValidateSignUpUseCase.Request.Type.USERNAME,
+                    ""
+                )
+            )
+        } returns Result.success(Unit)
 
         coEvery {
-            validateUseCase(ValidateSignUpRequest(ValidateSignUpRequest.Type.NICKNAME, ""))
-        } returns Result.success(EmptyResponse)
+            validateUseCase(
+                ValidateSignUpUseCase.Request(
+                    ValidateSignUpUseCase.Request.Type.NICKNAME,
+                    ""
+                )
+            )
+        } returns Result.success(Unit)
 
         coEvery {
             signUpUseCase(any())
-        } returns Result.success(EmptyResponse)
+        } returns Result.success(Unit)
 
         val eventDeferred = async { viewModel.eventFlow.first() }
 
@@ -99,7 +105,12 @@ class KakaoSignUpViewModelTest {
     @Test
     fun nextPage_invalidUsername_remainAtUsername(): Unit = scope.runTest {
         coEvery {
-            validateUseCase(ValidateSignUpRequest(ValidateSignUpRequest.Type.USERNAME, ""))
+            validateUseCase(
+                ValidateSignUpUseCase.Request(
+                    ValidateSignUpUseCase.Request.Type.USERNAME,
+                    ""
+                )
+            )
         } returns Result.failure(SignUpError.InvalidUsername)
 
         waitForValidationChange()

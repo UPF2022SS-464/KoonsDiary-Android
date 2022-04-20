@@ -2,7 +2,6 @@ package com.upf464.koonsdiary.domain.usecase.share
 
 import com.upf464.koonsdiary.domain.error.ShareError
 import com.upf464.koonsdiary.domain.repository.ShareRepository
-import com.upf464.koonsdiary.domain.request.share.DeleteCommentRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -29,7 +28,7 @@ class DeleteCommentUseCaseTest {
             shareRepository.deleteComment(1)
         } returns Result.success(Unit)
 
-        val result = useCase(DeleteCommentRequest(1))
+        val result = useCase(DeleteCommentUseCase.Request(1))
 
         assertTrue(result.isSuccess)
     }
@@ -40,7 +39,7 @@ class DeleteCommentUseCaseTest {
             shareRepository.deleteComment(1)
         } returns Result.failure(ShareError.InvalidDiaryId)
 
-        val result = useCase(DeleteCommentRequest(1))
+        val result = useCase(DeleteCommentUseCase.Request(1))
 
         assertTrue(result.isFailure)
         assertEquals(ShareError.InvalidDiaryId, result.exceptionOrNull())

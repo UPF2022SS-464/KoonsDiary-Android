@@ -2,7 +2,6 @@ package com.upf464.koonsdiary.domain.usecase.share
 
 import com.upf464.koonsdiary.domain.error.ShareError
 import com.upf464.koonsdiary.domain.repository.ShareRepository
-import com.upf464.koonsdiary.domain.request.share.AddCommentRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -29,7 +28,7 @@ class AddCommentUseCaseTest {
             shareRepository.addComment(any())
         } returns Result.success(Unit)
 
-        val result = useCase(AddCommentRequest(1, "content"))
+        val result = useCase(AddCommentUseCase.Request(1, "content"))
 
         assertTrue(result.isSuccess)
     }
@@ -40,7 +39,7 @@ class AddCommentUseCaseTest {
             shareRepository.addComment(any())
         } returns Result.failure(ShareError.InvalidDiaryId)
 
-        val result = useCase(AddCommentRequest(1, "content"))
+        val result = useCase(AddCommentUseCase.Request(1, "content"))
 
         assertTrue(result.isFailure)
         assertEquals(ShareError.InvalidDiaryId, result.exceptionOrNull())
@@ -49,7 +48,7 @@ class AddCommentUseCaseTest {
     @Test
     fun invoke_emptyContent_throwsEmptyContentError(): Unit = runBlocking {
 
-        val result = useCase(AddCommentRequest(1, ""))
+        val result = useCase(AddCommentUseCase.Request(1, ""))
 
         assertTrue(result.isFailure)
         assertEquals(ShareError.EmptyContent, result.exceptionOrNull())

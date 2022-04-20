@@ -3,7 +3,6 @@ package com.upf464.koonsdiary.domain.usecase.share
 import com.upf464.koonsdiary.domain.error.ShareError
 import com.upf464.koonsdiary.domain.model.Comment
 import com.upf464.koonsdiary.domain.repository.ShareRepository
-import com.upf464.koonsdiary.domain.request.share.FetchCommentListRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -30,7 +29,7 @@ class FetchCommentListUseCaseTest {
             shareRepository.fetchCommentList(1)
         } returns Result.success(emptyList())
 
-        val result = useCase(FetchCommentListRequest(1))
+        val result = useCase(FetchCommentListUseCase.Request(1))
 
         assertTrue(result.isSuccess)
         assertEquals(emptyList<Comment>(), result.getOrNull()?.commentList)
@@ -42,7 +41,7 @@ class FetchCommentListUseCaseTest {
             shareRepository.fetchCommentList(1)
         } returns Result.failure(ShareError.InvalidDiaryId)
 
-        val result = useCase(FetchCommentListRequest(1))
+        val result = useCase(FetchCommentListUseCase.Request(1))
 
         assertTrue(result.isFailure)
         assertEquals(ShareError.InvalidDiaryId, result.exceptionOrNull())

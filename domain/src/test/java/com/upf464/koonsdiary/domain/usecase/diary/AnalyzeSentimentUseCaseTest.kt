@@ -4,13 +4,14 @@ import com.upf464.koonsdiary.domain.common.DiaryValidator
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.diary.AnalyzeSentimentRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -40,7 +41,7 @@ class AnalyzeSentimentUseCaseTest {
         } returns true
 
         val result = useCase(
-            AnalyzeSentimentRequest("content")
+            AnalyzeSentimentUseCase.Request("content")
         )
 
         assertTrue(result.isSuccess)
@@ -54,7 +55,7 @@ class AnalyzeSentimentUseCaseTest {
         } returns false
 
         val result = useCase(
-            AnalyzeSentimentRequest("")
+            AnalyzeSentimentUseCase.Request("")
         )
 
         assertFalse(result.isSuccess)

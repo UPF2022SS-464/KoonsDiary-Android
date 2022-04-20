@@ -2,7 +2,6 @@ package com.upf464.koonsdiary.domain.usecase.cotton
 
 import com.upf464.koonsdiary.domain.model.QuestionAnswer
 import com.upf464.koonsdiary.domain.repository.CottonRepository
-import com.upf464.koonsdiary.domain.request.cotton.FetchRandomAnswerListRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -32,7 +31,7 @@ class FetchRandomAnswerListUseCaseTest {
             cottonRepository.fetchRandomAnswerList()
         } returns Result.success(emptyList())
 
-        val result = useCase(FetchRandomAnswerListRequest)
+        val result = useCase()
 
         assertTrue(result.isSuccess)
         assertEquals(emptyList<QuestionAnswer>(), result.getOrNull()?.questionAnswerList)

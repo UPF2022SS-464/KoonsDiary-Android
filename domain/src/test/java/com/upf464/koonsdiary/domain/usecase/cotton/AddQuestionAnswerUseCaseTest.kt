@@ -2,7 +2,6 @@ package com.upf464.koonsdiary.domain.usecase.cotton
 
 import com.upf464.koonsdiary.domain.error.CottonError
 import com.upf464.koonsdiary.domain.repository.CottonRepository
-import com.upf464.koonsdiary.domain.request.cotton.AddQuestionAnswerRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -33,7 +32,7 @@ class AddQuestionAnswerUseCaseTest {
         } returns Result.success(1)
 
         val result = useCase(
-            AddQuestionAnswerRequest(
+            AddQuestionAnswerUseCase.Request(
                 questionId = 1,
                 content = "content"
             )
@@ -47,7 +46,7 @@ class AddQuestionAnswerUseCaseTest {
     fun invoke_emptyQuestionAnswer_isFailure(): Unit = runBlocking {
 
         val result = useCase(
-            AddQuestionAnswerRequest(
+            AddQuestionAnswerUseCase.Request(
                 questionId = 1,
                 content = ""
             )

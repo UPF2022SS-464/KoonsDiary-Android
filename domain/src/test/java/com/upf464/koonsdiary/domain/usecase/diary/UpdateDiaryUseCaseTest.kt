@@ -4,7 +4,6 @@ import com.upf464.koonsdiary.domain.common.DiaryValidator
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.diary.UpdateDiaryRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
@@ -43,7 +42,7 @@ class UpdateDiaryUseCaseTest {
         } returns true
 
         val result = useCase(
-            UpdateDiaryRequest(
+            UpdateDiaryUseCase.Request(
                 diaryId = 1,
                 date = LocalDate.of(2022, 3, 25),
                 content = "content",
@@ -63,7 +62,7 @@ class UpdateDiaryUseCaseTest {
         } returns false
 
         val result = useCase(
-            UpdateDiaryRequest(
+            UpdateDiaryUseCase.Request(
                 diaryId = 1,
                 date = LocalDate.of(2022, 3, 25),
                 content = "",
@@ -87,7 +86,7 @@ class UpdateDiaryUseCaseTest {
         } returns true
 
         val result = useCase(
-            UpdateDiaryRequest(
+            UpdateDiaryUseCase.Request(
                 diaryId = 1,
                 date = LocalDate.of(2022, 3, 25),
                 content = "content",

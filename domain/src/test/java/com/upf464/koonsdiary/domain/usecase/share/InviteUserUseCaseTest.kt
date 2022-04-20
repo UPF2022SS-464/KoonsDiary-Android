@@ -2,7 +2,6 @@ package com.upf464.koonsdiary.domain.usecase.share
 
 import com.upf464.koonsdiary.domain.error.ShareError
 import com.upf464.koonsdiary.domain.repository.ShareRepository
-import com.upf464.koonsdiary.domain.request.share.InviteUserRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -29,7 +28,7 @@ class InviteUserUseCaseTest {
             shareRepository.inviteUser(any(), any())
         } returns Result.success(Unit)
 
-        val result = useCase(InviteUserRequest(1, listOf(1, 2, 3)))
+        val result = useCase(InviteUserUseCase.Request(1, listOf(1, 2, 3)))
 
         assertTrue(result.isSuccess)
     }
@@ -37,7 +36,7 @@ class InviteUserUseCaseTest {
     @Test
     fun invoke_emptyUserList_throwsEmptyContentError(): Unit = runBlocking {
 
-        val result = useCase(InviteUserRequest(1, listOf()))
+        val result = useCase(InviteUserUseCase.Request(1, listOf()))
 
         assertTrue(result.isFailure)
         assertEquals(ShareError.EmptyContent, result.exceptionOrNull())
@@ -49,7 +48,7 @@ class InviteUserUseCaseTest {
             shareRepository.inviteUser(any(), any())
         } returns Result.failure(ShareError.InvalidGroupId)
 
-        val result = useCase(InviteUserRequest(1, listOf(1, 2, 3)))
+        val result = useCase(InviteUserUseCase.Request(1, listOf(1, 2, 3)))
 
         assertTrue(result.isFailure)
         assertEquals(ShareError.InvalidGroupId, result.exceptionOrNull())
@@ -61,7 +60,7 @@ class InviteUserUseCaseTest {
             shareRepository.inviteUser(any(), any())
         } returns Result.failure(ShareError.InvalidUserId)
 
-        val result = useCase(InviteUserRequest(1, listOf(1, 2, 3)))
+        val result = useCase(InviteUserUseCase.Request(1, listOf(1, 2, 3)))
 
         assertTrue(result.isFailure)
         assertEquals(ShareError.InvalidUserId, result.exceptionOrNull())

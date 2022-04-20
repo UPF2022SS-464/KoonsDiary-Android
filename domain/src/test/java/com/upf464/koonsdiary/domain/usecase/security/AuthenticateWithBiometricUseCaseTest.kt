@@ -1,7 +1,6 @@
 package com.upf464.koonsdiary.domain.usecase.security
 
 import com.upf464.koonsdiary.domain.error.SecurityError
-import com.upf464.koonsdiary.domain.request.security.AuthenticateWithBiometricRequest
 import com.upf464.koonsdiary.domain.service.SecurityService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -29,7 +28,7 @@ class AuthenticateWithBiometricUseCaseTest {
             securityService.authenticateWithBiometric()
         } returns Result.success(Unit)
 
-        val result = useCase(AuthenticateWithBiometricRequest)
+        val result = useCase()
 
         assertTrue(result.isSuccess)
     }
@@ -40,7 +39,7 @@ class AuthenticateWithBiometricUseCaseTest {
             securityService.authenticateWithBiometric()
         } returns Result.failure(SecurityError.Cancelled)
 
-        val result = useCase(AuthenticateWithBiometricRequest)
+        val result = useCase()
 
         assertTrue(result.isFailure)
         assertEquals(SecurityError.Cancelled, result.exceptionOrNull())

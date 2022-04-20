@@ -2,7 +2,6 @@ package com.upf464.koonsdiary.domain.usecase.diary
 
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
-import com.upf464.koonsdiary.domain.request.diary.DeleteDiaryRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -32,7 +31,7 @@ class DeleteDiaryUseCaseTest {
         } returns Result.success(Unit)
 
         val result = useCase(
-            DeleteDiaryRequest(1)
+            DeleteDiaryUseCase.Request(1)
         )
 
         assertTrue(result.isSuccess)
@@ -45,7 +44,7 @@ class DeleteDiaryUseCaseTest {
         } returns Result.failure(DiaryError.InvalidDiaryId)
 
         val result = useCase(
-            DeleteDiaryRequest(1)
+            DeleteDiaryUseCase.Request(1)
         )
 
         assertTrue(result.isFailure)

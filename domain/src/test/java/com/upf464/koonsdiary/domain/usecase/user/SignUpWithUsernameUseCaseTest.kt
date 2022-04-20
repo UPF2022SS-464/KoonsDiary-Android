@@ -4,7 +4,6 @@ import com.upf464.koonsdiary.domain.common.HashGenerator
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.request.user.SignUpWithUsernameRequest
 import com.upf464.koonsdiary.domain.service.MessageService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -68,7 +67,7 @@ class SignUpWithUsernameUseCaseTest {
         } returns Result.success(Unit)
 
         val result = useCase(
-            SignUpWithUsernameRequest(
+            SignUpWithUsernameUseCase.Request(
                 email = "email",
                 username = "username",
                 password = "password",

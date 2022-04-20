@@ -2,7 +2,6 @@ package com.upf464.koonsdiary.domain.usecase.share
 
 import com.upf464.koonsdiary.domain.model.ShareGroup
 import com.upf464.koonsdiary.domain.repository.ShareRepository
-import com.upf464.koonsdiary.domain.request.share.FetchGroupListRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -29,7 +28,7 @@ class FetchGroupListUseCaseTest {
             shareRepository.fetchGroupList()
         } returns Result.success(emptyList())
 
-        val result = useCase(FetchGroupListRequest)
+        val result = useCase()
 
         assertTrue(result.isSuccess)
         assertEquals(emptyList<ShareGroup>(), result.getOrNull()?.groupList)

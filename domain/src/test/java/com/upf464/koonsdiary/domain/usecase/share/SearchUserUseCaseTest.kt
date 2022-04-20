@@ -3,7 +3,6 @@ package com.upf464.koonsdiary.domain.usecase.share
 import com.upf464.koonsdiary.domain.error.ShareError
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.repository.ShareRepository
-import com.upf464.koonsdiary.domain.request.share.SearchUserRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -30,7 +29,7 @@ class SearchUserUseCaseTest {
             shareRepository.searchUser("keyword")
         } returns Result.success(emptyList())
 
-        val result = useCase(SearchUserRequest("keyword"))
+        val result = useCase(SearchUserUseCase.Request("keyword"))
 
         assertTrue(result.isSuccess)
         assertEquals(emptyList<User>(), result.getOrNull()?.userList)
@@ -39,7 +38,7 @@ class SearchUserUseCaseTest {
     @Test
     fun invoke_emptyKeyword_throwsEmptyContentError(): Unit = runBlocking {
 
-        val result = useCase(SearchUserRequest(""))
+        val result = useCase(SearchUserUseCase.Request(""))
 
         assertTrue(result.isFailure)
         assertEquals(ShareError.EmptyContent, result.exceptionOrNull())

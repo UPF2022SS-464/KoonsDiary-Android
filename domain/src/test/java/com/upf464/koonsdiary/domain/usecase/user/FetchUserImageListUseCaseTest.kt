@@ -2,7 +2,6 @@ package com.upf464.koonsdiary.domain.usecase.user
 
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.request.user.FetchUserImageListRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -29,7 +28,7 @@ class FetchUserImageListUseCaseTest {
             userRepository.fetchUserImageList()
         } returns Result.success(emptyList())
 
-        val result = useCase(FetchUserImageListRequest)
+        val result = useCase()
 
         assertTrue(result.isSuccess)
         assertEquals(emptyList<User.Image>(), result.getOrNull()?.imageList)

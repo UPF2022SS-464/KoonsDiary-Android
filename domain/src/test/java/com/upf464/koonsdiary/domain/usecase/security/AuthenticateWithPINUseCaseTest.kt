@@ -3,7 +3,6 @@ package com.upf464.koonsdiary.domain.usecase.security
 import com.upf464.koonsdiary.domain.common.HashGenerator
 import com.upf464.koonsdiary.domain.error.SecurityError
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
-import com.upf464.koonsdiary.domain.request.security.AuthenticateWithPINRequest
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -39,7 +38,7 @@ class AuthenticateWithPINUseCaseTest {
             securityRepository.fetchPIN()
         } returns Result.success("password with salt")
 
-        val result = useCase(AuthenticateWithPINRequest("0000"))
+        val result = useCase(AuthenticateWithPINUseCase.Request("0000"))
 
         assertTrue(result.isSuccess)
     }
@@ -58,7 +57,7 @@ class AuthenticateWithPINUseCaseTest {
             securityRepository.fetchPIN()
         } returns Result.success("password with salt")
 
-        val result = useCase(AuthenticateWithPINRequest("0001"))
+        val result = useCase(AuthenticateWithPINUseCase.Request("0001"))
 
         assertTrue(result.isFailure)
         assertEquals(SecurityError.InvalidPIN, result.exceptionOrNull())

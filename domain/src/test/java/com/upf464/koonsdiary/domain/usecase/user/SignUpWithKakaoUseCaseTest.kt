@@ -4,7 +4,6 @@ import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.request.user.SignUpWithKakaoRequest
 import com.upf464.koonsdiary.domain.service.KakaoService
 import com.upf464.koonsdiary.domain.service.MessageService
 import io.mockk.MockKAnnotations
@@ -66,11 +65,13 @@ class SignUpWithKakaoUseCaseTest {
             securityRepository.clearPIN()
         } returns Result.success(Unit)
 
-        val result = useCase(SignUpWithKakaoRequest(
-            username = "username",
-            nickname = "nickname",
-            imageId = 1
-        ))
+        val result = useCase(
+            SignUpWithKakaoUseCase.Request(
+                username = "username",
+                nickname = "nickname",
+                imageId = 1
+            )
+        )
 
         assertTrue(result.isSuccess)
 
@@ -118,11 +119,13 @@ class SignUpWithKakaoUseCaseTest {
             messageRepository.registerFcmToken("token")
         } returns Result.success(Unit)
 
-        val result = useCase(SignUpWithKakaoRequest(
-            username = "username",
-            nickname = "nickname",
-            imageId = 1
-        ))
+        val result = useCase(
+            SignUpWithKakaoUseCase.Request(
+                username = "username",
+                nickname = "nickname",
+                imageId = 1
+            )
+        )
 
         assertTrue(result.isSuccess)
     }
