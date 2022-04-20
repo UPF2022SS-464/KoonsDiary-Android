@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.os.ResultReceiver
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
@@ -15,7 +16,7 @@ internal class BiometricActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_biometric)
+        setContent {  }
 
         intent.getBundleExtra(Constants.KEY_BUNDLE)
             ?.getParcelable<ResultReceiver>(Constants.KEY_RESULT_RECEIVER)?.let { resultReceiver ->
