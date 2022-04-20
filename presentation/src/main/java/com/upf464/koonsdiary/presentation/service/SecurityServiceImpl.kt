@@ -25,9 +25,12 @@ internal class SecurityServiceImpl @Inject constructor(
     override suspend fun authenticateWithBiometric(): Result<Unit> =
         suspendCancellableCoroutine { continuation ->
             val intent = Intent(context, BiometricActivity::class.java)
-                .putExtra(Constants.KEY_BUNDLE, Bundle().apply {
-                    putParcelable(Constants.KEY_RESULT_RECEIVER, resultReceiver(continuation))
-                })
+                .putExtra(
+                    Constants.KEY_BUNDLE,
+                    Bundle().apply {
+                        putParcelable(Constants.KEY_RESULT_RECEIVER, resultReceiver(continuation))
+                    }
+                )
 
             context.startActivity(intent)
         }

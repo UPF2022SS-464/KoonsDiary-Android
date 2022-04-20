@@ -11,8 +11,7 @@ import javax.inject.Singleton
 import kotlin.coroutines.resume
 
 @Singleton
-internal class MessageServiceImpl @Inject constructor(
-) : MessageService {
+internal class MessageServiceImpl @Inject constructor() : MessageService {
 
     private val messageFlow = MutableSharedFlow<Message>(extraBufferCapacity = 1)
 

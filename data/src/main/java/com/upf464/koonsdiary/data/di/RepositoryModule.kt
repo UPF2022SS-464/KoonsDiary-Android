@@ -1,7 +1,19 @@
 package com.upf464.koonsdiary.data.di
 
-import com.upf464.koonsdiary.data.repository.*
-import com.upf464.koonsdiary.domain.repository.*
+import com.upf464.koonsdiary.data.repository.CottonRepositoryImpl
+import com.upf464.koonsdiary.data.repository.DiaryRepositoryImpl
+import com.upf464.koonsdiary.data.repository.MessageRepositoryImpl
+import com.upf464.koonsdiary.data.repository.ReportRepositoryImpl
+import com.upf464.koonsdiary.data.repository.SecurityRepositoryImpl
+import com.upf464.koonsdiary.data.repository.ShareRepositoryImpl
+import com.upf464.koonsdiary.data.repository.UserRepositoryImpl
+import com.upf464.koonsdiary.domain.repository.CottonRepository
+import com.upf464.koonsdiary.domain.repository.DiaryRepository
+import com.upf464.koonsdiary.domain.repository.MessageRepository
+import com.upf464.koonsdiary.domain.repository.ReportRepository
+import com.upf464.koonsdiary.domain.repository.SecurityRepository
+import com.upf464.koonsdiary.domain.repository.ShareRepository
+import com.upf464.koonsdiary.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

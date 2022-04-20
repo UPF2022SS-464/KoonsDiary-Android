@@ -11,7 +11,7 @@ interface SecurityRepository {
     suspend fun fetchDisposableSalt(): Result<String>
 
     suspend fun clearPIN(): Result<Unit>
-    
+
     suspend fun setBiometric(isActive: Boolean): Result<Unit>
 
     suspend fun fetchLockType(): Result<LockType>

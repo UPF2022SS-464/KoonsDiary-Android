@@ -17,7 +17,7 @@ import kotlin.coroutines.resume
 
 internal class KakaoServiceImpl @Inject constructor(
     @ApplicationContext private val context: Context
-): KakaoService {
+) : KakaoService {
 
     override suspend fun signInWithKakao(): Result<Unit> {
         val result = suspendCancellableCoroutine<Result<Unit>> { cancellable ->

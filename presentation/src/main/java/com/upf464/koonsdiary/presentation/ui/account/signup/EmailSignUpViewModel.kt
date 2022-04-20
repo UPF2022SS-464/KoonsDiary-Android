@@ -139,9 +139,7 @@ internal class EmailSignUpViewModel @Inject constructor(
     }
 
     private fun isNextAvailable(): Boolean {
-        return firstValidationFlow.value == SignUpState.SUCCESS &&
-                (pageFlow.value != SignUpPage.PASSWORD ||
-                        secondValidationFlow.value == SignUpState.SUCCESS)
+        return firstValidationFlow.value == SignUpState.SUCCESS && (pageFlow.value != SignUpPage.PASSWORD || secondValidationFlow.value == SignUpState.SUCCESS)
     }
 
     fun prevPage() {

@@ -14,5 +14,5 @@ internal abstract class ServiceModule {
     @Binds
     abstract fun bindSecurityService(
         service: SecurityServiceImpl
-    ) : SecurityService
+    ): SecurityService
 }
