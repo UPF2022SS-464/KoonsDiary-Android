@@ -8,6 +8,7 @@ import androidx.compose.material.Surface
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.upf464.koonsdiary.presentation.ui.account.signin.EmailSignInScreen
 import com.upf464.koonsdiary.presentation.ui.account.signin.SignInHomeScreen
 import com.upf464.koonsdiary.presentation.ui.account.signup.KakaoSignUpScreen
 import com.upf464.koonsdiary.presentation.ui.account.signup.SignUpScreen
@@ -31,7 +32,7 @@ class SignInActivity : ComponentActivity() {
                             SignInHomeScreen(navController = navController)
                         }
                         composable(route = SignInScreen.SIGN_IN_EMAIL.route) {
-
+                            EmailSignInScreen()
                         }
                         composable(route = SignInScreen.SIGN_UP_KAKAO.route) {
                             KakaoSignUpScreen()

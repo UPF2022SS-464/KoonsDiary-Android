@@ -15,31 +15,27 @@ internal class SignInHomeViewModel @Inject constructor(
     private val kakaoSignInUseCase: SignInWithKakaoUseCase
 ) : ViewModel() {
 
-    private val _eventFlow = MutableSharedFlow<SignInEvent>(extraBufferCapacity = 1)
+    private val _eventFlow = MutableSharedFlow<SignInHomeEvent>(extraBufferCapacity = 1)
     val eventFlow = _eventFlow.asSharedFlow()
 
     fun signInWithEmail() {
-        setEvent(SignInEvent.NavigateToEmailSignIn)
+        _eventFlow.tryEmit(SignInHomeEvent.NavigateToEmailSignIn)
     }
 
     fun signInWithKakao() {
         viewModelScope.launch {
             kakaoSignInUseCase().onSuccess {
-                setEvent(SignInEvent.Success)
+                _eventFlow.tryEmit(SignInHomeEvent.Success)
             }.onFailure { error ->
                 when (error) {
-                    SignInError.NoSuchKakaoUser -> setEvent(SignInEvent.NavigateToKakaoSignUp)
-                    else -> setEvent(SignInEvent.UnknownError)
+                    SignInError.NoSuchKakaoUser -> _eventFlow.tryEmit(SignInHomeEvent.NavigateToKakaoSignUp)
+                    else -> _eventFlow.tryEmit(SignInHomeEvent.UnknownError)
                 }
             }
         }
     }
 
     fun signUpWithEmail() {
-        setEvent(SignInEvent.NavigateToEmailSignUp)
-    }
-
-    private fun setEvent(event: SignInEvent) {
-        _eventFlow.tryEmit(event)
+        _eventFlow.tryEmit(SignInHomeEvent.NavigateToEmailSignUp)
     }
 }

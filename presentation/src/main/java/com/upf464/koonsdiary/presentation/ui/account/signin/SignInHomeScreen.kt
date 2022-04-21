@@ -24,15 +24,15 @@ internal fun SignInHomeScreen(
     LaunchedEffect(key1 = Unit) {
         viewModel.eventFlow.collect { event ->
             when (event) {
-                SignInHomeViewModel.SignInEvent.EmailSignIn ->
+                SignInHomeEvent.NavigateToEmailSignIn ->
                     navController.navigate(SignInScreen.SIGN_IN_EMAIL.route)
-                SignInHomeViewModel.SignInEvent.EmailSignUp ->
+                SignInHomeEvent.NavigateToEmailSignUp ->
                     navController.navigate(SignInScreen.SIGN_UP_EMAIL.route)
-                SignInHomeViewModel.SignInEvent.KakaoSignInSuccess ->
+                SignInHomeEvent.Success ->
                     Toast.makeText(context, "로그인 성공", Toast.LENGTH_LONG).show()
-                SignInHomeViewModel.SignInEvent.KakaoSignUp ->
+                SignInHomeEvent.NavigateToKakaoSignUp ->
                     navController.navigate(SignInScreen.SIGN_UP_KAKAO.route)
-                SignInHomeViewModel.SignInEvent.UnknownError ->
+                SignInHomeEvent.UnknownError ->
                     Toast.makeText(context, "에러 발생", Toast.LENGTH_LONG).show()
             }
         }

@@ -23,8 +23,9 @@ internal fun EmailSignInScreen(
     LaunchedEffect(key1 = Unit) {
         viewModel.eventFlow.collect { event ->
             when (event) {
-                SignInEvent.Invalid -> Toast.makeText(context, "로그인 정보 오류", Toast.LENGTH_LONG).show()
-                SignInEvent.Success -> Toast.makeText(context, "로그인 성공", Toast.LENGTH_LONG).show()
+                EmailSignInEvent.Invalid -> Toast.makeText(context, "로그인 정보 오류", Toast.LENGTH_LONG).show()
+                EmailSignInEvent.Success -> Toast.makeText(context, "로그인 성공", Toast.LENGTH_LONG).show()
+                EmailSignInEvent.UnknownError -> Toast.makeText(context, "오류 발생", Toast.LENGTH_LONG).show()
             }
         }
     }

@@ -16,7 +16,7 @@ internal class EmailSignInViewModel @Inject constructor(
     val usernameFlow = MutableStateFlow("")
     val passwordFlow = MutableStateFlow("")
 
-    private val _eventFlow = MutableSharedFlow<SignInEvent>(extraBufferCapacity = 1)
+    private val _eventFlow = MutableSharedFlow<EmailSignInEvent>(extraBufferCapacity = 1)
     val eventFlow = _eventFlow.asSharedFlow()
 
     fun signIn() {
