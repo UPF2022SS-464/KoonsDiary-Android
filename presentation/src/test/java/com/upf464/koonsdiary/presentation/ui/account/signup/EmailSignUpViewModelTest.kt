@@ -4,7 +4,6 @@ import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.usecase.user.FetchUserImageListUseCase
 import com.upf464.koonsdiary.domain.usecase.user.SignUpWithAccountUseCase
 import com.upf464.koonsdiary.domain.usecase.user.ValidateSignUpUseCase
-import com.upf464.koonsdiary.presentation.model.account.SignUpState
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -27,14 +26,14 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class SignUpViewModelTest {
+class EmailSignUpViewModelTest {
     @MockK
     private lateinit var signUpUseCase: SignUpWithAccountUseCase
 
     @MockK
     private lateinit var fetchImageListUseCase: FetchUserImageListUseCase
     @MockK private lateinit var validateUseCase: ValidateSignUpUseCase
-    private lateinit var viewModel: SignUpViewModel
+    private lateinit var viewModel: EmailSignUpViewModel
 
     private val dispatcher = StandardTestDispatcher()
     private val scope = TestScope(dispatcher)
@@ -44,7 +43,7 @@ class SignUpViewModelTest {
         Dispatchers.setMain(dispatcher)
 
         MockKAnnotations.init(this)
-        viewModel = SignUpViewModel(
+        viewModel = EmailSignUpViewModel(
             signUpUseCase = signUpUseCase,
             fetchImageListUseCase = fetchImageListUseCase,
             validateUseCase = validateUseCase
@@ -67,39 +66,7 @@ class SignUpViewModelTest {
     @Test
     fun nextPage_validInputs_signUpSuccess(): Unit = scope.runTest {
         coEvery {
-            validateUseCase(
-                ValidateSignUpUseCase.Request(
-                    ValidateSignUpUseCase.Request.Type.EMAIL,
-                    ""
-                )
-            )
-        } returns Result.success(Unit)
-
-        coEvery {
-            validateUseCase(
-                ValidateSignUpUseCase.Request(
-                    ValidateSignUpUseCase.Request.Type.USERNAME,
-                    ""
-                )
-            )
-        } returns Result.success(Unit)
-
-        coEvery {
-            validateUseCase(
-                ValidateSignUpUseCase.Request(
-                    ValidateSignUpUseCase.Request.Type.PASSWORD,
-                    ""
-                )
-            )
-        } returns Result.success(Unit)
-
-        coEvery {
-            validateUseCase(
-                ValidateSignUpUseCase.Request(
-                    ValidateSignUpUseCase.Request.Type.NICKNAME,
-                    ""
-                )
-            )
+            validateUseCase(any())
         } returns Result.success(Unit)
 
         coEvery {
@@ -108,19 +75,34 @@ class SignUpViewModelTest {
 
         val eventDeferred = async { viewModel.eventFlow.first() }
 
+        delay(100)
+        viewModel.firstFieldFlow.value = "username"
         waitForValidationSuccess()
         viewModel.nextPage()
+        delay(100)
+
+        viewModel.firstFieldFlow.value = "email"
         waitForValidationSuccess()
         viewModel.nextPage()
+        delay(100)
+
+        viewModel.firstFieldFlow.value = "password"
+        viewModel.secondFieldFlow.value = "password"
         waitForValidationSuccess()
         waitForValidationSuccess(false)
         viewModel.nextPage()
-        waitForValidationSuccess()
-        viewModel.nextPage()
-        waitForValidationSuccess()
-        viewModel.nextPage()
+        delay(100)
 
-        assertEquals(SignUpViewModel.SignUpEvent.Success, eventDeferred.await())
+        waitForValidationSuccess()
+        viewModel.nextPage()
+        delay(100)
+
+        viewModel.firstFieldFlow.value = "nickname"
+        waitForValidationSuccess()
+        viewModel.nextPage()
+        delay(100)
+
+        assertEquals(SignUpEvent.Success, eventDeferred.await())
         coVerify { signUpUseCase(any()) }
     }
 
@@ -133,30 +115,7 @@ class SignUpViewModelTest {
         }
 
         coEvery {
-            validateUseCase(
-                ValidateSignUpUseCase.Request(
-                    ValidateSignUpUseCase.Request.Type.EMAIL,
-                    ""
-                )
-            )
-        } returns Result.success(Unit)
-
-        coEvery {
-            validateUseCase(
-                ValidateSignUpUseCase.Request(
-                    ValidateSignUpUseCase.Request.Type.EMAIL,
-                    "content"
-                )
-            )
-        } returns Result.success(Unit)
-
-        coEvery {
-            validateUseCase(
-                ValidateSignUpUseCase.Request(
-                    ValidateSignUpUseCase.Request.Type.USERNAME,
-                    ""
-                )
-            )
+            validateUseCase(any())
         } returns Result.success(Unit)
 
         delay(100)
@@ -182,7 +141,7 @@ class SignUpViewModelTest {
                 viewModel.secondValidationFlow
             }
             validationFlow.collect { status ->
-                if (status == SignUpState.SUCCESS) cancel()
+                if (status == SignUpValidationState.Success) cancel()
             }
         }.join()
     }
