@@ -13,7 +13,7 @@ interface UserRepository {
 
     suspend fun signUpWithKakao(user: User, token: String): Result<Unit>
 
-    suspend fun signInWithAccount(account: String, password: String) : Result<String>
+    suspend fun signInWithAccount(account: String, password: String): Result<String>
 
     suspend fun signInWithKakao(token: String): Result<Unit>
 

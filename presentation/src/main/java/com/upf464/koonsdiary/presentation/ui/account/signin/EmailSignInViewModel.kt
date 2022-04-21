@@ -2,6 +2,7 @@ package com.upf464.koonsdiary.presentation.ui.account.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.usecase.user.SignInWithAccountUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +27,14 @@ internal class EmailSignInViewModel @Inject constructor(
                     username = usernameFlow.value,
                     password = passwordFlow.value
                 )
-            ).onSuccess {  }
+            ).onSuccess {
+                _eventFlow.tryEmit(EmailSignInEvent.Success)
+            }.onFailure { error ->
+                when (error) {
+                    SignInError.IncorrectUsernameOrPassword -> _eventFlow.tryEmit(EmailSignInEvent.Invalid)
+                    else -> _eventFlow.tryEmit(EmailSignInEvent.UnknownError)
+                }
+            }
         }
     }
 }
