@@ -16,7 +16,7 @@ internal class BiometricActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {  }
+        setContent { }
 
         intent.getBundleExtra(Constants.KEY_BUNDLE)
             ?.getParcelable<ResultReceiver>(Constants.KEY_RESULT_RECEIVER)?.let { resultReceiver ->

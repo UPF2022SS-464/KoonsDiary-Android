@@ -45,7 +45,6 @@ internal fun KakaoSignUpScreen(
         }
     }
 
-
     Column {
         Text(text = pageState.value.name)
 
