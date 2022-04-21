@@ -8,9 +8,9 @@ import com.upf464.koonsdiary.domain.usecase.user.SignUpWithAccountUseCase
 import com.upf464.koonsdiary.domain.usecase.user.ValidateSignUpUseCase
 import com.upf464.koonsdiary.presentation.mapper.toPresentation
 import com.upf464.koonsdiary.presentation.model.account.SignUpPage
-import com.upf464.koonsdiary.presentation.model.account.SignUpValidationState
-import com.upf464.koonsdiary.presentation.model.account.UserEmailModel
 import com.upf464.koonsdiary.presentation.model.account.UserImageModel
+import com.upf464.koonsdiary.presentation.model.account.UserModel
+import com.upf464.koonsdiary.presentation.model.account.UserValidationModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -25,13 +25,22 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class SignUpViewModel @Inject constructor(
+internal class EmailSignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpWithAccountUseCase,
     private val fetchImageListUseCase: FetchUserImageListUseCase,
     validateUseCase: ValidateSignUpUseCase
 ) : ViewModel() {
 
-    private val userModel = UserEmailModel(validateUseCase)
+    private val userModel = UserModel.Email()
+    private val validationModel = UserValidationModel.Email(
+        validateUseCase,
+        userModel.usernameFlow,
+        userModel.emailFlow,
+        userModel.passwordFlow,
+        userModel.passwordConfirmFlow,
+        userModel.imageFlow,
+        userModel.nicknameFlow
+    )
 
     private val pageList = listOf(
         SignUpPage.USERNAME,
@@ -51,17 +60,17 @@ internal class SignUpViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val firstValidationFlow = pageFlow.flatMapLatest { page ->
         when (page) {
-            SignUpPage.EMAIL -> userModel.emailValidFlow
-            SignUpPage.USERNAME -> userModel.usernameValidFlow
-            SignUpPage.PASSWORD -> userModel.passwordValidFlow
-            SignUpPage.IMAGE -> userModel.imageValidFlow
-            SignUpPage.NICKNAME -> userModel.nicknameValidFlow
+            SignUpPage.EMAIL -> validationModel.emailFlow
+            SignUpPage.USERNAME -> validationModel.usernameFlow
+            SignUpPage.PASSWORD -> validationModel.passwordFlow
+            SignUpPage.IMAGE -> validationModel.imageFlow
+            SignUpPage.NICKNAME -> validationModel.nicknameFlow
         }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, SignUpValidationState.WAITING)
+    }.stateIn(viewModelScope, SharingStarted.Lazily, SignUpValidationState.Waiting)
 
     val secondFieldFlow = MutableStateFlow("")
-    val secondValidationFlow = userModel.passwordConfirmValidFlow
-        .stateIn(viewModelScope, SharingStarted.Lazily, SignUpValidationState.WAITING)
+    val secondValidationFlow = validationModel.passwordConfirmFlow
+        .stateIn(viewModelScope, SharingStarted.Lazily, SignUpValidationState.Waiting)
 
     private val _imageListFlow = MutableStateFlow(listOf<UserImageModel>())
     val imageListFlow = _imageListFlow.asStateFlow()
@@ -131,7 +140,9 @@ internal class SignUpViewModel @Inject constructor(
     }
 
     private fun isNextAvailable(): Boolean {
-        return firstValidationFlow.value == SignUpValidationState.SUCCESS && (pageFlow.value != SignUpPage.PASSWORD || secondValidationFlow.value == SignUpValidationState.SUCCESS)
+        val firstAvailable = firstValidationFlow.value == SignUpValidationState.Success
+        val secondAvailable = pageFlow.value != SignUpPage.PASSWORD || secondValidationFlow.value == SignUpValidationState.Success
+        return firstAvailable && secondAvailable
     }
 
     fun prevPage() {

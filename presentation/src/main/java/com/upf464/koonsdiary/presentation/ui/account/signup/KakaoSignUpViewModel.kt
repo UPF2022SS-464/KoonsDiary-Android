@@ -8,9 +8,9 @@ import com.upf464.koonsdiary.domain.usecase.user.SignUpWithKakaoUseCase
 import com.upf464.koonsdiary.domain.usecase.user.ValidateSignUpUseCase
 import com.upf464.koonsdiary.presentation.mapper.toPresentation
 import com.upf464.koonsdiary.presentation.model.account.SignUpPage
-import com.upf464.koonsdiary.presentation.model.account.SignUpValidationState
 import com.upf464.koonsdiary.presentation.model.account.UserImageModel
-import com.upf464.koonsdiary.presentation.model.account.UserKakaoModel
+import com.upf464.koonsdiary.presentation.model.account.UserModel
+import com.upf464.koonsdiary.presentation.model.account.UserValidationModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,7 +32,13 @@ internal class KakaoSignUpViewModel @Inject constructor(
     validateUseCase: ValidateSignUpUseCase
 ) : ViewModel() {
 
-    private val userModel = UserKakaoModel(validateUseCase)
+    private val userModel = UserModel.Kakao()
+    private val validationModel = UserValidationModel.Kakao(
+        validateUseCase,
+        userModel.usernameFlow,
+        userModel.imageFlow,
+        userModel.nicknameFlow
+    )
 
     private val pageList = listOf(
         SignUpPage.USERNAME,
@@ -50,12 +56,12 @@ internal class KakaoSignUpViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val validationFlow = pageFlow.flatMapLatest { page ->
         when (page) {
-            SignUpPage.USERNAME -> userModel.usernameValidFlow
-            SignUpPage.IMAGE -> userModel.imageValidFlow
-            SignUpPage.NICKNAME -> userModel.nicknameValidFlow
+            SignUpPage.USERNAME -> validationModel.usernameFlow
+            SignUpPage.IMAGE -> validationModel.imageFlow
+            SignUpPage.NICKNAME -> validationModel.nicknameFlow
             else -> flow { }
         }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, SignUpValidationState.WAITING)
+    }.stateIn(viewModelScope, SharingStarted.Lazily, SignUpValidationState.Waiting)
 
     private val _imageListFlow = MutableStateFlow(listOf<UserImageModel>())
     val imageListFlow = _imageListFlow.asStateFlow()
@@ -123,7 +129,7 @@ internal class KakaoSignUpViewModel @Inject constructor(
     }
 
     private fun isNextAvailable(): Boolean {
-        return validationFlow.value == SignUpValidationState.SUCCESS
+        return validationFlow.value == SignUpValidationState.Success
     }
 
     private fun signUp() {

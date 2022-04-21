@@ -25,7 +25,7 @@ import com.upf464.koonsdiary.presentation.ui.account.signup.components.UserImage
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun SignUpScreen(
-    viewModel: SignUpViewModel = hiltViewModel()
+    viewModel: EmailSignUpViewModel = hiltViewModel()
 ) {
     val pageState = viewModel.pageFlow.collectAsState()
     val firstFieldState = viewModel.firstFieldFlow.collectAsState()
@@ -70,7 +70,7 @@ internal fun SignUpScreen(
                 visualTransformation = if (isPassword) PasswordVisualTransformation()
                 else VisualTransformation.None
             )
-            Text(text = firstValidationState.value.name)
+            Text(text = firstValidationState.value.toString())
 
             if (isPassword) {
                 TextField(
@@ -78,7 +78,7 @@ internal fun SignUpScreen(
                     onValueChange = { value -> viewModel.secondFieldFlow.value = value },
                     visualTransformation = PasswordVisualTransformation()
                 )
-                Text(text = secondValidationState.value.name)
+                Text(text = secondValidationState.value.toString())
             }
 
             Spacer(modifier = Modifier.weight(1f))

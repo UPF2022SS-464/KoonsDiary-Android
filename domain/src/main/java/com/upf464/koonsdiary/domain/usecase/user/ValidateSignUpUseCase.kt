@@ -12,20 +12,20 @@ class ValidateSignUpUseCase @Inject constructor(
 
     suspend operator fun invoke(request: Request): Result<Unit> {
         return when (request.type) {
-            Request.Type.EMAIL -> {
+            Type.EMAIL -> {
                 if (userValidator.isEmailValid(request.content)) {
                     userRepository.isEmailDuplicated(request.content)
                 } else Result.failure(SignUpError.InvalidEmail)
             }
-            Request.Type.USERNAME -> {
+            Type.USERNAME -> {
                 if (userValidator.isUsernameValid(request.content)) {
                     userRepository.isUsernameDuplicated(request.content)
                 } else Result.failure(SignUpError.InvalidUsername)
             }
-            Request.Type.PASSWORD ->
+            Type.PASSWORD ->
                 if (userValidator.isPasswordValid(request.content)) Result.success(Unit)
                 else Result.failure(SignUpError.InvalidPassword)
-            Request.Type.NICKNAME ->
+            Type.NICKNAME ->
                 if (userValidator.isNicknameValid(request.content)) Result.success(Unit)
                 else Result.failure(SignUpError.InvalidNickname)
         }
@@ -34,13 +34,12 @@ class ValidateSignUpUseCase @Inject constructor(
     data class Request(
         val type: Type,
         val content: String
-    ) {
+    )
 
-        enum class Type {
-            EMAIL,
-            USERNAME,
-            PASSWORD,
-            NICKNAME
-        }
+    enum class Type {
+        EMAIL,
+        USERNAME,
+        PASSWORD,
+        NICKNAME
     }
 }
