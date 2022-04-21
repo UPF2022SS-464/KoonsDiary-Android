@@ -13,6 +13,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,17 +31,20 @@ internal fun KakaoSignUpScreen(
     val validationState = viewModel.validationFlow.collectAsState()
     val imageListState = viewModel.imageListFlow.collectAsState()
     val context = LocalContext.current
-    val state = viewModel.stateFlow.collectAsState()
 
-    when (state.value) {
-        SignUpState.NoNetwork ->
-            Toast.makeText(context, "네트워크 오류", Toast.LENGTH_LONG).show()
-        SignUpState.Success ->
-            Toast.makeText(context, "회원가입 성공", Toast.LENGTH_LONG).show()
-        SignUpState.Failure ->
-            Toast.makeText(context, "오류", Toast.LENGTH_LONG).show()
-        SignUpState.None -> {}
+    LaunchedEffect(key1 = Unit) {
+        viewModel.eventFlow.collect { event ->
+            when (event) {
+                SignUpEvent.NoNetwork ->
+                    Toast.makeText(context, "네트워크 오류", Toast.LENGTH_LONG).show()
+                SignUpEvent.Success ->
+                    Toast.makeText(context, "회원가입 성공", Toast.LENGTH_LONG).show()
+                SignUpEvent.UnknownError ->
+                    Toast.makeText(context, "오류", Toast.LENGTH_LONG).show()
+            }
+        }
     }
+
 
     Column {
         Text(text = pageState.value.name)

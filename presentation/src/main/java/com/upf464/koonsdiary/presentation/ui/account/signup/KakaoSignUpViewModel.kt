@@ -15,8 +15,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -66,8 +68,8 @@ internal class KakaoSignUpViewModel @Inject constructor(
     private val _imageListFlow = MutableStateFlow(listOf<UserImageModel>())
     val imageListFlow = _imageListFlow.asStateFlow()
 
-    private val _stateFlow = MutableStateFlow<SignUpState>(SignUpState.None)
-    val stateFlow = _stateFlow.asStateFlow()
+    private val _eventFlow = MutableSharedFlow<SignUpEvent>(extraBufferCapacity = 1)
+    val eventFlow = _eventFlow.asSharedFlow()
 
     init {
         viewModelScope.launch {
@@ -141,7 +143,7 @@ internal class KakaoSignUpViewModel @Inject constructor(
                     imageId = userModel.imageFlow.value?.id ?: return@launch
                 )
             ).onSuccess {
-                _stateFlow.value = SignUpState.Success
+                _eventFlow.tryEmit(SignUpEvent.Success)
             }.onFailure { error ->
                 handleError(error)
             }
@@ -156,8 +158,8 @@ internal class KakaoSignUpViewModel @Inject constructor(
 
     private fun handleError(error: Throwable) {
         when (error) {
-            CommonError.NetworkDisconnected -> _stateFlow.value = SignUpState.NoNetwork
-            else -> _stateFlow.value = SignUpState.Failure
+            CommonError.NetworkDisconnected -> _eventFlow.tryEmit(SignUpEvent.NoNetwork)
+            else -> _eventFlow.tryEmit(SignUpEvent.UnknownError)
         }
     }
 }

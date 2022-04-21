@@ -1,0 +1,32 @@
+package com.upf464.koonsdiary.presentation.ui.account.signin
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.upf464.koonsdiary.domain.usecase.user.SignInWithAccountUseCase
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+internal class EmailSignInViewModel @Inject constructor(
+    private val signInUseCase: SignInWithAccountUseCase
+) : ViewModel() {
+
+    val usernameFlow = MutableStateFlow("")
+    val passwordFlow = MutableStateFlow("")
+
+    private val _eventFlow = MutableSharedFlow<SignInEvent>(extraBufferCapacity = 1)
+    val eventFlow = _eventFlow.asSharedFlow()
+
+    fun signIn() {
+        viewModelScope.launch {
+            signInUseCase(
+                SignInWithAccountUseCase.Request(
+                    username = usernameFlow.value,
+                    password = passwordFlow.value
+                )
+            ).onSuccess {  }
+        }
+    }
+}
