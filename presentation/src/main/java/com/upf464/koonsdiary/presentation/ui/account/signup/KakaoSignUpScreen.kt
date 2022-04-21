@@ -62,7 +62,7 @@ internal fun KakaoSignUpScreen(
                 value = fieldState.value,
                 onValueChange = { value -> viewModel.fieldFlow.value = value }
             )
-            Text(text = validationState.value.name)
+            Text(text = validationState.value.toString())
             Spacer(modifier = Modifier.weight(1f))
         }
 
