@@ -5,7 +5,6 @@ import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.service.MessageService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
@@ -21,7 +20,6 @@ class SignInWithAccountUseCaseTest {
 
     @MockK private lateinit var userRepository: UserRepository
     @MockK private lateinit var hashGenerator: HashGenerator
-    @MockK private lateinit var messageService: MessageService
     @MockK private lateinit var messageRepository: MessageRepository
     @MockK private lateinit var securityRepository: SecurityRepository
     private lateinit var useCase: SignInWithAccountUseCase
@@ -32,7 +30,6 @@ class SignInWithAccountUseCaseTest {
         useCase = SignInWithAccountUseCase(
             userRepository = userRepository,
             hashGenerator = hashGenerator,
-            messageService = messageService,
             messageRepository = messageRepository,
             securityRepository = securityRepository
         )
@@ -57,7 +54,7 @@ class SignInWithAccountUseCaseTest {
         } returns Result.success(Unit)
 
         coEvery {
-            messageService.getToken()
+            messageRepository.getToken()
         } returns Result.success("token")
 
         coEvery {

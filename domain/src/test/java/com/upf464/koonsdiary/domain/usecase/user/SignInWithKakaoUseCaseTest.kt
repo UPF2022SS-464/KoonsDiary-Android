@@ -4,8 +4,6 @@ import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.service.KakaoService
-import com.upf464.koonsdiary.domain.service.MessageService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -18,9 +16,7 @@ import org.junit.Test
 
 class SignInWithKakaoUseCaseTest {
 
-    @MockK private lateinit var kakaoService: KakaoService
     @MockK private lateinit var userRepository: UserRepository
-    @MockK private lateinit var messageService: MessageService
     @MockK private lateinit var messageRepository: MessageRepository
     @MockK private lateinit var securityRepository: SecurityRepository
     private lateinit var useCase: SignInWithKakaoUseCase
@@ -29,9 +25,7 @@ class SignInWithKakaoUseCaseTest {
     fun setup() {
         MockKAnnotations.init(this)
         useCase = SignInWithKakaoUseCase(
-            kakaoService = kakaoService,
             userRepository = userRepository,
-            messageService = messageService,
             messageRepository = messageRepository,
             securityRepository = securityRepository
         )
@@ -40,7 +34,7 @@ class SignInWithKakaoUseCaseTest {
     @Test
     fun invoke_kakaoSignIn_isSuccess(): Unit = runBlocking {
         coEvery {
-            kakaoService.getAccessToken()
+            userRepository.getKakaoAccessToken()
         } returns Result.success("token")
 
         coEvery {
@@ -52,7 +46,7 @@ class SignInWithKakaoUseCaseTest {
         } returns Result.success(Unit)
 
         coEvery {
-            messageService.getToken()
+            messageRepository.getToken()
         } returns Result.success("token")
 
         coEvery {
@@ -74,7 +68,7 @@ class SignInWithKakaoUseCaseTest {
 
     fun invoke_kakaoCancel_isFailure(): Unit = runBlocking {
         coEvery {
-            kakaoService.getAccessToken()
+            userRepository.getKakaoAccessToken()
         } returns Result.success("token")
 
         coEvery {
