@@ -2,23 +2,20 @@ package com.upf464.koonsdiary.firebase.service
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.upf464.koonsdiary.domain.service.MessageService
-import com.upf464.koonsdiary.domain.usecase.message.RegisterFcmTokenUseCase
+import com.upf464.koonsdiary.data.model.MessageData
+import com.upf464.koonsdiary.data.source.FirebaseRemoteDataSource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
 
-    @Inject lateinit var messageService: MessageService
-    @Inject lateinit var registerTokenUseCase: RegisterFcmTokenUseCase
+    @Inject lateinit var firebase: FirebaseRemoteDataSource
     private val scope = CoroutineScope(Dispatchers.Main + Job())
-    private var registerJob: Job? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -26,11 +23,7 @@ internal class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-
-        registerJob?.cancel()
-        registerJob = scope.launch {
-            registerTokenUseCase(RegisterFcmTokenUseCase.Request(token))
-        }
+        firebase.setMessage(MessageData.TokenChanged(token))
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
