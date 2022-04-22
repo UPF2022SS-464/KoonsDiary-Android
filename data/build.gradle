@@ -9,6 +9,12 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs += '-opt-in=kotlin.RequiresOptIn'
+    }
+}
+
 dependencies {
 
     implementation "com.google.dagger:hilt-core:$hilt_version"
