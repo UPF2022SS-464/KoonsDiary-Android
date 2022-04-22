@@ -4,6 +4,7 @@ import com.upf464.koonsdiary.common.extension.errorMap
 import com.upf464.koonsdiary.data.error.ErrorData
 import com.upf464.koonsdiary.data.mapper.toData
 import com.upf464.koonsdiary.data.mapper.toDomain
+import com.upf464.koonsdiary.data.source.KakaoRemoteDataSource
 import com.upf464.koonsdiary.data.source.UserLocalDataSource
 import com.upf464.koonsdiary.data.source.UserRemoteDataSource
 import com.upf464.koonsdiary.domain.model.SignInType
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 internal class UserRepositoryImpl @Inject constructor(
     private val remote: UserRemoteDataSource,
-    private val local: UserLocalDataSource
+    private val local: UserLocalDataSource,
+    private val kakao: KakaoRemoteDataSource
 ) : UserRepository {
 
     override suspend fun isUsernameDuplicated(username: String): Result<Unit> {
@@ -46,6 +48,20 @@ internal class UserRepositoryImpl @Inject constructor(
 
     override suspend fun signInWithKakao(token: String): Result<Unit> {
         return remote.signInWithKakao(token).errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
+
+    override suspend fun signInKakaoAccount(): Result<Unit> {
+        return kakao.signInKakaoAccount().errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
+
+    override suspend fun getKakaoAccessToken(): Result<String> {
+        return kakao.getKakaoAccessToken().errorMap { error ->
             if (error is ErrorData) error.toDomain()
             else Exception(error)
         }

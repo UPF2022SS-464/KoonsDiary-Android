@@ -7,15 +7,11 @@ import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.service.KakaoService
-import com.upf464.koonsdiary.domain.service.MessageService
 import javax.inject.Inject
 
 class SignUpWithKakaoUseCase @Inject constructor(
-    private val kakaoService: KakaoService,
     private val userRepository: UserRepository,
     private val securityRepository: SecurityRepository,
-    private val messageService: MessageService,
     private val messageRepository: MessageRepository
 ) {
 
@@ -28,11 +24,11 @@ class SignUpWithKakaoUseCase @Inject constructor(
 
         return trySignUpWithToken(user).handleWith { error ->
             if (error is SignInError.AccessTokenExpired) {
-                kakaoService.signInWithKakao()
+                userRepository.signInKakaoAccount()
                 trySignUpWithToken(user)
             } else Result.failure(error)
         }.flatMap {
-            messageService.getToken()
+            messageRepository.getToken()
         }.flatMap { token ->
             messageRepository.registerFcmToken(token)
         }.onSuccess {
@@ -42,7 +38,7 @@ class SignUpWithKakaoUseCase @Inject constructor(
     }
 
     private suspend fun trySignUpWithToken(user: User): Result<Unit> =
-        kakaoService.getAccessToken().flatMap { token ->
+        userRepository.getKakaoAccessToken().flatMap { token ->
             userRepository.signUpWithKakao(user, token)
         }
 
