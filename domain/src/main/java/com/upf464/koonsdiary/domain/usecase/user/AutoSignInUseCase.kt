@@ -5,14 +5,10 @@ import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.model.SignInType
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.service.KakaoService
-import com.upf464.koonsdiary.domain.service.MessageService
 import javax.inject.Inject
 
 class AutoSignInUseCase @Inject constructor(
     private val userRepository: UserRepository,
-    private val kakaoService: KakaoService,
-    private val messageService: MessageService,
     private val messageRepository: MessageRepository
 ) {
 
@@ -24,7 +20,7 @@ class AutoSignInUseCase @Inject constructor(
                 null -> Result.failure(SignInError.NoAutoSignIn)
             }
         }.flatMap {
-            messageService.getToken()
+            messageRepository.getToken()
         }.flatMap { token ->
             messageRepository.registerFcmToken(token)
         }.onFailure { error ->
@@ -45,7 +41,7 @@ class AutoSignInUseCase @Inject constructor(
     }
 
     private suspend fun autoSignInWithKakao(): Result<Unit> {
-        return kakaoService.getAccessToken().flatMap { token ->
+        return userRepository.getKakaoAccessToken().flatMap { token ->
             userRepository.signInWithKakao(token)
         }
     }

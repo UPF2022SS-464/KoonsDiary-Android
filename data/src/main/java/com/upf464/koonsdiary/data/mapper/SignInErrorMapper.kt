@@ -7,4 +7,6 @@ internal fun SignInErrorData.toDomain() = when (this) {
     SignInErrorData.IncorrectUsernameOrPassword -> SignInError.IncorrectUsernameOrPassword
     SignInErrorData.NoSuchKakaoUser -> SignInError.NoSuchKakaoUser
     SignInErrorData.AccessTokenExpired -> SignInError.AccessTokenExpired
+    is SignInErrorData.KakaoSignInCancel -> SignInError.KakaoSignInCancel(message, cause)
+    is SignInErrorData.KakaoSignInFailed -> SignInError.KakaoSignInFailed(message, cause)
 }

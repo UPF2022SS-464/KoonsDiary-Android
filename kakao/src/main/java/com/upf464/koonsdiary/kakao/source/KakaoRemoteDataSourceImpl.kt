@@ -9,7 +9,7 @@ import com.kakao.sdk.user.UserApiClient
 import com.upf464.koonsdiary.common.extension.errorMap
 import com.upf464.koonsdiary.data.error.SignInErrorData
 import com.upf464.koonsdiary.data.source.KakaoRemoteDataSource
-import com.upf464.koonsdiary.kakao.mapper.toDomain
+import com.upf464.koonsdiary.kakao.mapper.toData
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
@@ -50,8 +50,8 @@ internal class KakaoRemoteDataSourceImpl @Inject constructor(
 
         return result.errorMap { error ->
             when (error) {
-                is ClientError -> error.toDomain()
-                is AuthError -> error.toDomain()
+                is ClientError -> error.toData()
+                is AuthError -> error.toData()
                 else -> Exception(error)
             }
         }

@@ -17,6 +17,10 @@ interface UserRepository {
 
     suspend fun signInWithKakao(token: String): Result<Unit>
 
+    suspend fun signInKakaoAccount(): Result<Unit>
+
+    suspend fun getKakaoAccessToken(): Result<String>
+
     suspend fun signInWithToken(token: String): Result<String?>
 
     suspend fun generateSaltOf(username: String): Result<String>
