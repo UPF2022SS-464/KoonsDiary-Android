@@ -4,8 +4,6 @@ import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.model.SignInType
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.service.KakaoService
-import com.upf464.koonsdiary.domain.service.MessageService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -18,9 +16,7 @@ import org.junit.Test
 
 class AutoSignInUseCaseTest {
 
-    @MockK private lateinit var kakaoService: KakaoService
     @MockK private lateinit var userRepository: UserRepository
-    @MockK private lateinit var messageService: MessageService
     @MockK private lateinit var messageRepository: MessageRepository
     private lateinit var useCase: AutoSignInUseCase
 
@@ -29,8 +25,6 @@ class AutoSignInUseCaseTest {
         MockKAnnotations.init(this)
         useCase = AutoSignInUseCase(
             userRepository = userRepository,
-            kakaoService = kakaoService,
-            messageService = messageService,
             messageRepository = messageRepository
         )
     }
@@ -42,7 +36,7 @@ class AutoSignInUseCaseTest {
         } returns Result.success(SignInType.KAKAO)
 
         coEvery {
-            kakaoService.getAccessToken()
+            userRepository.getKakaoAccessToken()
         } returns Result.success("token")
 
         coEvery {
@@ -50,7 +44,7 @@ class AutoSignInUseCaseTest {
         } returns Result.success(Unit)
 
         coEvery {
-            messageService.getToken()
+            messageRepository.getToken()
         } returns Result.success("token")
 
         coEvery {
@@ -81,7 +75,7 @@ class AutoSignInUseCaseTest {
         } returns Result.success(Unit)
 
         coEvery {
-            messageService.getToken()
+            messageRepository.getToken()
         } returns Result.success("token")
 
         coEvery {

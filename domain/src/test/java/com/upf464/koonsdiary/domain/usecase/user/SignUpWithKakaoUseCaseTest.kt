@@ -4,8 +4,6 @@ import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.repository.MessageRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.UserRepository
-import com.upf464.koonsdiary.domain.service.KakaoService
-import com.upf464.koonsdiary.domain.service.MessageService
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -17,9 +15,7 @@ import org.junit.Test
 
 class SignUpWithKakaoUseCaseTest {
 
-    @MockK private lateinit var kakaoService: KakaoService
     @MockK private lateinit var userRepository: UserRepository
-    @MockK private lateinit var messageService: MessageService
     @MockK private lateinit var messageRepository: MessageRepository
     @MockK private lateinit var securityRepository: SecurityRepository
     private lateinit var useCase: SignUpWithKakaoUseCase
@@ -28,9 +24,7 @@ class SignUpWithKakaoUseCaseTest {
     fun setup() {
         MockKAnnotations.init(this)
         useCase = SignUpWithKakaoUseCase(
-            kakaoService = kakaoService,
             userRepository = userRepository,
-            messageService = messageService,
             messageRepository = messageRepository,
             securityRepository = securityRepository
         )
@@ -39,7 +33,7 @@ class SignUpWithKakaoUseCaseTest {
     @Test
     fun invoke_hasToken_isSuccess(): Unit = runBlocking {
         coEvery {
-            kakaoService.getAccessToken()
+            userRepository.getKakaoAccessToken()
         } returns Result.success("token")
 
         coEvery {
@@ -54,7 +48,7 @@ class SignUpWithKakaoUseCaseTest {
         } returns Result.success(Unit)
 
         coEvery {
-            messageService.getToken()
+            messageRepository.getToken()
         } returns Result.success("token")
 
         coEvery {
@@ -83,14 +77,14 @@ class SignUpWithKakaoUseCaseTest {
     @Test
     fun invoke_noToken_isSuccess(): Unit = runBlocking {
         coEvery {
-            kakaoService.getAccessToken()
+            userRepository.getKakaoAccessToken()
         } returns Result.failure(SignInError.AccessTokenExpired)
 
         coEvery {
-            kakaoService.signInWithKakao()
+            userRepository.signInKakaoAccount()
         } answers {
             coEvery {
-                kakaoService.getAccessToken()
+                userRepository.getKakaoAccessToken()
             } returns Result.success("token")
 
             Result.success(Unit)
@@ -112,7 +106,7 @@ class SignUpWithKakaoUseCaseTest {
         } returns Result.success(Unit)
 
         coEvery {
-            messageService.getToken()
+            messageRepository.getToken()
         } returns Result.success("token")
 
         coEvery {
