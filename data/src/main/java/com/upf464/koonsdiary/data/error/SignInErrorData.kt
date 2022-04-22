@@ -8,4 +8,6 @@ sealed class SignInErrorData(
     object IncorrectUsernameOrPassword : SignInErrorData()
 
     object NoSuchKakaoUser : SignInErrorData()
+
+    object AccessTokenExpired : SignInErrorData()
 }

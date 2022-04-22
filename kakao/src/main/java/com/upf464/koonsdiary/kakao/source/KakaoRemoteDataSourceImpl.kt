@@ -1,4 +1,4 @@
-package com.upf464.koonsdiary.kakao.service
+package com.upf464.koonsdiary.kakao.source
 
 import android.content.Context
 import com.kakao.sdk.auth.AuthApiClient
@@ -7,21 +7,23 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.upf464.koonsdiary.common.extension.errorMap
-import com.upf464.koonsdiary.domain.error.SignInError
-import com.upf464.koonsdiary.domain.service.KakaoService
+import com.upf464.koonsdiary.data.error.SignInErrorData
+import com.upf464.koonsdiary.data.source.KakaoRemoteDataSource
 import com.upf464.koonsdiary.kakao.mapper.toDomain
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
-internal class KakaoServiceImpl @Inject constructor(
-    @ApplicationContext private val context: Context
-) : KakaoService {
+internal class KakaoRemoteDataSourceImpl @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val userApiClient: UserApiClient,
+    private val authApiClient: AuthApiClient
+) : KakaoRemoteDataSource {
 
-    override suspend fun signInWithKakao(): Result<Unit> {
+    override suspend fun signInKakaoAccount(): Result<Unit> {
         val result = suspendCancellableCoroutine<Result<Unit>> { cancellable ->
-            with(UserApiClient.instance) {
+            with(userApiClient) {
                 if (isKakaoTalkLoginAvailable(context)) {
                     loginWithKakaoTalk(context) { _, error ->
                         error?.let {
@@ -55,13 +57,13 @@ internal class KakaoServiceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAccessToken(): Result<String> {
+    override suspend fun getKakaoAccessToken(): Result<String> {
         val token = suspendCancellableCoroutine<String?> { cancellable ->
-            val token = AuthApiClient.instance.tokenManagerProvider.manager.getToken()?.accessToken
+            val token = authApiClient.tokenManagerProvider.manager.getToken()?.accessToken
             cancellable.resume(token)
         }
 
         return token?.let { Result.success(token) }
-            ?: Result.failure(SignInError.AccessTokenExpired)
+            ?: Result.failure(SignInErrorData.AccessTokenExpired)
     }
 }
