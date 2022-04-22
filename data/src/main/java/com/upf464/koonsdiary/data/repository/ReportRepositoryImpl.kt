@@ -8,9 +8,7 @@ import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.ReportRepository
 import java.time.LocalDate
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 internal class ReportRepositoryImpl @Inject constructor(
     private val remote: ReportRemoteDataSource,
 ) : ReportRepository {
