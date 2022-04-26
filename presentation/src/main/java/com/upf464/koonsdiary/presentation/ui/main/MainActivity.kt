@@ -3,6 +3,8 @@ package com.upf464.koonsdiary.presentation.ui.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -13,10 +15,12 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.upf464.koonsdiary.presentation.ui.main.calendar.CalendarScreen
 import com.upf464.koonsdiary.presentation.ui.main.components.BottomNavigationBar
 import com.upf464.koonsdiary.presentation.ui.main.components.MainNavigationItem
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsDiaryTheme
@@ -67,8 +71,10 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
-                    ) {
-                        Navigation(navController = navController)
+                    ) { innerPadding ->
+                        Box(modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())) {
+                            Navigation(navController = navController)
+                        }
                     }
                 }
             }
@@ -82,7 +88,9 @@ fun Navigation(navController: NavHostController) {
         navController = navController,
         startDestination = MainScreen.CALENDAR.route
     ) {
-        composable(route = MainScreen.CALENDAR.route) { }
+        composable(route = MainScreen.CALENDAR.route) {
+            CalendarScreen()
+        }
         composable(route = MainScreen.SHARE.route) { }
         composable(route = MainScreen.COTTON.route) { }
         composable(route = MainScreen.REPORT.route) { }
