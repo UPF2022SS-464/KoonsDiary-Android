@@ -5,6 +5,7 @@ import com.upf464.koonsdiary.domain.model.DiaryPreview
 
 internal fun DiaryPreviewData.toDomain() = DiaryPreview(
     id = id,
+    date = date,
     content = content,
     imagePath = imagePath
 )
