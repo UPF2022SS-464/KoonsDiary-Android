@@ -4,6 +4,7 @@ import com.upf464.koonsdiary.domain.model.Diary
 import com.upf464.koonsdiary.domain.model.DiaryPreview
 import com.upf464.koonsdiary.domain.model.Sentiment
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 interface DiaryRepository {
 
@@ -17,7 +18,7 @@ interface DiaryRepository {
 
     suspend fun fetchDiary(diaryId: Int): Result<Diary>
 
-    suspend fun fetchDiaryPreview(diaryId: Int): Result<DiaryPreview>
+    suspend fun fetchDiaryPreview(date: LocalDate): Result<DiaryPreview>
 
     fun fetchMonthlySentimentFlow(year: Int, month: Int): Flow<Result<List<Sentiment?>>>
 }

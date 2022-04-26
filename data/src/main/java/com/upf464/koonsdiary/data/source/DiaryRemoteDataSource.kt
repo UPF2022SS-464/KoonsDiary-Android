@@ -2,6 +2,7 @@ package com.upf464.koonsdiary.data.source
 
 import com.upf464.koonsdiary.data.model.DiaryData
 import com.upf464.koonsdiary.data.model.DiaryPreviewData
+import java.time.LocalDate
 
 interface DiaryRemoteDataSource {
 
@@ -15,7 +16,7 @@ interface DiaryRemoteDataSource {
 
     suspend fun fetchDiary(diaryId: Int): Result<DiaryData>
 
-    suspend fun fetchDiaryPreview(diaryId: Int): Result<DiaryPreviewData>
+    suspend fun fetchDiaryPreview(date: LocalDate): Result<DiaryPreviewData>
 
     suspend fun fetchMonthlySentiment(year: Int, month: Int): Result<List<Int?>>
 }

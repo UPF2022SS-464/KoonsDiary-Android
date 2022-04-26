@@ -35,12 +35,13 @@ internal class DiaryRemoteDevDataSourceImpl @Inject constructor() : DiaryRemoteD
         )
     }
 
-    override suspend fun fetchDiaryPreview(diaryId: Int): Result<DiaryPreviewData> {
+    override suspend fun fetchDiaryPreview(date: LocalDate): Result<DiaryPreviewData> {
         return Result.success(
             DiaryPreviewData(
                 id = 1,
-                content = "",
-                imagePath = ""
+                date = date,
+                content = "content",
+                imagePath = "imagePath"
             )
         )
     }

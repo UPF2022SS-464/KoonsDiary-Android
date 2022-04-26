@@ -11,6 +11,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.time.LocalDate
 
 class FetchDiaryPreviewUseCaseTest {
 
@@ -27,9 +28,9 @@ class FetchDiaryPreviewUseCaseTest {
     fun invoke_validDiaryId_isSuccess(): Unit = runBlocking {
         coEvery {
             diaryRepository.fetchDiaryPreview(any())
-        } returns Result.success(DiaryPreview(1, "", ""))
+        } returns Result.success(DiaryPreview(1, LocalDate.of(2022, 4, 26), "", ""))
 
-        val result = useCase(FetchDiaryPreviewUseCase.Request(1))
+        val result = useCase(FetchDiaryPreviewUseCase.Request(LocalDate.of(2022, 4, 26)))
 
         assertTrue(result.isSuccess)
         assertEquals(1, result.getOrNull()?.preview?.id)
@@ -39,11 +40,11 @@ class FetchDiaryPreviewUseCaseTest {
     fun invoke_invalidDiaryId_isFailure(): Unit = runBlocking {
         coEvery {
             diaryRepository.fetchDiaryPreview(any())
-        } returns Result.failure(DiaryError.InvalidDiaryId)
+        } returns Result.failure(DiaryError.NoPreview)
 
-        val result = useCase(FetchDiaryPreviewUseCase.Request(1))
+        val result = useCase(FetchDiaryPreviewUseCase.Request(LocalDate.of(2022, 4, 26)))
 
         assertTrue(result.isFailure)
-        assertEquals(DiaryError.InvalidDiaryId, result.exceptionOrNull())
+        assertEquals(DiaryError.NoPreview, result.exceptionOrNull())
     }
 }

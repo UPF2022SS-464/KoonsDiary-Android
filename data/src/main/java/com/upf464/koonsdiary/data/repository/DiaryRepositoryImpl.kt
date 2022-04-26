@@ -13,6 +13,7 @@ import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.time.LocalDate
 import javax.inject.Inject
 
 internal class DiaryRepositoryImpl @Inject constructor(
@@ -59,8 +60,8 @@ internal class DiaryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchDiaryPreview(diaryId: Int): Result<DiaryPreview> {
-        return remote.fetchDiaryPreview(diaryId).map { diaryPreview ->
+    override suspend fun fetchDiaryPreview(date: LocalDate): Result<DiaryPreview> {
+        return remote.fetchDiaryPreview(date).map { diaryPreview ->
             diaryPreview.toDomain()
         }.errorMap { error ->
             if (error is ErrorData) error.toDomain()

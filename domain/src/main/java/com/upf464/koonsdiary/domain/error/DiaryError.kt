@@ -8,4 +8,6 @@ sealed class DiaryError(
     object EmptyContent : DiaryError()
 
     object InvalidDiaryId : DiaryError()
+
+    object NoPreview : DiaryError()
 }
