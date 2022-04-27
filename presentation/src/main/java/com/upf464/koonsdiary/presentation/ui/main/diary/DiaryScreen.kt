@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.upf464.koonsdiary.presentation.common.Constants
 import com.upf464.koonsdiary.presentation.ui.main.diary.calendar.CalendarScreen
+import com.upf464.koonsdiary.presentation.ui.main.diary.detail.DiaryDetailScreen
 
 @Composable
 fun DiaryScreen() {
@@ -23,6 +24,8 @@ fun Navigation(navController: NavHostController) {
         composable(route = DiaryNavigation.CALENDAR.route) {
             CalendarScreen(navController = navController)
         }
-        composable(route = DiaryNavigation.DETAIL.route + "/{${Constants.PARAM_DIARY_ID}}") { }
+        composable(route = DiaryNavigation.DETAIL.route + "/{${Constants.PARAM_DIARY_ID}}") {
+            DiaryDetailScreen()
+        }
     }
 }

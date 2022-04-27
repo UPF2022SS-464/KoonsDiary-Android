@@ -22,7 +22,7 @@ internal class DiaryDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val diaryId = savedStateHandle.get<Int>(Constants.PARAM_DIARY_ID) ?: -1
+    private val diaryId = savedStateHandle.get<String>(Constants.PARAM_DIARY_ID)?.toInt() ?: -1
 
     private val _diaryStateFlow = MutableStateFlow<DiaryDetailState>(DiaryDetailState.Loading)
     val diaryStateFlow = _diaryStateFlow.asStateFlow()
