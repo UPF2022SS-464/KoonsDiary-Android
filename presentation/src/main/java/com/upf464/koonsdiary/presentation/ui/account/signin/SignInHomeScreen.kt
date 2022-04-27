@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.upf464.koonsdiary.presentation.ui.account.SignInScreen
+import com.upf464.koonsdiary.presentation.ui.account.SignInNavigation
 
 @Composable
 internal fun SignInHomeScreen(
@@ -25,13 +25,13 @@ internal fun SignInHomeScreen(
         viewModel.eventFlow.collect { event ->
             when (event) {
                 SignInHomeEvent.NavigateToEmailSignIn ->
-                    navController.navigate(SignInScreen.SIGN_IN_EMAIL.route)
+                    navController.navigate(SignInNavigation.SIGN_IN_EMAIL.route)
                 SignInHomeEvent.NavigateToEmailSignUp ->
-                    navController.navigate(SignInScreen.SIGN_UP_EMAIL.route)
+                    navController.navigate(SignInNavigation.SIGN_UP_EMAIL.route)
                 SignInHomeEvent.Success ->
                     Toast.makeText(context, "로그인 성공", Toast.LENGTH_LONG).show()
                 SignInHomeEvent.NavigateToKakaoSignUp ->
-                    navController.navigate(SignInScreen.SIGN_UP_KAKAO.route)
+                    navController.navigate(SignInNavigation.SIGN_UP_KAKAO.route)
                 SignInHomeEvent.UnknownError ->
                     Toast.makeText(context, "에러 발생", Toast.LENGTH_LONG).show()
             }

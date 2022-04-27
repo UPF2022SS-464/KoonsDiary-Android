@@ -1,6 +1,6 @@
-package com.upf464.koonsdiary.presentation.ui.main.calendar
+package com.upf464.koonsdiary.presentation.ui.main.diary.calendar
 
-import com.upf464.koonsdiary.presentation.model.calendar.DateModel
+import com.upf464.koonsdiary.presentation.model.diary.calendar.DateModel
 
 sealed class CalendarState {
 

@@ -26,18 +26,18 @@ class SignInActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = SignInScreen.SIGN_IN_HOME.route
+                        startDestination = SignInNavigation.SIGN_IN_HOME.route
                     ) {
-                        composable(route = SignInScreen.SIGN_IN_HOME.route) {
+                        composable(route = SignInNavigation.SIGN_IN_HOME.route) {
                             SignInHomeScreen(navController = navController)
                         }
-                        composable(route = SignInScreen.SIGN_IN_EMAIL.route) {
+                        composable(route = SignInNavigation.SIGN_IN_EMAIL.route) {
                             EmailSignInScreen()
                         }
-                        composable(route = SignInScreen.SIGN_UP_KAKAO.route) {
+                        composable(route = SignInNavigation.SIGN_UP_KAKAO.route) {
                             KakaoSignUpScreen()
                         }
-                        composable(route = SignInScreen.SIGN_UP_EMAIL.route) {
+                        composable(route = SignInNavigation.SIGN_UP_EMAIL.route) {
                             SignUpScreen()
                         }
                     }

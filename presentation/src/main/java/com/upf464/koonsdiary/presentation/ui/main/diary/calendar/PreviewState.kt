@@ -1,6 +1,6 @@
-package com.upf464.koonsdiary.presentation.ui.main.calendar
+package com.upf464.koonsdiary.presentation.ui.main.diary.calendar
 
-import com.upf464.koonsdiary.presentation.model.calendar.PreviewModel
+import com.upf464.koonsdiary.presentation.model.diary.calendar.PreviewModel
 import java.time.LocalDate
 
 sealed class PreviewState {
