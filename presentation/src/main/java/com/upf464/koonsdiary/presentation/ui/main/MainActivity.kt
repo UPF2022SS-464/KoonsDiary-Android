@@ -16,13 +16,15 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.upf464.koonsdiary.presentation.ui.main.calendar.CalendarScreen
+import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.ui.main.components.BottomNavigationBar
 import com.upf464.koonsdiary.presentation.ui.main.components.MainNavigationItem
+import com.upf464.koonsdiary.presentation.ui.main.diary.DiaryScreen
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsDiaryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,29 +42,29 @@ class MainActivity : ComponentActivity() {
                             BottomNavigationBar(
                                 itemList = listOf(
                                     MainNavigationItem(
-                                        name = "Calendar",
+                                        name = stringResource(id = R.string.bottomBar_diary),
                                         icon = Icons.Default.Home,
-                                        route = MainScreen.CALENDAR.route
+                                        route = MainNavigation.DIARY.route
                                     ),
                                     MainNavigationItem(
-                                        name = "Share",
+                                        name = stringResource(id = R.string.bottomBar_share),
                                         icon = Icons.Default.Share,
-                                        route = MainScreen.SHARE.route
+                                        route = MainNavigation.SHARE.route
                                     ),
                                     MainNavigationItem(
-                                        name = "Cotton",
+                                        name = stringResource(id = R.string.bottomBar_cotton),
                                         icon = Icons.Default.Star,
-                                        route = MainScreen.COTTON.route
+                                        route = MainNavigation.COTTON.route
                                     ),
                                     MainNavigationItem(
-                                        name = "Report",
+                                        name = stringResource(id = R.string.bottomBar_report),
                                         icon = Icons.Default.Edit,
-                                        route = MainScreen.REPORT.route
+                                        route = MainNavigation.REPORT.route
                                     ),
                                     MainNavigationItem(
-                                        name = "Notification",
+                                        name = stringResource(id = R.string.bottomBar_notification),
                                         icon = Icons.Default.Notifications,
-                                        route = MainScreen.NOTIFICATION.route
+                                        route = MainNavigation.NOTIFICATION.route
                                     ),
                                 ),
                                 navController = navController,
@@ -86,14 +88,14 @@ class MainActivity : ComponentActivity() {
 fun Navigation(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = MainScreen.CALENDAR.route
+        startDestination = MainNavigation.DIARY.route
     ) {
-        composable(route = MainScreen.CALENDAR.route) {
-            CalendarScreen()
+        composable(route = MainNavigation.DIARY.route) {
+            DiaryScreen()
         }
-        composable(route = MainScreen.SHARE.route) { }
-        composable(route = MainScreen.COTTON.route) { }
-        composable(route = MainScreen.REPORT.route) { }
-        composable(route = MainScreen.NOTIFICATION.route) { }
+        composable(route = MainNavigation.SHARE.route) { }
+        composable(route = MainNavigation.COTTON.route) { }
+        composable(route = MainNavigation.REPORT.route) { }
+        composable(route = MainNavigation.NOTIFICATION.route) { }
     }
 }

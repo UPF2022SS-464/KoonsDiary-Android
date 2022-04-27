@@ -4,4 +4,10 @@
     <string name="biometric_cancel">PIN으로 잠금해제</string>
 
     <string name="calendar_preview_monthDay">%d월 %d일</string>
+
+    <string name="bottomBar_diary">일기</string>
+    <string name="bottomBar_share">공유일기</string>
+    <string name="bottomBar_cotton">솜사탕</string>
+    <string name="bottomBar_report">보고서</string>
+    <string name="bottomBar_notification">알림</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.upf464.koonsdiary.presentation.model.calendar
+package com.upf464.koonsdiary.presentation.model.diary.calendar
 
 import java.time.LocalDate
 

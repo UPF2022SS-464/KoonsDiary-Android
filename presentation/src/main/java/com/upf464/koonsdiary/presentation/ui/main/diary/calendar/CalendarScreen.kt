@@ -1,4 +1,4 @@
-package com.upf464.koonsdiary.presentation.ui.main.calendar
+package com.upf464.koonsdiary.presentation.ui.main.diary.calendar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,13 +32,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.upf464.koonsdiary.presentation.R
-import com.upf464.koonsdiary.presentation.model.calendar.PreviewModel
+import com.upf464.koonsdiary.presentation.model.diary.calendar.PreviewModel
+import com.upf464.koonsdiary.presentation.ui.main.diary.DiaryNavigation
 import java.time.LocalDate
 
 @Composable
 internal fun CalendarScreen(
+    navController: NavController,
     viewModel: CalendarViewModel = hiltViewModel()
 ) {
     val calendarState by viewModel.calendarStateFlow.collectAsState()
@@ -48,7 +51,7 @@ internal fun CalendarScreen(
         viewModel.eventFlow.collect { event ->
             when (event) {
                 is CalendarEvent.NavigateToDetail -> {
-                    /* TODO("일기 상세 화면 실행") */
+                    navController.navigate(DiaryNavigation.DETAIL.route + "/${event.diaryId}")
                 }
                 else -> {
                     /* TODO("일기 작성 화면 실행") */
@@ -77,6 +80,8 @@ internal fun CalendarScreen(
     onNewDiaryClicked: () -> Unit
 ) {
     Column {
+        Text(text = "캘린더입니다.")
+        
         when (calendarState) {
             is CalendarState.Loading -> { }
             is CalendarState.Success -> { }

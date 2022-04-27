@@ -1,12 +1,12 @@
-package com.upf464.koonsdiary.presentation.ui.main.calendar
+package com.upf464.koonsdiary.presentation.ui.main.diary.calendar
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.usecase.calendar.FetchCalendarFlowUseCase
 import com.upf464.koonsdiary.domain.usecase.diary.FetchDiaryPreviewUseCase
-import com.upf464.koonsdiary.presentation.model.calendar.DateModel
-import com.upf464.koonsdiary.presentation.model.calendar.PreviewModel
+import com.upf464.koonsdiary.presentation.model.diary.calendar.DateModel
+import com.upf464.koonsdiary.presentation.model.diary.calendar.PreviewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -107,6 +107,7 @@ internal class CalendarViewModel @Inject constructor(
         if (previewState is PreviewState.Success) {
             _eventFlow.tryEmit(CalendarEvent.NavigateToDetail(previewState.model.diaryId))
         }
+        _eventFlow.tryEmit(CalendarEvent.NavigateToDetail(2))
     }
 
     fun newDiary() {
