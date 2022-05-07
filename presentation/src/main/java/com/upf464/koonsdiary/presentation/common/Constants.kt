@@ -11,4 +11,5 @@ object Constants {
     const val SIGN_UP_DEBOUNCE_TIME = 1000L
 
     const val PARAM_DIARY_ID = "diaryId"
+    const val PARAM_DATE = "date"
 }
