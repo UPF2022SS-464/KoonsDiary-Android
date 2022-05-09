@@ -41,6 +41,9 @@ internal class AddDiaryViewModel @Inject constructor(
     private val _imageListFlow = MutableStateFlow<List<DiaryImageModel>>(emptyList())
     val imageListFlow = _imageListFlow.asStateFlow()
 
+    private val _imageDialogStateFlow = MutableStateFlow<ImageDialogState>(ImageDialogState.Closed)
+    val imageDialogStateFlow = _imageDialogStateFlow.asStateFlow()
+
     private val _sentimentStateFlow = MutableStateFlow<SentimentState>(SentimentState.None)
     val sentimentStateFlow = _sentimentStateFlow.asStateFlow()
 
@@ -118,9 +121,26 @@ internal class AddDiaryViewModel @Inject constructor(
         _imageListFlow.value = _imageListFlow.value + DiaryImageModel(imagePath)
     }
 
+    fun openImageDialog(index: Int) {
+        _imageDialogStateFlow.value = ImageDialogState.Opened(index)
+    }
+
+    fun closeImageDialog() {
+        _imageDialogStateFlow.value = ImageDialogState.Closed
+    }
+
+    fun deleteImage(index: Int) {
+        val imageList = imageListFlow.value
+        _imageListFlow.value = imageList.subList(0, index) + imageList.subList(index + 1, imageList.size)
+        _imageDialogStateFlow.value = ImageDialogState.Closed
+    }
+
     fun changeImage(index: Int, imagePath: String) {
         val imageList = _imageListFlow.value
-        _imageListFlow.value = imageList.subList(0, index) + DiaryImageModel(imagePath) + imageList.subList(index + 1, imageList.size)
+        _imageListFlow.value = imageList.subList(0, index) +
+                imageList[index].copy(imagePath = imagePath) +
+                imageList.subList(index + 1, imageList.size)
+        _imageDialogStateFlow.value = ImageDialogState.Closed
     }
 
     fun analyzeSentiment() {
