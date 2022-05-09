@@ -138,7 +138,7 @@ fun PreviewItem(
                 modifier = Modifier.padding(vertical = 20.dp)
             ) {
                 Text(
-                    text = stringResource(id = R.string.calendar_preview_monthDay, model.date.monthValue, model.date.dayOfMonth),
+                    text = stringResource(id = R.string.month_day, model.date.monthValue, model.date.dayOfMonth),
                     modifier = Modifier.padding(20.dp, 4.dp)
                 )
                 AsyncImage(
@@ -178,7 +178,7 @@ fun PreviewLoading(
             .padding(20.dp)
     ) {
         Text(
-            text = stringResource(id = R.string.calendar_preview_monthDay, date.monthValue, date.dayOfMonth),
+            text = stringResource(id = R.string.month_day, date.monthValue, date.dayOfMonth),
             modifier = Modifier.padding(start = 20.dp, top = 4.dp)
         )
         Row(

@@ -9,7 +9,7 @@
     <string name="bottomBar_report">보고서</string>
     <string name="bottomBar_notification">알림</string>
 
-    <string name="calendar_preview_monthDay">%d월 %d일</string>
-    <string name="diary_detail_yearMonthDay">%d년 %d월 %d일</string>
+    <string name="month_day">%d월 %d일</string>
+    <string name="year_month_day">%d년 %d월 %d일</string>
     <string name="diary_detail_sentiment">일기에 나타난 감정은 ...</string>
 </resources>

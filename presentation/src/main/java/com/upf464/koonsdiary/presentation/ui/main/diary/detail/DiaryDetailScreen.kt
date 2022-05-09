@@ -113,7 +113,7 @@ fun DetailTopBar(
 fun ColumnScope.DetailSuccessBody(model: DiaryDetailModel) {
     Text(
         text = stringResource(
-            id = R.string.diary_detail_yearMonthDay,
+            id = R.string.year_month_day,
             model.date.year,
             model.date.monthValue,
             model.date.dayOfMonth
