@@ -21,6 +21,7 @@ import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
@@ -29,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -77,6 +79,7 @@ internal fun AddDiaryScreen(
         imageList = viewModel.imageListFlow.collectAsState().value,
         sentimentState = viewModel.sentimentStateFlow.collectAsState().value,
         content = viewModel.contentFlow.collectAsState().value,
+        onContentChange = { viewModel.contentFlow.value = it },
         onSave = { viewModel.analyzeSentiment() },
         onSelectImage = { galleryLauncher.launch("image/*") },
         onAddImage = { viewModel.addImage(it) },
@@ -92,6 +95,7 @@ private fun AddDiaryScreen(
     imageList: List<DiaryImageModel>,
     sentimentState: SentimentState,
     content: String,
+    onContentChange: (String) -> Unit,
     onSave: () -> Unit,
     onSelectImage: () -> Unit,
     onAddImage: (String) -> Unit,
@@ -116,6 +120,16 @@ private fun AddDiaryScreen(
                 onSelectImage = onSelectImage,
                 onAddImage = onAddImage,
                 onImageClicked = onImageClicked
+            )
+            TextField(
+                value = content,
+                onValueChange = onContentChange,
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                )
             )
         }
     }
