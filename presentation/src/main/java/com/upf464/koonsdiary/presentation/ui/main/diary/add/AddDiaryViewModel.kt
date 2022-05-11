@@ -47,8 +47,7 @@ internal class AddDiaryViewModel @Inject constructor(
     private val _sentimentStateFlow = MutableStateFlow<SentimentState>(SentimentState.None)
     val sentimentStateFlow = _sentimentStateFlow.asStateFlow()
 
-    private val _contentFlow = MutableStateFlow("")
-    val contentFlow = _contentFlow.asStateFlow()
+    val contentFlow = MutableStateFlow("")
 
     private val _eventFlow = MutableSharedFlow<AddDiaryEvent>(extraBufferCapacity = 1)
     val eventFlow = _eventFlow.asSharedFlow()
