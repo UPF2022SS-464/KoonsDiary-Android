@@ -5,11 +5,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
@@ -17,11 +22,9 @@ import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
@@ -30,17 +33,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
 import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.model.diary.detail.DiaryImageModel
 import com.upf464.koonsdiary.presentation.ui.theme.Black100
+import com.upf464.koonsdiary.presentation.ui.theme.transparentTextColors
 import java.time.LocalDate
 
 private var galleryCallback: ((String) -> Unit)? = null
@@ -81,6 +83,7 @@ internal fun AddDiaryScreen(
         content = viewModel.contentFlow.collectAsState().value,
         onContentChange = { viewModel.contentFlow.value = it },
         onSave = { viewModel.analyzeSentiment() },
+        showAddImage = viewModel.showAddImageFlow.collectAsState(initial = true).value,
         onSelectImage = { galleryLauncher.launch("image/*") },
         onAddImage = { viewModel.addImage(it) },
         onImageClicked = { viewModel.openImageDialog(it) },
@@ -97,6 +100,7 @@ private fun AddDiaryScreen(
     content: String,
     onContentChange: (String) -> Unit,
     onSave: () -> Unit,
+    showAddImage: Boolean,
     onSelectImage: () -> Unit,
     onAddImage: (String) -> Unit,
     onImageClicked: (Int) -> Unit,
@@ -115,8 +119,9 @@ private fun AddDiaryScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             AddDiaryDate(date = date, onDateClicked = onDateClicked)
-            AddImagePager(
+            AddImageList(
                 modelList = imageList,
+                showAddImage = showAddImage,
                 onSelectImage = onSelectImage,
                 onAddImage = onAddImage,
                 onImageClicked = onImageClicked
@@ -125,11 +130,7 @@ private fun AddDiaryScreen(
                 value = content,
                 onValueChange = onContentChange,
                 modifier = Modifier.fillMaxWidth(),
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                )
+                colors = transparentTextColors()
             )
         }
     }
@@ -182,53 +183,58 @@ private fun AddDiaryDate(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun AddImagePager(
+private fun AddImageList(
     modelList: List<DiaryImageModel>,
+    showAddImage: Boolean,
     onSelectImage: () -> Unit,
     onAddImage: (String) -> Unit,
     onImageClicked: (Int) -> Unit
 ) {
-    HorizontalPager(count = modelList.size + 1) { index ->
-        val isButton = index == modelList.size
-
-        Card(
-            elevation = 4.dp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-                .then(if (isButton) Modifier.clickable {
-                    galleryCallback = onAddImage
-                    onSelectImage()
-                } else Modifier)
-        ) {
-            if (isButton) {
-                Icon(
-                    imageVector = Icons.Default.AddCircle,
-                    contentDescription = null,
-                    modifier = Modifier.padding(vertical = 16.dp)
-                )
-            } else {
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(count = modelList.size) { index ->
+            Card(elevation = 4.dp) {
                 val model = modelList[index]
                 val content = model.content.collectAsState()
-                Column {
-                    AsyncImage(
-                        model = model.imagePath,
-                        contentDescription = null,
+
+                AsyncImage(
+                    model = model.imagePath,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .height(180.dp)
+                        .clickable {
+                            onImageClicked(index)
+                        },
+                    contentScale = ContentScale.FillHeight
+                )
+            }
+        }
+
+        if (showAddImage) {
+            item {
+                Card(elevation = 4.dp) {
+                    Box(
                         modifier = Modifier
-                            .padding(8.dp)
-                            .fillMaxWidth()
+                            .height(196.dp)
                             .clickable {
-                                onImageClicked(index)
+                                galleryCallback = onAddImage
+                                onSelectImage()
                             }
-                    )
-                    TextField(
-                        value = content.value,
-                        onValueChange = { model.content.value = it },
-                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
-                    )
+                            .padding(horizontal = 48.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.AddCircle,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(36.dp)
+                        )
+                    }
                 }
             }
         }
