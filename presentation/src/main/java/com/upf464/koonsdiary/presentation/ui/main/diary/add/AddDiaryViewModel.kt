@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -40,6 +41,7 @@ internal class AddDiaryViewModel @Inject constructor(
 
     private val _imageListFlow = MutableStateFlow<List<DiaryImageModel>>(emptyList())
     val imageListFlow = _imageListFlow.asStateFlow()
+    val showAddImageFlow = imageListFlow.map { it.size < MAX_IMAGE_LIST_SIZE }
 
     private val _imageDialogStateFlow = MutableStateFlow<ImageDialogState>(ImageDialogState.Closed)
     val imageDialogStateFlow = _imageDialogStateFlow.asStateFlow()
@@ -179,5 +181,9 @@ internal class AddDiaryViewModel @Inject constructor(
                 // TODO("오류 처리")
             }
         }
+    }
+
+    companion object {
+        private const val MAX_IMAGE_LIST_SIZE = 3
     }
 }
