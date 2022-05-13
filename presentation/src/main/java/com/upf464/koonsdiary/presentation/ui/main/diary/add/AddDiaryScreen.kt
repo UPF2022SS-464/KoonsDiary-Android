@@ -2,6 +2,7 @@ package com.upf464.koonsdiary.presentation.ui.main.diary.add
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,14 +18,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -33,9 +36,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -65,12 +74,6 @@ internal fun AddDiaryScreen(
         val index = dialogState.index
         ChangeImageDialog(
             onDismiss = { viewModel.closeImageDialog() },
-            onImageChanged = {
-                galleryCallback = { uri ->
-                    viewModel.changeImage(index, uri)
-                }
-                galleryLauncher.launch("image/*")
-            },
             onImageDeleted = { viewModel.deleteImage(index) }
         )
     }
@@ -129,7 +132,9 @@ private fun AddDiaryScreen(
             TextField(
                 value = content,
                 onValueChange = onContentChange,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .defaultMinSize(minHeight = 300.dp),
                 colors = transparentTextColors()
             )
         }
@@ -244,24 +249,48 @@ private fun AddImageList(
 @Composable
 private fun ChangeImageDialog(
     onDismiss: () -> Unit,
-    onImageChanged: () -> Unit,
     onImageDeleted: () -> Unit
 ) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("해당 이미지를 변경하시겠습니까?") },
-        buttons = {
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.White)
+        ) {
+            Text(
+                text = buildAnnotatedString {
+                    append("정말로 사진을 ")
+                    withStyle(SpanStyle(color = Color.Red)) { append("삭제") }
+                    append("하시나요?")
+                },
+                modifier = Modifier.padding(top = 16.dp)
+            )
+
             Row(
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                TextButton(onClick = onImageDeleted) {
-                    Text(text = "삭제")
+                Button(
+                    onClick = onDismiss,
+                    border = BorderStroke(1.dp, Color.Green),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                ) {
+                    Text(text = "아니요", color = Color.Green)
                 }
-                TextButton(onClick = onImageChanged) {
-                    Text(text = "재선택")
+                Button(
+                    onClick = onImageDeleted,
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green, contentColor = Color.White),
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text(text = "예")
                 }
             }
         }
-    )
+    }
 }
