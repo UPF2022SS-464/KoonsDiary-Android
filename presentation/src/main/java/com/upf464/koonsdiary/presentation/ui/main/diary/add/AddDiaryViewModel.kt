@@ -136,14 +136,6 @@ internal class AddDiaryViewModel @Inject constructor(
         _imageDialogStateFlow.value = ImageDialogState.Closed
     }
 
-    fun changeImage(index: Int, imagePath: String) {
-        val imageList = _imageListFlow.value
-        _imageListFlow.value = imageList.subList(0, index) +
-                imageList[index].copy(imagePath = imagePath) +
-                imageList.subList(index + 1, imageList.size)
-        _imageDialogStateFlow.value = ImageDialogState.Closed
-    }
-
     fun analyzeSentiment() {
         viewModelScope.launch {
             analyzeSentimentUseCase(AnalyzeSentimentUseCase.Request(contentFlow.value))
