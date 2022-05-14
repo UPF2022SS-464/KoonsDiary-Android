@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.upf464.koonsdiary.presentation.common.Constants
-import com.upf464.koonsdiary.presentation.ui.main.diary.add.AddDiaryScreen
+import com.upf464.koonsdiary.presentation.ui.main.diary.add.DiaryEditorScreen
 import com.upf464.koonsdiary.presentation.ui.main.diary.calendar.CalendarScreen
 import com.upf464.koonsdiary.presentation.ui.main.diary.detail.DiaryDetailScreen
 
@@ -29,7 +29,7 @@ fun Navigation(navController: NavHostController) {
             DiaryDetailScreen()
         }
         composable(route = DiaryNavigation.ADD.route) {
-            AddDiaryScreen(navController = navController)
+            DiaryEditorScreen(navController = navController)
         }
     }
 }

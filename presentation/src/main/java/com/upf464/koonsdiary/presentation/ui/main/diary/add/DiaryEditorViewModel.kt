@@ -7,8 +7,11 @@ import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.domain.usecase.calendar.FetchCalendarFlowUseCase
 import com.upf464.koonsdiary.domain.usecase.diary.AddDiaryUseCase
 import com.upf464.koonsdiary.domain.usecase.diary.AnalyzeSentimentUseCase
+import com.upf464.koonsdiary.domain.usecase.diary.FetchDiaryUseCase
+import com.upf464.koonsdiary.domain.usecase.diary.UpdateDiaryUseCase
 import com.upf464.koonsdiary.presentation.common.Constants
 import com.upf464.koonsdiary.presentation.mapper.toDomain
+import com.upf464.koonsdiary.presentation.mapper.toEditorModel
 import com.upf464.koonsdiary.presentation.model.diary.detail.DiaryImageModel
 import com.upf464.koonsdiary.presentation.model.diary.editor.DiaryEditorModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,10 +26,12 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-internal class AddDiaryViewModel @Inject constructor(
+internal class DiaryEditorViewModel @Inject constructor(
     private val addDiaryUseCase: AddDiaryUseCase,
+    private val updateDiaryUseCase: UpdateDiaryUseCase,
     private val analyzeSentimentUseCase: AnalyzeSentimentUseCase,
     private val fetchCalendarFlowUseCase: FetchCalendarFlowUseCase,
+    private val fetchDiaryUseCase: FetchDiaryUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -42,7 +47,7 @@ internal class AddDiaryViewModel @Inject constructor(
     val contentFlow = MutableStateFlow("")
 
     val model = DiaryEditorModel(
-        id = null,
+        diaryId = savedStateHandle.get<Int>(Constants.PARAM_DIARY_ID),
         dateFlow = _dateFlow.asStateFlow(),
         imageListFlow = _imageListFlow.asStateFlow(),
         contentFlow = contentFlow.asStateFlow(),
@@ -56,8 +61,33 @@ internal class AddDiaryViewModel @Inject constructor(
     private val _sentimentStateFlow = MutableStateFlow<SentimentState>(SentimentState.Closed)
     val sentimentStateFlow = _sentimentStateFlow.asStateFlow()
 
-    private val _eventFlow = MutableSharedFlow<AddDiaryEvent>(extraBufferCapacity = 1)
+    private val _eventFlow = MutableSharedFlow<DiaryEditorEvent>(extraBufferCapacity = 1)
     val eventFlow = _eventFlow.asSharedFlow()
+
+    private val _loadingStateFlow = MutableStateFlow(
+        if (model.diaryId != null) LoadingState.Loading
+        else LoadingState.Closed
+    )
+    val loadingStateFlow = _loadingStateFlow.asStateFlow()
+
+    init {
+        model.diaryId?.let { diaryId ->
+            viewModelScope.launch {
+                fetchDiaryUseCase(FetchDiaryUseCase.Request(diaryId))
+                    .onSuccess { response ->
+                        val diary = response.diary
+                        _dateFlow.value = diary.date
+                        _imageListFlow.value = diary.imageList.map { it.toEditorModel() }
+                        contentFlow.value = diary.content
+                        model.sentiment = diary.sentiment
+                        _loadingStateFlow.value = LoadingState.Closed
+                    }
+                    .onFailure {
+                        _loadingStateFlow.value = LoadingState.Error
+                    }
+            }
+        }
+    }
 
     fun selectDate(day: Int) {
         val dateState = _availableDateStateFlow.value
@@ -175,17 +205,33 @@ internal class AddDiaryViewModel @Inject constructor(
 
     fun save() {
         viewModelScope.launch {
-            addDiaryUseCase(
-                AddDiaryUseCase.Request(
-                    date = model.dateFlow.value,
-                    content = model.contentFlow.value,
-                    sentiment = model.sentiment ?: return@launch,
-                    imageList = model.imageListFlow.value.map { it.toDomain() }
-                )
-            ).onSuccess { response ->
-                _eventFlow.tryEmit(AddDiaryEvent.Success(response.diaryId))
-            }.onFailure {
-                // TODO("오류 처리")
+            if (model.diaryId == null) {
+                addDiaryUseCase(
+                    AddDiaryUseCase.Request(
+                        date = model.dateFlow.value,
+                        content = model.contentFlow.value,
+                        sentiment = model.sentiment ?: return@launch,
+                        imageList = model.imageListFlow.value.map { it.toDomain() }
+                    )
+                ).onSuccess { response ->
+                    _eventFlow.tryEmit(DiaryEditorEvent.Success(response.diaryId))
+                }.onFailure {
+                    // TODO("오류 처리")
+                }
+            } else {
+                updateDiaryUseCase(
+                    UpdateDiaryUseCase.Request(
+                        diaryId = model.diaryId,
+                        date = model.dateFlow.value,
+                        content = model.contentFlow.value,
+                        sentiment = model.sentiment ?: return@launch,
+                        imageList = model.imageListFlow.value.map { it.toDomain() }
+                    )
+                ).onSuccess { response ->
+                    _eventFlow.tryEmit(DiaryEditorEvent.Success(response.diaryId))
+                }.onFailure {
+                    // TODO("오류 처리")
+                }
             }
         }
     }

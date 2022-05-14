@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 
 data class DiaryEditorModel(
-    val id: Int?,
+    val diaryId: Int?,
     val dateFlow: StateFlow<LocalDate>,
     val imageListFlow: StateFlow<List<DiaryImageModel>>,
     val contentFlow: StateFlow<String>,
