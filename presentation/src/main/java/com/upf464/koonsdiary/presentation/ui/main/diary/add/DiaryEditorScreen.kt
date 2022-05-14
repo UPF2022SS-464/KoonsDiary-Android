@@ -51,6 +51,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
@@ -67,8 +68,8 @@ import java.time.LocalDate
 private var galleryCallback: ((String) -> Unit)? = null
 
 @Composable
-internal fun AddDiaryScreen(
-    viewModel: AddDiaryViewModel = hiltViewModel(),
+internal fun DiaryEditorScreen(
+    viewModel: DiaryEditorViewModel = hiltViewModel(),
     navController: NavController
 ) {
     val galleryLauncher = rememberLauncherForActivityResult(
@@ -92,12 +93,18 @@ internal fun AddDiaryScreen(
     LaunchedEffect(key1 = Unit) {
         viewModel.eventFlow.collect { event ->
             when (event) {
-                is AddDiaryEvent.Success -> {
+                is DiaryEditorEvent.Success -> {
                     navController.popBackStack()
                     navController.navigate(DiaryNavigation.DETAIL.route + "/${event.diaryId}")
                 }
             }
         }
+    }
+
+    when (viewModel.loadingStateFlow.collectAsState().value) {
+        LoadingState.Loading -> LoadingDialog()
+        LoadingState.Error -> LoadingDialog(isError = true)
+        LoadingState.Closed -> {}
     }
 
     SentimentDialog(
@@ -108,7 +115,7 @@ internal fun AddDiaryScreen(
         onConfirmed = { viewModel.save() }
     )
 
-    AddDiaryScreen(
+    DiaryEditorScreen(
         availableDateState = viewModel.availableDateStateFlow.collectAsState().value,
         date = viewModel.model.dateFlow.collectAsState().value,
         imageList = viewModel.model.imageListFlow.collectAsState().value,
@@ -124,7 +131,36 @@ internal fun AddDiaryScreen(
 }
 
 @Composable
-private fun AddDiaryScreen(
+private fun LoadingDialog(
+    isError: Boolean = false
+) {
+    Dialog(
+        onDismissRequest = {},
+        DialogProperties(
+            dismissOnBackPress = false,
+            dismissOnClickOutside = false
+        )
+    ) {
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color.White)
+            .padding(
+                horizontal = 16.dp,
+                vertical = 32.dp
+            )
+        ) {
+            if (isError) {
+                Text(text = "오류가 발생했습니다.")
+            } else {
+                Text(text = "로딩중입니다...")
+            }
+        }
+    }
+}
+
+@Composable
+private fun DiaryEditorScreen(
     availableDateState: AvailableDateState,
     date: LocalDate,
     imageList: List<DiaryImageModel>,
@@ -141,7 +177,7 @@ private fun AddDiaryScreen(
         modifier = Modifier
             .fillMaxHeight()
     ) {
-        AddDiaryTopBar(onSave = onSave)
+        DiaryEditorTopBar(onSave = onSave)
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -149,8 +185,8 @@ private fun AddDiaryScreen(
                 .fillMaxHeight()
                 .verticalScroll(rememberScrollState())
         ) {
-            AddDiaryDate(date = date, onDateClicked = onDateClicked)
-            AddImageList(
+            DiaryEditorDate(date = date, onDateClicked = onDateClicked)
+            ImageLazyList(
                 modelList = imageList,
                 showAddImage = showAddImage,
                 onSelectImage = onSelectImage,
@@ -170,7 +206,7 @@ private fun AddDiaryScreen(
 }
 
 @Composable
-private fun AddDiaryTopBar(
+private fun DiaryEditorTopBar(
     onSave: () -> Unit
 ) {
     TopAppBar(
@@ -187,7 +223,7 @@ private fun AddDiaryTopBar(
 }
 
 @Composable
-private fun AddDiaryDate(
+private fun DiaryEditorDate(
     date: LocalDate,
     onDateClicked: () -> Unit
 ) {
@@ -216,7 +252,7 @@ private fun AddDiaryDate(
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun AddImageList(
+private fun ImageLazyList(
     modelList: List<DiaryImageModel>,
     showAddImage: Boolean,
     onSelectImage: () -> Unit,
