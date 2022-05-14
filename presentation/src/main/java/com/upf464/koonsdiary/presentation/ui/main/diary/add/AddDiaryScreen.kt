@@ -37,6 +37,7 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,11 +52,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.model.diary.detail.DiaryImageModel
+import com.upf464.koonsdiary.presentation.ui.main.diary.DiaryNavigation
 import com.upf464.koonsdiary.presentation.ui.theme.Black100
 import com.upf464.koonsdiary.presentation.ui.theme.colorOf
 import com.upf464.koonsdiary.presentation.ui.theme.transparentTextColors
@@ -65,7 +68,8 @@ private var galleryCallback: ((String) -> Unit)? = null
 
 @Composable
 internal fun AddDiaryScreen(
-    viewModel: AddDiaryViewModel = hiltViewModel()
+    viewModel: AddDiaryViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val galleryLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
@@ -83,6 +87,17 @@ internal fun AddDiaryScreen(
             onDismiss = { viewModel.closeImageDialog() },
             onImageDeleted = { viewModel.deleteImage(index) }
         )
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.eventFlow.collect { event ->
+            when (event) {
+                is AddDiaryEvent.Success -> {
+                    navController.popBackStack()
+                    navController.navigate(DiaryNavigation.DETAIL.route + "/${event.diaryId}")
+                }
+            }
+        }
     }
 
     SentimentDialog(

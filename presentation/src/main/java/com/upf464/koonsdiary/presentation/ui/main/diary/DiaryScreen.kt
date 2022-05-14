@@ -29,7 +29,7 @@ fun Navigation(navController: NavHostController) {
             DiaryDetailScreen()
         }
         composable(route = DiaryNavigation.ADD.route) {
-            AddDiaryScreen()
+            AddDiaryScreen(navController = navController)
         }
     }
 }
