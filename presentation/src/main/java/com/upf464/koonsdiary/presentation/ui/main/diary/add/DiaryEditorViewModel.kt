@@ -40,9 +40,11 @@ internal class DiaryEditorViewModel @Inject constructor(
     private val _availableDateStateFlow = MutableStateFlow<AvailableDateState>(AvailableDateState.Closed)
     val availableDateStateFlow = _availableDateStateFlow.asStateFlow()
 
-    private val _dateFlow = MutableStateFlow(savedStateHandle.get<String>(Constants.PARAM_DATE)?.let {
-        LocalDate.parse(it)
-    } ?: LocalDate.now())
+    private val _dateFlow = MutableStateFlow(
+        savedStateHandle.get<String>(Constants.PARAM_DATE)?.let {
+            LocalDate.parse(it)
+        } ?: LocalDate.now()
+    )
     private val _imageListFlow = MutableStateFlow<List<DiaryImageModel>>(emptyList())
     val contentFlow = MutableStateFlow("")
 
