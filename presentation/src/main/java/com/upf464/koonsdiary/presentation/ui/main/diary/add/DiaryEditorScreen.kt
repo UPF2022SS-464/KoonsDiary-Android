@@ -144,14 +144,15 @@ private fun LoadingDialog(
             dismissOnClickOutside = false
         )
     ) {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(Color.White)
-            .padding(
-                horizontal = 16.dp,
-                vertical = 32.dp
-            )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.White)
+                .padding(
+                    horizontal = 16.dp,
+                    vertical = 32.dp
+                )
         ) {
             if (isError) {
                 Text(text = "오류가 발생했습니다.")
@@ -431,8 +432,7 @@ private fun CustomDialog(
     Dialog(
         onDismissRequest = onDismiss
     ) {
-        Box(
-        ) {
+        Box {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier

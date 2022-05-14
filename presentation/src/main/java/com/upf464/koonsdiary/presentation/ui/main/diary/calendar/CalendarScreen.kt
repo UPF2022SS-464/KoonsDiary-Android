@@ -29,7 +29,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -81,10 +80,10 @@ internal fun CalendarScreen(
 ) {
     Column {
         Text(text = "캘린더입니다.")
-        
+
         when (calendarState) {
-            is CalendarState.Loading -> { }
-            is CalendarState.Success -> { }
+            is CalendarState.Loading -> {}
+            is CalendarState.Success -> {}
             is CalendarState.UnknownError -> {
                 ErrorDialog()
                 return
@@ -190,18 +189,4 @@ fun PreviewLoading(
             CircularProgressIndicator()
         }
     }
-}
-
-@Preview
-@Composable
-fun Preview() {
-//    PreviewLoading(year = 2022, month = 4, day = 26)
-    PreviewItem(
-        PreviewModel(
-            1,
-            LocalDate.of(2022, 4, 26),
-            "정말 긴 문장인데 이게 다 나오는지 확인하기 위함임 이걸 복붙해야겠지 정말 긴 문장인데 이게 다 나오는지 확인하기 위함임 이걸 복붙해야겠지 정말 긴 문장인데 이게 다 나오는지 확인하기 위함임 이걸 복붙해야겠지 정말 긴 문장인데 이게 다 나오는지 확인하기 위함임 이걸 복붙해야겠지 정말 긴 문장인데 이게 다 나오는지 확인하기 위함임 이걸 복붙해야겠지 ",
-            "https://news.samsungdisplay.com/wp-content/uploads/2018/08/8.jpg"
-        )
-    )
 }
