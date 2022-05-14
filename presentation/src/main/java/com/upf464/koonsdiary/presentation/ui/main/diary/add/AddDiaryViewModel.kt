@@ -10,6 +10,7 @@ import com.upf464.koonsdiary.domain.usecase.diary.AnalyzeSentimentUseCase
 import com.upf464.koonsdiary.presentation.common.Constants
 import com.upf464.koonsdiary.presentation.mapper.toDomain
 import com.upf464.koonsdiary.presentation.model.diary.detail.DiaryImageModel
+import com.upf464.koonsdiary.presentation.model.diary.editor.DiaryEditorModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -37,21 +38,23 @@ internal class AddDiaryViewModel @Inject constructor(
     private val _dateFlow = MutableStateFlow(savedStateHandle.get<String>(Constants.PARAM_DATE)?.let {
         LocalDate.parse(it)
     } ?: LocalDate.now())
-    val dateFlow = _dateFlow.asStateFlow()
-
     private val _imageListFlow = MutableStateFlow<List<DiaryImageModel>>(emptyList())
-    val imageListFlow = _imageListFlow.asStateFlow()
-    val showAddImageFlow = imageListFlow.map { it.size < MAX_IMAGE_LIST_SIZE }
+    val contentFlow = MutableStateFlow("")
 
+    val model = DiaryEditorModel(
+        id = null,
+        dateFlow = _dateFlow.asStateFlow(),
+        imageListFlow = _imageListFlow.asStateFlow(),
+        contentFlow = contentFlow.asStateFlow(),
+        sentiment = null
+    )
+
+    val showAddImageFlow = model.imageListFlow.map { it.size < MAX_IMAGE_LIST_SIZE }
     private val _imageDialogStateFlow = MutableStateFlow<ImageDialogState>(ImageDialogState.Closed)
     val imageDialogStateFlow = _imageDialogStateFlow.asStateFlow()
 
-    private var sentiment: Sentiment? = null
-
     private val _sentimentStateFlow = MutableStateFlow<SentimentState>(SentimentState.Closed)
     val sentimentStateFlow = _sentimentStateFlow.asStateFlow()
-
-    val contentFlow = MutableStateFlow("")
 
     private val _eventFlow = MutableSharedFlow<AddDiaryEvent>(extraBufferCapacity = 1)
     val eventFlow = _eventFlow.asSharedFlow()
@@ -67,7 +70,7 @@ internal class AddDiaryViewModel @Inject constructor(
 
     fun toggleAvailableDate() {
         if (availableDateStateFlow.value == AvailableDateState.Closed) {
-            val date = dateFlow.value
+            val date = model.dateFlow.value
             _availableDateStateFlow.value = AvailableDateState.Loading(date.year, date.monthValue)
             fetchAvailableDate(date.year, date.monthValue)
         } else {
@@ -133,7 +136,7 @@ internal class AddDiaryViewModel @Inject constructor(
     }
 
     fun deleteImage(index: Int) {
-        val imageList = imageListFlow.value
+        val imageList = model.imageListFlow.value
         _imageListFlow.value = imageList.subList(0, index) + imageList.subList(index + 1, imageList.size)
         _imageDialogStateFlow.value = ImageDialogState.Closed
     }
@@ -144,11 +147,11 @@ internal class AddDiaryViewModel @Inject constructor(
 
     fun selectSentiment(sentiment: Sentiment) {
         _sentimentStateFlow.value = SentimentState.Selected(sentiment)
-        this.sentiment = sentiment
+        model.sentiment = sentiment
     }
 
     fun openSentimentDialog() {
-        sentiment?.let { sentiment ->
+        model.sentiment?.let { sentiment ->
             _sentimentStateFlow.value = SentimentState.Selected(sentiment)
         } ?: analyzeSentiment()
     }
@@ -158,7 +161,7 @@ internal class AddDiaryViewModel @Inject constructor(
             analyzeSentimentUseCase(AnalyzeSentimentUseCase.Request(contentFlow.value))
                 .onSuccess { response ->
                     _sentimentStateFlow.value = SentimentState.Recommended(response.sentiment)
-                    sentiment = response.sentiment
+                    model.sentiment = response.sentiment
                 }
                 .onFailure {
                     // TODO("오류 처리")
@@ -174,10 +177,10 @@ internal class AddDiaryViewModel @Inject constructor(
         viewModelScope.launch {
             addDiaryUseCase(
                 AddDiaryUseCase.Request(
-                    date = dateFlow.value,
-                    content = contentFlow.value,
-                    sentiment = sentiment ?: return@launch,
-                    imageList = imageListFlow.value.map { it.toDomain() }
+                    date = model.dateFlow.value,
+                    content = model.contentFlow.value,
+                    sentiment = model.sentiment ?: return@launch,
+                    imageList = model.imageListFlow.value.map { it.toDomain() }
                 )
             ).onSuccess { response ->
                 _eventFlow.tryEmit(AddDiaryEvent.Success(response.diaryId))

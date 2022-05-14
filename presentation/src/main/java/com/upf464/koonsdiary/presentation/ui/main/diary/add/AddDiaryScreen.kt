@@ -110,8 +110,8 @@ internal fun AddDiaryScreen(
 
     AddDiaryScreen(
         availableDateState = viewModel.availableDateStateFlow.collectAsState().value,
-        date = viewModel.dateFlow.collectAsState().value,
-        imageList = viewModel.imageListFlow.collectAsState().value,
+        date = viewModel.model.dateFlow.collectAsState().value,
+        imageList = viewModel.model.imageListFlow.collectAsState().value,
         content = viewModel.contentFlow.collectAsState().value,
         onContentChange = { viewModel.contentFlow.value = it },
         onSave = { viewModel.openSentimentDialog() },
