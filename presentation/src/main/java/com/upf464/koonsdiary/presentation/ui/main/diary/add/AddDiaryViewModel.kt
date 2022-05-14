@@ -46,7 +46,9 @@ internal class AddDiaryViewModel @Inject constructor(
     private val _imageDialogStateFlow = MutableStateFlow<ImageDialogState>(ImageDialogState.Closed)
     val imageDialogStateFlow = _imageDialogStateFlow.asStateFlow()
 
-    private val _sentimentStateFlow = MutableStateFlow<SentimentState>(SentimentState.None)
+    private var sentiment: Sentiment? = null
+
+    private val _sentimentStateFlow = MutableStateFlow<SentimentState>(SentimentState.Closed)
     val sentimentStateFlow = _sentimentStateFlow.asStateFlow()
 
     val contentFlow = MutableStateFlow("")
@@ -136,11 +138,27 @@ internal class AddDiaryViewModel @Inject constructor(
         _imageDialogStateFlow.value = ImageDialogState.Closed
     }
 
-    fun analyzeSentiment() {
+    fun startSelectSentiment() {
+        _sentimentStateFlow.value = SentimentState.InSelect
+    }
+
+    fun selectSentiment(sentiment: Sentiment) {
+        _sentimentStateFlow.value = SentimentState.Selected(sentiment)
+        this.sentiment = sentiment
+    }
+
+    fun openSentimentDialog() {
+        sentiment?.let { sentiment ->
+            _sentimentStateFlow.value = SentimentState.Selected(sentiment)
+        } ?: analyzeSentiment()
+    }
+
+    private fun analyzeSentiment() {
         viewModelScope.launch {
             analyzeSentimentUseCase(AnalyzeSentimentUseCase.Request(contentFlow.value))
                 .onSuccess { response ->
                     _sentimentStateFlow.value = SentimentState.Recommended(response.sentiment)
+                    sentiment = response.sentiment
                 }
                 .onFailure {
                     // TODO("오류 처리")
@@ -148,15 +166,15 @@ internal class AddDiaryViewModel @Inject constructor(
         }
     }
 
-    fun selectSentiment(sentiment: Sentiment) {
-        _sentimentStateFlow.value = SentimentState.Selected(sentiment)
+    fun closeSentimentDialog() {
+        _sentimentStateFlow.value = SentimentState.Closed
     }
 
     fun save() {
         val sentiment = when (val sentimentState = sentimentStateFlow.value) {
-            SentimentState.None -> return
             is SentimentState.Recommended -> sentimentState.sentiment
             is SentimentState.Selected -> sentimentState.sentiment
+            else -> return
         }
 
         viewModelScope.launch {
