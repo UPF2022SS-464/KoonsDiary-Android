@@ -3,6 +3,7 @@ package com.upf464.koonsdiary.presentation.ui.theme
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.upf464.koonsdiary.domain.model.Sentiment
 
 val Purple200 = Color(0xFFBB86FC)
 val Purple500 = Color(0xFF6200EE)
@@ -16,3 +17,11 @@ fun transparentTextColors() = TextFieldDefaults.textFieldColors(
     focusedIndicatorColor = Color.Transparent,
     unfocusedIndicatorColor = Color.Transparent
 )
+
+fun colorOf(sentiment: Sentiment) = when (sentiment) {
+    Sentiment.VERY_SAD -> Color(0xFFEB7487)
+    Sentiment.SAD -> Color(0xFFF7C7C7)
+    Sentiment.NORMAL -> Color(0xFFB5D3B6)
+    Sentiment.GOOD -> Color(0xFF88B0DC)
+    Sentiment.VERY_GOOD -> Color(0xFF3F7DC6)
+}
