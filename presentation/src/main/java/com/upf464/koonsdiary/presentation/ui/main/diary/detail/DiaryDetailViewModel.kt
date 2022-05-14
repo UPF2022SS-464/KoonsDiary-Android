@@ -22,13 +22,16 @@ internal class DiaryDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val diaryId = savedStateHandle.get<String>(Constants.PARAM_DIARY_ID)?.toInt() ?: -1
+    val diaryId = savedStateHandle.get<String>(Constants.PARAM_DIARY_ID)?.toInt() ?: -1
 
     private val _diaryStateFlow = MutableStateFlow<DiaryDetailState>(DiaryDetailState.Loading)
     val diaryStateFlow = _diaryStateFlow.asStateFlow()
 
     private val _eventFlow = MutableSharedFlow<DiaryDetailEvent>(extraBufferCapacity = 1)
     val eventFlow = _eventFlow.asSharedFlow()
+
+    private val _deletionStateFlow = MutableStateFlow<DetailDeletionState>(DetailDeletionState.Closed)
+    val deletionStateFlow = _deletionStateFlow.asStateFlow()
 
     init {
         fetchDiary(diaryId)
@@ -49,9 +52,9 @@ internal class DiaryDetailViewModel @Inject constructor(
         viewModelScope.launch {
             deleteDiaryUseCase(DeleteDiaryUseCase.Request(diaryId))
                 .onSuccess {
-                    _eventFlow.tryEmit(DiaryDetailEvent.Deleted)
+                    _deletionStateFlow.value = DetailDeletionState.Deleted
                 }.onFailure {
-                    _eventFlow.tryEmit(DiaryDetailEvent.DeletionError)
+                    _deletionStateFlow.value = DetailDeletionState.Error
                 }
         }
     }

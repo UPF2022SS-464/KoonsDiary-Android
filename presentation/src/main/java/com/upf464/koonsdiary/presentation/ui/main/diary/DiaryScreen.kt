@@ -20,15 +20,18 @@ fun DiaryScreen() {
 fun Navigation(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = DiaryNavigation.ADD.route
+        startDestination = DiaryNavigation.EDITOR.route
     ) {
         composable(route = DiaryNavigation.CALENDAR.route) {
             CalendarScreen(navController = navController)
         }
         composable(route = DiaryNavigation.DETAIL.route + "/{${Constants.PARAM_DIARY_ID}}") {
-            DiaryDetailScreen()
+            DiaryDetailScreen(navController = navController)
         }
-        composable(route = DiaryNavigation.ADD.route) {
+        composable(route = DiaryNavigation.EDITOR.route + "/{${Constants.PARAM_DIARY_ID}}") {
+            DiaryEditorScreen(navController = navController)
+        }
+        composable(route = DiaryNavigation.EDITOR.route) {
             DiaryEditorScreen(navController = navController)
         }
     }

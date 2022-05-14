@@ -94,6 +94,9 @@ internal fun DiaryEditorScreen(
         viewModel.eventFlow.collect { event ->
             when (event) {
                 is DiaryEditorEvent.Success -> {
+                    if (viewModel.model.diaryId != null) {
+                        navController.popBackStack()
+                    }
                     navController.popBackStack()
                     navController.navigate(DiaryNavigation.DETAIL.route + "/${event.diaryId}")
                 }
