@@ -171,18 +171,12 @@ internal class AddDiaryViewModel @Inject constructor(
     }
 
     fun save() {
-        val sentiment = when (val sentimentState = sentimentStateFlow.value) {
-            is SentimentState.Recommended -> sentimentState.sentiment
-            is SentimentState.Selected -> sentimentState.sentiment
-            else -> return
-        }
-
         viewModelScope.launch {
             addDiaryUseCase(
                 AddDiaryUseCase.Request(
                     date = dateFlow.value,
                     content = contentFlow.value,
-                    sentiment = sentiment,
+                    sentiment = sentiment ?: return@launch,
                     imageList = imageListFlow.value.map { it.toDomain() }
                 )
             ).onSuccess { response ->
