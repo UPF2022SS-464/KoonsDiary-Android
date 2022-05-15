@@ -32,7 +32,7 @@ class SignInActivity : ComponentActivity() {
                             SignInHomeScreen(navController = navController)
                         }
                         composable(route = SignInNavigation.SIGN_IN_EMAIL.route) {
-                            EmailSignInScreen()
+                            EmailSignInScreen(navController = navController)
                         }
                         composable(route = SignInNavigation.SIGN_UP_KAKAO.route) {
                             KakaoSignUpScreen()
