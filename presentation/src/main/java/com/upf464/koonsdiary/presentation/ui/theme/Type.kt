@@ -26,3 +26,19 @@ val Typography = Typography(
     )
     */
 )
+
+object KoonsTypography {
+    val H1 = TextStyle(fontSize = 40.sp, fontWeight = FontWeight.ExtraBold)
+    val H2 = TextStyle(fontSize = 32.sp, fontWeight = FontWeight.ExtraBold)
+    val H3 = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
+    val H4 = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.ExtraBold)
+    val H5 = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.ExtraBold)
+    val H6 = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.ExtraBold)
+    val H7 = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.ExtraBold)
+    val H8 = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
+
+    val BodyRegular = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Normal)
+    val BodyMedium = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Normal)
+    val BodySmall = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Normal)
+    val BodyMoreSmall = TextStyle(fontSize = 10.sp, fontWeight = FontWeight.Normal)
+}
