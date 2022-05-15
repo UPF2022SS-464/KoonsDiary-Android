@@ -8,9 +8,9 @@ import androidx.compose.material.Surface
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.upf464.koonsdiary.presentation.common.Constants
 import com.upf464.koonsdiary.presentation.ui.account.signin.EmailSignInScreen
 import com.upf464.koonsdiary.presentation.ui.account.signin.SignInHomeScreen
-import com.upf464.koonsdiary.presentation.ui.account.signup.KakaoSignUpScreen
 import com.upf464.koonsdiary.presentation.ui.account.signup.SignUpScreen
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsDiaryTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,10 +34,7 @@ class SignInActivity : ComponentActivity() {
                         composable(route = SignInNavigation.SIGN_IN_EMAIL.route) {
                             EmailSignInScreen(navController = navController)
                         }
-                        composable(route = SignInNavigation.SIGN_UP_KAKAO.route) {
-                            KakaoSignUpScreen()
-                        }
-                        composable(route = SignInNavigation.SIGN_UP_EMAIL.route) {
+                        composable(route = SignInNavigation.SIGN_UP.route + "/{${Constants.PARAM_SIGN_UP_TYPE}}") {
                             SignUpScreen()
                         }
                     }
