@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -27,16 +26,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.ui.account.SignInNavigation
+import com.upf464.koonsdiary.presentation.ui.account.components.AccountTextField
+import com.upf464.koonsdiary.presentation.ui.account.signup.SignUpType
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 
@@ -53,9 +51,9 @@ internal fun EmailSignInScreen(
                 EmailSignInEvent.Success ->
                     Toast.makeText(context, "로그인 성공", Toast.LENGTH_LONG).show()
                 EmailSignInEvent.NavigateToEmailSignUp ->
-                    navController.navigate(SignInNavigation.SIGN_UP_EMAIL.route)
+                    navController.navigate(SignInNavigation.SIGN_UP.route + "/${SignUpType.EMAIL.name}")
                 EmailSignInEvent.NavigateToKakaoSignUp ->
-                    navController.navigate(SignInNavigation.SIGN_UP_KAKAO.route)
+                    navController.navigate(SignInNavigation.SIGN_UP.route + "/${SignUpType.KAKAO.name}")
             }
         }
     }
@@ -207,40 +205,4 @@ private fun EmailSignInScreen(
             color = KoonsColor.Black100
         )
     }
-}
-
-@Composable
-private fun AccountTextField(
-    value: String,
-    onValueChanged: (String) -> Unit,
-    placeHolder: String,
-    paddingTop: Dp = 0.dp,
-    isPassword: Boolean = false
-) {
-    BasicTextField(
-        value = value,
-        onValueChange = onValueChanged,
-        textStyle = KoonsTypography.BodyRegular,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = paddingTop),
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-        decorationBox = { innerTextField ->
-            Column {
-                Box(
-                    modifier = Modifier.padding(vertical = 8.dp)
-                ) {
-                    if (value.isEmpty()) {
-                        Text(
-                            text = placeHolder,
-                            color = KoonsColor.Black40,
-                            style = KoonsTypography.BodyRegular
-                        )
-                    }
-                    innerTextField()
-                }
-                Divider(color = if (value.isEmpty()) KoonsColor.Black40 else KoonsColor.Black100)
-            }
-        }
-    )
 }

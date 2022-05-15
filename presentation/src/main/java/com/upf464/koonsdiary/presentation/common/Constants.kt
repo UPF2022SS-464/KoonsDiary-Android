@@ -12,4 +12,5 @@ object Constants {
 
     const val PARAM_DIARY_ID = "diaryId"
     const val PARAM_DATE = "date"
+    const val PARAM_SIGN_UP_TYPE = "signUpType"
 }

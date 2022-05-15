@@ -30,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.ui.account.SignInNavigation
+import com.upf464.koonsdiary.presentation.ui.account.signup.SignUpType
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 
@@ -45,11 +46,11 @@ internal fun SignInHomeScreen(
                 SignInHomeEvent.NavigateToEmailSignIn ->
                     navController.navigate(SignInNavigation.SIGN_IN_EMAIL.route)
                 SignInHomeEvent.NavigateToEmailSignUp ->
-                    navController.navigate(SignInNavigation.SIGN_UP_EMAIL.route)
+                    navController.navigate(SignInNavigation.SIGN_UP.route + "/${SignUpType.EMAIL.name}")
                 SignInHomeEvent.Success ->
                     Toast.makeText(context, "로그인 성공", Toast.LENGTH_LONG).show()
                 SignInHomeEvent.NavigateToKakaoSignUp ->
-                    navController.navigate(SignInNavigation.SIGN_UP_KAKAO.route)
+                    navController.navigate(SignInNavigation.SIGN_UP.route + "/${SignUpType.KAKAO.name}")
                 SignInHomeEvent.UnknownError ->
                     Toast.makeText(context, "에러 발생", Toast.LENGTH_LONG).show()
             }
