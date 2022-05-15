@@ -4,12 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upf464.koonsdiary.domain.error.SignInError
 import com.upf464.koonsdiary.domain.usecase.user.SignInWithAccountUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 internal class EmailSignInViewModel @Inject constructor(
     private val signInUseCase: SignInWithAccountUseCase
 ) : ViewModel() {
