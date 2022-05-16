@@ -1,5 +1,6 @@
 package com.upf464.koonsdiary.presentation.ui.account
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +13,7 @@ import com.upf464.koonsdiary.presentation.common.Constants
 import com.upf464.koonsdiary.presentation.ui.account.signin.EmailSignInScreen
 import com.upf464.koonsdiary.presentation.ui.account.signin.SignInHomeScreen
 import com.upf464.koonsdiary.presentation.ui.account.signup.SignUpScreen
+import com.upf464.koonsdiary.presentation.ui.main.MainActivity
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsDiaryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,5 +43,10 @@ class SignInActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    fun startMain() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 }
