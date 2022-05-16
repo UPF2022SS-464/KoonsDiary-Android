@@ -1,6 +1,5 @@
 package com.upf464.koonsdiary.presentation.ui.account.signin
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -32,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.upf464.koonsdiary.presentation.R
+import com.upf464.koonsdiary.presentation.ui.account.SignInActivity
 import com.upf464.koonsdiary.presentation.ui.account.SignInNavigation
 import com.upf464.koonsdiary.presentation.ui.account.components.AccountTextField
 import com.upf464.koonsdiary.presentation.ui.account.signup.SignUpType
@@ -49,7 +49,7 @@ internal fun EmailSignInScreen(
         viewModel.eventFlow.collect { event ->
             when (event) {
                 EmailSignInEvent.Success ->
-                    Toast.makeText(context, "로그인 성공", Toast.LENGTH_LONG).show()
+                    (context as? SignInActivity)?.startMain()
                 EmailSignInEvent.NavigateToEmailSignUp ->
                     navController.navigate(SignInNavigation.SIGN_UP.route + "/${SignUpType.EMAIL.name}")
                 EmailSignInEvent.NavigateToKakaoSignUp ->

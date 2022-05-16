@@ -2,7 +2,6 @@ package com.upf464.koonsdiary.presentation.ui.account.signup
 
 import android.app.Activity
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.upf464.koonsdiary.domain.model.User
+import com.upf464.koonsdiary.presentation.ui.account.SignInActivity
 import com.upf464.koonsdiary.presentation.ui.account.components.AccountTextField
 import com.upf464.koonsdiary.presentation.ui.account.signup.components.UserImageListItem
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
@@ -49,9 +49,9 @@ internal fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
 
-    (LocalContext.current as? Activity)?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-
     val context = LocalContext.current
+    (context as? Activity)?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
     LaunchedEffect(key1 = Unit) {
         viewModel.eventFlow.collect { event ->
             when (event) {
@@ -59,7 +59,7 @@ internal fun SignUpScreen(
                     // TODO()
                 }
                 SignUpEvent.Success -> {
-                    Toast.makeText(context, "회원가입 성공", Toast.LENGTH_LONG).show()
+                    (context as? SignInActivity)?.startMain()
                 }
                 SignUpEvent.UnknownError -> {
                     // TODO()
