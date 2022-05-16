@@ -1,47 +1,44 @@
 package com.upf464.koonsdiary.presentation.ui.main.components
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.compose.runtime.State
+import androidx.navigation.NavBackStackEntry
+import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
+import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 
 @Composable
 fun BottomNavigationBar(
     itemList: List<MainNavigationItem>,
-    navController: NavHostController,
-    modifier: Modifier = Modifier,
-    onItemClick: (MainNavigationItem) -> Unit
+    onItemClick: (MainNavigationItem) -> Unit,
+    backStackState: State<NavBackStackEntry?>
 ) {
-    val backStackState = navController.currentBackStackEntryAsState()
     BottomNavigation(
-        modifier = modifier
+        backgroundColor = KoonsColor.Black5
     ) {
         itemList.forEach { item ->
-            val selected = item.route == backStackState.value?.destination?.route
+            val isSelected = backStackState.value?.destination?.route == item.route
             BottomNavigationItem(
-                selected = selected,
+                selected = isSelected,
                 onClick = { onItemClick(item) },
                 icon = {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(
-                            imageVector = item.icon,
-                            contentDescription = item.name
-                        )
-                        if (selected) {
-                            Text(
-                                text = item.name,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                }
+                    Icon(
+                        painter = item.icon,
+                        contentDescription = item.name
+                    )
+                },
+                label = {
+                    Text(
+                        text = item.name,
+                        style = KoonsTypography.BodySmall
+                    )
+                },
+                alwaysShowLabel = false,
+                unselectedContentColor = KoonsColor.Black20,
+                selectedContentColor = KoonsColor.Green
             )
         }
     }

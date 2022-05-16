@@ -20,7 +20,7 @@ fun DiaryScreen() {
 fun Navigation(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = DiaryNavigation.EDITOR.route
+        startDestination = DiaryNavigation.CALENDAR.route
     ) {
         composable(route = DiaryNavigation.CALENDAR.route) {
             CalendarScreen(navController = navController)
