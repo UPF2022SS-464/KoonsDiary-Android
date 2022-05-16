@@ -8,18 +8,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.ui.main.components.BottomNavigationBar
@@ -37,40 +33,41 @@ class MainActivity : ComponentActivity() {
             KoonsDiaryTheme {
                 Surface(color = MaterialTheme.colors.background) {
                     val navController = rememberNavController()
+                    val backStackState = navController.currentBackStackEntryAsState()
                     Scaffold(
                         bottomBar = {
                             BottomNavigationBar(
                                 itemList = listOf(
                                     MainNavigationItem(
                                         name = stringResource(id = R.string.bottomBar_diary),
-                                        icon = Icons.Default.Home,
+                                        icon = painterResource(id = R.drawable.ic_calendar),
                                         route = MainNavigation.DIARY.route
                                     ),
                                     MainNavigationItem(
                                         name = stringResource(id = R.string.bottomBar_share),
-                                        icon = Icons.Default.Share,
+                                        icon = painterResource(id = R.drawable.ic_share_diary),
                                         route = MainNavigation.SHARE.route
                                     ),
                                     MainNavigationItem(
                                         name = stringResource(id = R.string.bottomBar_cotton),
-                                        icon = Icons.Default.Star,
+                                        icon = painterResource(id = R.drawable.ic_cotton),
                                         route = MainNavigation.COTTON.route
                                     ),
                                     MainNavigationItem(
                                         name = stringResource(id = R.string.bottomBar_report),
-                                        icon = Icons.Default.Edit,
+                                        icon = painterResource(id = R.drawable.ic_statistics),
                                         route = MainNavigation.REPORT.route
                                     ),
                                     MainNavigationItem(
                                         name = stringResource(id = R.string.bottomBar_notification),
-                                        icon = Icons.Default.Notifications,
+                                        icon = painterResource(id = R.drawable.ic_notification),
                                         route = MainNavigation.NOTIFICATION.route
                                     ),
                                 ),
-                                navController = navController,
                                 onItemClick = { item ->
                                     navController.navigate(item.route)
-                                }
+                                },
+                                backStackState = backStackState
                             )
                         }
                     ) { innerPadding ->
