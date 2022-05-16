@@ -3,6 +3,7 @@ package com.upf464.koonsdiary.presentation.ui.account.signin
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upf464.koonsdiary.domain.error.SignInError
+import com.upf464.koonsdiary.domain.usecase.user.AutoSignInUseCase
 import com.upf464.koonsdiary.domain.usecase.user.SignInWithKakaoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -12,11 +13,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class SignInHomeViewModel @Inject constructor(
-    private val kakaoSignInUseCase: SignInWithKakaoUseCase
+    private val kakaoSignInUseCase: SignInWithKakaoUseCase,
+    autoSignInUseCase: AutoSignInUseCase
 ) : ViewModel() {
 
     private val _eventFlow = MutableSharedFlow<SignInHomeEvent>(extraBufferCapacity = 1)
     val eventFlow = _eventFlow.asSharedFlow()
+
+    init {
+        viewModelScope.launch {
+            autoSignInUseCase()
+                .onSuccess {
+                    _eventFlow.tryEmit(SignInHomeEvent.Success)
+                }
+        }
+    }
 
     fun signInWithEmail() {
         _eventFlow.tryEmit(SignInHomeEvent.NavigateToEmailSignIn)
