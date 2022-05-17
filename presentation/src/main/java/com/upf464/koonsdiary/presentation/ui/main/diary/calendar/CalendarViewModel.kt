@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.upf464.koonsdiary.domain.error.DiaryError
 import com.upf464.koonsdiary.domain.usecase.calendar.FetchCalendarFlowUseCase
 import com.upf464.koonsdiary.domain.usecase.diary.FetchDiaryPreviewUseCase
-import com.upf464.koonsdiary.presentation.model.diary.calendar.DateModel
 import com.upf464.koonsdiary.presentation.model.diary.calendar.PreviewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -59,12 +58,7 @@ internal class CalendarViewModel @Inject constructor(
                         _calendarStateFlow.value = CalendarState.Success(
                             year = year,
                             month = month,
-                            modelList = response.sentimentList.mapIndexed { index, sentiment ->
-                                DateModel(
-                                    date = LocalDate.of(year, month, index + 1),
-                                    sentiment = sentiment
-                                )
-                            }
+                            sentimentList = response.sentimentList
                         )
                     }.onFailure { error ->
                         _calendarStateFlow.value = CalendarState.UnknownError(year, month, error.message)
