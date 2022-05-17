@@ -11,5 +11,16 @@
 
     <string name="month_day">%d월 %d일</string>
     <string name="year_month_day">%d년 %d월 %d일</string>
+    <string name="year_month">%d년 %d월</string>
     <string name="diary_detail_sentiment">일기에 나타난 감정은 ...</string>
+
+    <string-array name="WeekDay">
+        <item>일</item>
+        <item>월</item>
+        <item>화</item>
+        <item>수</item>
+        <item>목</item>
+        <item>금</item>
+        <item>토</item>
+    </string-array>
 </resources>

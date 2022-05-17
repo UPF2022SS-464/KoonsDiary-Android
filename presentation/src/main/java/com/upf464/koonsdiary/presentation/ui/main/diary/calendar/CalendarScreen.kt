@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,15 +28,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.presentation.R
+import com.upf464.koonsdiary.presentation.model.calendar.WeekDay
 import com.upf464.koonsdiary.presentation.model.diary.calendar.PreviewModel
 import com.upf464.koonsdiary.presentation.ui.main.diary.DiaryNavigation
+import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
+import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 import java.time.LocalDate
 
 @Composable
@@ -70,7 +76,7 @@ internal fun CalendarScreen(
 }
 
 @Composable
-internal fun CalendarScreen(
+private fun CalendarScreen(
     calendarState: CalendarState,
     previewState: PreviewState,
     onMonthChanged: (Int, Int) -> Unit,
@@ -78,12 +84,24 @@ internal fun CalendarScreen(
     onPreviewClicked: () -> Unit,
     onNewDiaryClicked: () -> Unit
 ) {
-    Column {
-        Text(text = "캘린더입니다.")
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CalendarHeader(
+            year = calendarState.year,
+            month = calendarState.month
+        )
 
         when (calendarState) {
             is CalendarState.Loading -> {}
-            is CalendarState.Success -> {}
+            is CalendarState.Success -> {
+                CalendarBody(
+                    startWeekDay = calendarState.startWeekDay,
+                    lastDay = calendarState.lastDay,
+                    sentimentList = calendarState.sentimentList
+                )
+            }
             is CalendarState.UnknownError -> {
                 ErrorDialog()
                 return
@@ -110,7 +128,54 @@ internal fun CalendarScreen(
 }
 
 @Composable
-fun ErrorDialog() {
+private fun CalendarHeader(
+    year: Int,
+    month: Int
+) {
+    Text(
+        text = stringResource(id = R.string.year_month, year, month),
+        style = KoonsTypography.H4,
+        color = KoonsColor.Black100,
+        modifier = Modifier.padding(vertical = 48.dp)
+    )
+}
+
+@Composable
+private fun CalendarBody(
+    startWeekDay: WeekDay,
+    lastDay: Int,
+    sentimentList: List<Sentiment?>
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        WeekDayHeader()
+    }
+}
+
+@Composable
+private fun WeekDayHeader() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        val weekDayArray = stringArrayResource(id = R.array.WeekDay)
+        weekDayArray.forEachIndexed { i, weekDay ->
+            Text(
+                text = weekDay,
+                style = KoonsTypography.H7,
+                color = when (i) {
+                    0 -> KoonsColor.Red
+                    6 -> KoonsColor.Green
+                    else -> KoonsColor.Black100
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun ErrorDialog() {
     AlertDialog(
         onDismissRequest = { },
         buttons = { },
@@ -120,7 +185,7 @@ fun ErrorDialog() {
 }
 
 @Composable
-fun PreviewItem(
+private fun PreviewItem(
     model: PreviewModel
 ) {
     Box(
@@ -166,7 +231,7 @@ fun PreviewItem(
 }
 
 @Composable
-fun PreviewLoading(
+private fun PreviewLoading(
     date: LocalDate
 ) {
     Column(
