@@ -34,6 +34,8 @@ internal class CalendarViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<CalendarEvent>(extraBufferCapacity = 1)
     val eventFlow = _eventFlow.asSharedFlow()
 
+    val today: LocalDate = LocalDate.now()
+
     init {
         val today = LocalDate.now()
         _calendarStateFlow = MutableStateFlow(

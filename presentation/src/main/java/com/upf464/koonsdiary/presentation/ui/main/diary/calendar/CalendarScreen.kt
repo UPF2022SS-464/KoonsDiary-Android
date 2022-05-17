@@ -1,6 +1,7 @@
 package com.upf464.koonsdiary.presentation.ui.main.diary.calendar
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,11 +14,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,20 +31,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.presentation.R
-import com.upf464.koonsdiary.presentation.model.calendar.WeekDay
 import com.upf464.koonsdiary.presentation.model.diary.calendar.PreviewModel
+import com.upf464.koonsdiary.presentation.ui.components.SentimentCalendar
 import com.upf464.koonsdiary.presentation.ui.main.diary.DiaryNavigation
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
+import com.upf464.koonsdiary.presentation.ui.theme.colorOf
 import java.time.LocalDate
 
 @Composable
@@ -68,10 +71,12 @@ internal fun CalendarScreen(
     CalendarScreen(
         calendarState = calendarState,
         previewState = previewState,
-        { year, month -> viewModel.setMonth(year, month) },
-        { day -> viewModel.setPreviewDay(day) },
-        { viewModel.detailDiary() },
-        { viewModel.newDiary() }
+        today = viewModel.today,
+        selectedDay = viewModel.selectDayFlow.collectAsState().value,
+        onMonthChanged = { year, month -> viewModel.setMonth(year, month) },
+        onDateClicked = { day -> viewModel.setPreviewDay(day) },
+        onPreviewClicked = { viewModel.detailDiary() },
+        onNewDiaryClicked = { viewModel.newDiary() }
     )
 }
 
@@ -79,6 +84,8 @@ internal fun CalendarScreen(
 private fun CalendarScreen(
     calendarState: CalendarState,
     previewState: PreviewState,
+    today: LocalDate,
+    selectedDay: Int?,
     onMonthChanged: (Int, Int) -> Unit,
     onDateClicked: (Int) -> Unit,
     onPreviewClicked: () -> Unit,
@@ -96,11 +103,56 @@ private fun CalendarScreen(
         when (calendarState) {
             is CalendarState.Loading -> {}
             is CalendarState.Success -> {
-                CalendarBody(
-                    startWeekDay = calendarState.startWeekDay,
-                    lastDay = calendarState.lastDay,
+                SentimentCalendar(
+                    firstWeekDay = calendarState.startWeekDay,
+                    monthLength = calendarState.lastDay,
                     sentimentList = calendarState.sentimentList
-                )
+                ) { day, weekDay, sentiment ->
+                    val isToday = calendarState.year == today.year && calendarState.month == today.monthValue && day == today.dayOfMonth
+                    val isSelected = selectedDay == day
+
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 12.dp, bottom = 4.dp)
+                            .clip(CircleShape)
+                            .size(28.dp)
+                            .then(
+                                when {
+                                    isSelected -> Modifier.background(KoonsColor.Green)
+                                    isToday -> Modifier.background(KoonsColor.Black10)
+                                    else -> Modifier
+                                }
+                            )
+                            .clickable {
+                                onDateClicked(day)
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "$day",
+                            style = KoonsTypography.BodyRegular,
+                            color = when {
+                                isSelected -> KoonsColor.Black5
+                                weekDay == 0 -> KoonsColor.Red
+                                weekDay == 6 -> KoonsColor.Green
+                                else -> KoonsColor.Black100
+                            }
+                        )
+                    }
+
+                    if (sentiment != null) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_koon),
+                            contentDescription = null,
+                            tint = colorOf(sentiment),
+                            modifier = Modifier.size(24.dp)
+                        )
+                    } else {
+                        Box(
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                }
             }
             is CalendarState.UnknownError -> {
                 ErrorDialog()
@@ -127,6 +179,7 @@ private fun CalendarScreen(
     }
 }
 
+
 @Composable
 private fun CalendarHeader(
     year: Int,
@@ -138,40 +191,6 @@ private fun CalendarHeader(
         color = KoonsColor.Black100,
         modifier = Modifier.padding(vertical = 48.dp)
     )
-}
-
-@Composable
-private fun CalendarBody(
-    startWeekDay: WeekDay,
-    lastDay: Int,
-    sentimentList: List<Sentiment?>
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        WeekDayHeader()
-    }
-}
-
-@Composable
-private fun WeekDayHeader() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        val weekDayArray = stringArrayResource(id = R.array.WeekDay)
-        weekDayArray.forEachIndexed { i, weekDay ->
-            Text(
-                text = weekDay,
-                style = KoonsTypography.H7,
-                color = when (i) {
-                    0 -> KoonsColor.Red
-                    6 -> KoonsColor.Green
-                    else -> KoonsColor.Black100
-                }
-            )
-        }
-    }
 }
 
 @Composable
