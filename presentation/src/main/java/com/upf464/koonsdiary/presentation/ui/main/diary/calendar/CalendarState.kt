@@ -1,7 +1,7 @@
 package com.upf464.koonsdiary.presentation.ui.main.diary.calendar
 
 import com.upf464.koonsdiary.domain.model.Sentiment
-import com.upf464.koonsdiary.presentation.model.calendar.WeekDay
+import java.time.DayOfWeek
 import java.time.LocalDate
 
 sealed class CalendarState(
@@ -9,12 +9,12 @@ sealed class CalendarState(
     val month: Int
 ) {
 
-    val startWeekDay: WeekDay
+    val startWeekDay: Int
     val lastDay: Int
 
     init {
         val startDay = LocalDate.of(year, month, 1)
-        startWeekDay = WeekDay.fromDayOfWeek(startDay.dayOfWeek)
+        startWeekDay = (startDay.dayOfWeek.ordinal - DayOfWeek.MONDAY.ordinal + 1) % 7
         lastDay = startDay.lengthOfMonth()
     }
 
