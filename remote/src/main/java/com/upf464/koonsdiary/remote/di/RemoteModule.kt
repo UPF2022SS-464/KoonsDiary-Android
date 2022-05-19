@@ -1,5 +1,6 @@
 package com.upf464.koonsdiary.remote.di
 
+import com.upf464.koonsdiary.remote.api.UserApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -7,6 +8,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -17,6 +19,10 @@ internal object RemoteModule {
     @Provides
     @Named("baseUrl")
     fun provideBaseUrl(): String = "http://orly2.ga/"
+
+    @Provides
+    @Singleton
+    fun provideUserApi(retrofit: Retrofit): UserApi = retrofit.create()
 
     @Provides
     @Singleton
