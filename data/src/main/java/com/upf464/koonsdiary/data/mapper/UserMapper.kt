@@ -7,14 +7,16 @@ internal fun User.toData() = UserData(
     id = id,
     username = username,
     email = email,
-    nickname = nickname
+    nickname = nickname,
+    imageId = image.id
 )
 
 internal fun UserData.toDomain() = User(
     id = id,
     username = username,
     email = email,
-    nickname = nickname
+    nickname = nickname,
+    image = User.Image(id = imageId)
 )
 
 internal fun User.Image.toData() = UserData.Image(
