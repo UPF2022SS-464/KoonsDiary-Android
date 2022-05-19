@@ -8,20 +8,25 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,8 +34,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,7 +44,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.upf464.koonsdiary.presentation.R
-import com.upf464.koonsdiary.presentation.model.diary.calendar.PreviewModel
 import com.upf464.koonsdiary.presentation.ui.components.SentimentCalendar
 import com.upf464.koonsdiary.presentation.ui.main.diary.DiaryNavigation
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
@@ -58,12 +62,10 @@ internal fun CalendarScreen(
     LaunchedEffect(key1 = Unit) {
         viewModel.eventFlow.collect { event ->
             when (event) {
-                is CalendarEvent.NavigateToDetail -> {
+                is CalendarEvent.NavigateToDetail ->
                     navController.navigate(DiaryNavigation.DETAIL.route + "/${event.diaryId}")
-                }
-                else -> {
-                    /* TODO("일기 작성 화면 실행") */
-                }
+                else ->
+                    navController.navigate(DiaryNavigation.EDITOR.route)
             }
         }
     }
@@ -75,8 +77,13 @@ internal fun CalendarScreen(
         selectedDay = viewModel.selectDayFlow.collectAsState().value,
         onMonthChanged = { year, month -> viewModel.setMonth(year, month) },
         onDateClicked = { day -> viewModel.setPreviewDay(day) },
-        onPreviewClicked = { viewModel.detailDiary() },
-        onNewDiaryClicked = { viewModel.newDiary() }
+        onPreviewClicked = {
+            when (previewState) {
+                is PreviewState.NoPreview -> viewModel.newDiary()
+                is PreviewState.Success -> viewModel.detailDiary()
+                else -> {}
+            }
+        },
     )
 }
 
@@ -88,8 +95,7 @@ private fun CalendarScreen(
     selectedDay: Int?,
     onMonthChanged: (Int, Int) -> Unit,
     onDateClicked: (Int) -> Unit,
-    onPreviewClicked: () -> Unit,
-    onNewDiaryClicked: () -> Unit
+    onPreviewClicked: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -97,7 +103,8 @@ private fun CalendarScreen(
     ) {
         CalendarHeader(
             year = calendarState.year,
-            month = calendarState.month
+            month = calendarState.month,
+            onMonthChanged = onMonthChanged
         )
 
         when (calendarState) {
@@ -162,35 +169,47 @@ private fun CalendarScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        when (previewState) {
-            is PreviewState.Loading -> PreviewLoading(date = previewState.date)
-            is PreviewState.NoPreview -> {
-                Button(onClick = { onNewDiaryClicked() }) {
-                    Text("일기 작성")
-                }
-            }
-            PreviewState.None -> {}
-            is PreviewState.Success -> PreviewItem(previewState.model)
-            is PreviewState.UnknownError -> {
-                ErrorDialog()
-                return
-            }
-        }
+        CalendarPreview(
+            state = previewState,
+            onPreviewClicked = onPreviewClicked
+        )
     }
 }
-
 
 @Composable
 private fun CalendarHeader(
     year: Int,
-    month: Int
+    month: Int,
+    onMonthChanged: (Int, Int) -> Unit
 ) {
-    Text(
-        text = stringResource(id = R.string.year_month, year, month),
-        style = KoonsTypography.H4,
-        color = KoonsColor.Black100,
-        modifier = Modifier.padding(vertical = 48.dp)
-    )
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 48.dp, horizontal = 32.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Icon(
+            imageVector = Icons.Default.ArrowBack,
+            contentDescription = null,
+            modifier = Modifier.clickable {
+                if (month == 1) onMonthChanged(year - 1, 12)
+                else onMonthChanged(year, month - 1)
+            }
+        )
+        Text(
+            text = stringResource(id = R.string.year_month, year, month),
+            style = KoonsTypography.H4,
+            color = KoonsColor.Black100
+        )
+        Icon(
+            imageVector = Icons.Default.ArrowForward,
+            contentDescription = null,
+            modifier = Modifier.clickable {
+                if (month == 12) onMonthChanged(year + 1, 1)
+                else onMonthChanged(year, month + 1)
+            }
+        )
+    }
 }
 
 @Composable
@@ -204,73 +223,93 @@ private fun ErrorDialog() {
 }
 
 @Composable
-private fun PreviewItem(
-    model: PreviewModel
+private fun CalendarPreview(
+    state: PreviewState,
+    onPreviewClicked: () -> Unit
 ) {
-    Box(
-        modifier = Modifier.padding(20.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.LightGray, RoundedCornerShape(20.dp)),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(vertical = 20.dp)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.month_day, model.date.monthValue, model.date.dayOfMonth),
-                    modifier = Modifier.padding(20.dp, 4.dp)
-                )
-                AsyncImage(
-                    model = model.imagePath,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(60.dp)
-                        .clip(RoundedCornerShape(10.dp)),
-                    contentScale = ContentScale.Crop
-                )
-            }
-            Divider(
-                color = Color.DarkGray,
-                modifier = Modifier
-                    .height(IntrinsicSize.Min)
-                    .width(1.dp)
-            )
-            Text(
-                text = model.content,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 3,
-                modifier = Modifier.padding(end = 20.dp, top = 10.dp, bottom = 10.dp)
-            )
-        }
+    val (month, day) = when (state) {
+        is PreviewState.Loading -> state.date.monthValue to state.date.dayOfMonth
+        is PreviewState.NoPreview -> state.date.monthValue to state.date.dayOfMonth
+        is PreviewState.Success -> state.model.date.monthValue to state.model.date.dayOfMonth
+        else -> return
     }
-}
 
-@Composable
-private fun PreviewLoading(
-    date: LocalDate
-) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
-            .background(Color.LightGray)
-            .padding(20.dp)
+            .padding(16.dp)
     ) {
         Text(
-            text = stringResource(id = R.string.month_day, date.monthValue, date.dayOfMonth),
-            modifier = Modifier.padding(start = 20.dp, top = 4.dp)
+            text = stringResource(id = R.string.month_day, month, day),
+            modifier = Modifier
+                .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                .background(KoonsColor.Black5)
+                .padding(vertical = 4.dp, horizontal = 16.dp),
+            style = KoonsTypography.BodySmall,
+            color = KoonsColor.Black100
         )
         Row(
-            horizontalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp)
+                .clip(RoundedCornerShape(topEnd = 12.dp, bottomStart = 12.dp, bottomEnd = 12.dp))
+                .background(KoonsColor.Black5)
+                .clickable(onClick = onPreviewClicked)
+                .padding(16.dp)
+                .height(IntrinsicSize.Min),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            CircularProgressIndicator()
+            when (state) {
+                is PreviewState.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(32.dp),
+                        color = KoonsColor.Green
+                    )
+                }
+                is PreviewState.NoPreview -> {
+                    Text(
+                        text = "일기가 없어요! 일기를 써 볼까요?",
+                        style = KoonsTypography.BodySmall,
+                        color = KoonsColor.Black100,
+                        modifier = Modifier.padding(vertical = 16.dp)
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_new_diary),
+                        tint = KoonsColor.Green,
+                        contentDescription = null,
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                }
+                is PreviewState.Success -> {
+                    AsyncImage(
+                        model = state.model.imagePath,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(12.dp))
+                            .aspectRatio(1f)
+                    )
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(horizontal = 16.dp)
+                            .width(1.dp),
+                        color = KoonsColor.Black100
+                    )
+                    val lineHeight = KoonsTypography.BodySmall.fontSize
+                    Text(
+                        text = state.model.content,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis,
+                        style = KoonsTypography.BodySmall,
+                        color = KoonsColor.Black100,
+                        modifier = Modifier
+                            .heightIn(min = with(LocalDensity.current) { (lineHeight * 3).toDp() })
+                            .fillMaxWidth()
+                    )
+                }
+                else -> return
+            }
         }
     }
 }
