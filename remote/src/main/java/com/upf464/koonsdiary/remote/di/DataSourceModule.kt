@@ -11,7 +11,7 @@ import com.upf464.koonsdiary.remote.devsource.DiaryRemoteDevDataSourceImpl
 import com.upf464.koonsdiary.remote.devsource.MessageRemoteDevDataSourceImpl
 import com.upf464.koonsdiary.remote.devsource.ReportRemoteDevDataSourceImpl
 import com.upf464.koonsdiary.remote.devsource.ShareRemoteDevDataSourceImpl
-import com.upf464.koonsdiary.remote.devsource.UserRemoteDevDataSourceImpl
+import com.upf464.koonsdiary.remote.source.UserRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -23,7 +23,7 @@ internal abstract class DataSourceModule {
 
     @Binds
     abstract fun bindUserRemoteDataSource(
-        source: UserRemoteDevDataSourceImpl
+        source: UserRemoteDataSourceImpl
     ): UserRemoteDataSource
 
     @Binds
