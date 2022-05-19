@@ -18,4 +18,10 @@ sealed class SignUpError(
     object DuplicatedEmail : SignUpError()
 
     object DuplicatedKakaoUser : SignUpError()
+
+    object MissingParameters : SignUpError()
+
+    data class UnknownError(
+        override val message: String? = null
+    ) : SignUpError(message)
 }
