@@ -34,7 +34,7 @@ internal fun SentimentCalendar(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(paddingHorizontal)
+            .padding(horizontal = paddingHorizontal)
     ) {
         if (showHeader) {
             CalendarWeekHeader(headerStyle)
@@ -43,7 +43,7 @@ internal fun SentimentCalendar(
         ((1 - firstWeekDay)..monthLength step 7).forEach { weekStart ->
             CalendarWeek(
                 startDay = maxOf(1, weekStart),
-                sentimentList = sentimentList.subList(minOf(0, weekStart - 1), minOf(weekStart + 6, monthLength)),
+                sentimentList = sentimentList.subList(maxOf(0, weekStart - 1), minOf(weekStart + 6, monthLength)),
                 emptyStart = -minOf(weekStart - 1, 0),
                 emptyEnd = maxOf(weekStart + 6 - monthLength, 0),
                 content = content

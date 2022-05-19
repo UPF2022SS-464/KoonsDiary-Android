@@ -40,8 +40,8 @@ internal class DiaryRemoteDevDataSourceImpl @Inject constructor() : DiaryRemoteD
             DiaryPreviewData(
                 id = 1,
                 date = date,
-                content = "content",
-                imagePath = "imagePath"
+                content = "엄청나게 긴 글인데 이걸 어디까지 써야되나 복붙이나 하자 ㅎㅎㅎ 엄청나게 긴 글인데 이걸 어디까지 써야되나 복붙이나 하자 ㅎㅎㅎ 엄청나게 긴 글인데 이걸 어디까지 써야되나 복붙이나 하자 ㅎㅎㅎ",
+                imagePath = "https://developers.kakao.com/tool/resource/static/img/button/login/full/ko/kakao_login_large_wide.png"
             )
         )
     }
