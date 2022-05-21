@@ -9,13 +9,16 @@ import com.upf464.koonsdiary.remote.model.user.EmailSignUp
 import com.upf464.koonsdiary.remote.model.user.KakaoSignUp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
 import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 internal class UserRemoteDataSourceImpl @Inject constructor(
-    private val userApi: UserApi
+    private val userApi: UserApi,
+    private val okHttpClient: OkHttpClient
 ) : UserRemoteDataSource {
 
     override suspend fun signInWithAccount(account: String, password: String): Result<String> {
@@ -37,7 +40,9 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
                 )
             )
 
-            return@runCatching result.body()?.refreshToken ?: throw errorFromResult(result)
+            val response = result.body() ?: throw errorFromResult(result)
+            addAuthorizationInterceptor(response.accessToken)
+            response.refreshToken
         }
     }
 
@@ -71,7 +76,8 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
                 )
             )
 
-            if (result.body() == null) throw errorFromResult(result)
+            val response = result.body() ?: throw errorFromResult(result)
+            addAuthorizationInterceptor(response.accessToken)
         }
     }
 
@@ -112,6 +118,18 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
                     path = "https://r1.community.samsung.com/t5/image/serverpage/image-id/1078560iA1D80891B2B80672/image-size/large?v=v2&px=999"
                 )
             )
+        )
+    }
+
+    private fun addAuthorizationInterceptor(accessToken: String) {
+        okHttpClient.interceptors().add(
+            Interceptor { chain ->
+                val request = chain.request()
+                    .newBuilder()
+                    .addHeader("Authorization", accessToken)
+                    .build()
+                return@Interceptor chain.proceed(request)
+            }
         )
     }
 

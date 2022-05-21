@@ -11,7 +11,6 @@ interface KakaoSignUp {
 
     data class Response(
         val accessToken: String,
-        val refreshToken: String,
         val userId: String
     )
 }
