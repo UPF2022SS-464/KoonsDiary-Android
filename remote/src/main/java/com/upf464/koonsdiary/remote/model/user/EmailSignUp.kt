@@ -8,7 +8,7 @@ interface EmailSignUp {
         val email: String,
         val nickname: String,
         val imageId: Int
-    ) : EmailSignUp
+    )
 
     data class Response(
         val accessToken: String,
