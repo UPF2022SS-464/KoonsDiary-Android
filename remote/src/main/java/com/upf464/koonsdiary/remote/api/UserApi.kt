@@ -3,18 +3,31 @@ package com.upf464.koonsdiary.remote.api
 import com.upf464.koonsdiary.remote.model.user.EmailSignIn
 import com.upf464.koonsdiary.remote.model.user.EmailSignUp
 import com.upf464.koonsdiary.remote.model.user.KakaoSignUp
+import com.upf464.koonsdiary.remote.model.user.TokenSignIn
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 internal interface UserApi {
 
     @POST("user")
-    suspend fun signUpWithEmail(@Body user: EmailSignUp.Request): Response<EmailSignUp.Response>
+    suspend fun signUpWithEmail(
+        @Body user: EmailSignUp.Request
+    ): Response<EmailSignUp.Response>
 
     @POST("kakaoUser")
-    suspend fun signUpWithKakao(@Body user: KakaoSignUp.Request): Response<KakaoSignUp.Response>
+    suspend fun signUpWithKakao(
+        @Body user: KakaoSignUp.Request
+    ): Response<KakaoSignUp.Response>
 
     @POST("requestLogin")
-    suspend fun signInWithEmail(@Body user: EmailSignIn.Request): Response<EmailSignIn.Response>
+    suspend fun signInWithEmail(
+        @Body user: EmailSignIn.Request
+    ): Response<EmailSignIn.Response>
+
+    @POST("tokenLogin")
+    suspend fun signInWithToken(
+        @Header("Authorization") refreshToken: String
+    ): Response<TokenSignIn.Response>
 }

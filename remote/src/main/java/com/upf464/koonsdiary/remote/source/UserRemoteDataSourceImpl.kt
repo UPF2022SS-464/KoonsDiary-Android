@@ -73,8 +73,16 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
         return Result.failure(SignInErrorData.NoSuchKakaoUser)
     }
 
-    override suspend fun signInWithToken(token: String): Result<String?> {
-        return Result.success(null)
+    override suspend fun signInWithToken(
+        token: String
+    ): Result<String?> = withContext(Dispatchers.IO) {
+        runCatching {
+            val result = userApi.signInWithToken(token)
+
+            val response = result.body() ?: throw errorFromResult(result)
+            addAuthorizationInterceptor(response.accessToken)
+            response.refreshToken
+        }
     }
 
     override suspend fun signUpWithKakao(
