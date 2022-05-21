@@ -5,6 +5,7 @@ import com.upf464.koonsdiary.data.error.SignUpErrorData
 import com.upf464.koonsdiary.data.model.UserData
 import com.upf464.koonsdiary.data.source.UserRemoteDataSource
 import com.upf464.koonsdiary.remote.api.UserApi
+import com.upf464.koonsdiary.remote.model.user.EmailSignIn
 import com.upf464.koonsdiary.remote.model.user.EmailSignUp
 import com.upf464.koonsdiary.remote.model.user.KakaoSignUp
 import kotlinx.coroutines.Dispatchers
@@ -21,8 +22,22 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
     private val okHttpClient: OkHttpClient
 ) : UserRemoteDataSource {
 
-    override suspend fun signInWithAccount(account: String, password: String): Result<String> {
-        return Result.success("")
+    override suspend fun signInWithAccount(
+        account: String,
+        password: String
+    ): Result<String> = withContext(Dispatchers.IO) {
+        runCatching {
+            val result = userApi.signInWithEmail(
+                EmailSignIn.Request(
+                    userId = account,
+                    password = password
+                )
+            )
+
+            val response = result.body() ?: throw errorFromResult(result)
+            addAuthorizationInterceptor(response.accessToken)
+            response.refreshToken
+        }
     }
 
     override suspend fun signUpWithAccount(

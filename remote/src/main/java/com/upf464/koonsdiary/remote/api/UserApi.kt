@@ -1,5 +1,6 @@
 package com.upf464.koonsdiary.remote.api
 
+import com.upf464.koonsdiary.remote.model.user.EmailSignIn
 import com.upf464.koonsdiary.remote.model.user.EmailSignUp
 import com.upf464.koonsdiary.remote.model.user.KakaoSignUp
 import retrofit2.Response
@@ -13,4 +14,7 @@ internal interface UserApi {
 
     @POST("kakaoUser")
     suspend fun signUpWithKakao(@Body user: KakaoSignUp.Request): Response<KakaoSignUp.Response>
+
+    @POST("requestLogin")
+    suspend fun signInWithEmail(@Body user: EmailSignIn.Request): Response<EmailSignIn.Response>
 }
