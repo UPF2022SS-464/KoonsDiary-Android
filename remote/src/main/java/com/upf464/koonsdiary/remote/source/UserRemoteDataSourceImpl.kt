@@ -6,8 +6,10 @@ import com.upf464.koonsdiary.data.model.UserData
 import com.upf464.koonsdiary.data.source.UserRemoteDataSource
 import com.upf464.koonsdiary.remote.api.UserApi
 import com.upf464.koonsdiary.remote.model.user.EmailSignUp
+import com.upf464.koonsdiary.remote.model.user.KakaoSignUp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,8 +37,7 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
                 )
             )
 
-            return@runCatching result.body()?.refreshToken
-                ?: throw SignUpErrorData.UnknownError(result.message())
+            return@runCatching result.body()?.refreshToken ?: throw errorFromResult(result)
         }
     }
 
@@ -56,8 +57,22 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
         return Result.success(null)
     }
 
-    override suspend fun signUpWithKakao(user: UserData, token: String): Result<Unit> {
-        return Result.success(Unit)
+    override suspend fun signUpWithKakao(
+        user: UserData,
+        token: String
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        runCatching {
+            val result = userApi.signUpWithKakao(
+                KakaoSignUp.Request(
+                    token = token,
+                    userId = user.username,
+                    nickname = user.nickname,
+                    imageId = user.imageId
+                )
+            )
+
+            if (result.body() == null) throw errorFromResult(result)
+        }
     }
 
     override suspend fun generateSaltOf(username: String): Result<String> {
@@ -99,4 +114,7 @@ internal class UserRemoteDataSourceImpl @Inject constructor(
             )
         )
     }
+
+    private fun <T> errorFromResult(result: Response<T>) =
+        SignUpErrorData.UnknownError("${result.code()} - ${result.message()}")
 }
