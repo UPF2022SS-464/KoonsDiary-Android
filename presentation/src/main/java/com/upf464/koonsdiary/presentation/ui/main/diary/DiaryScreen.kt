@@ -11,13 +11,13 @@ import com.upf464.koonsdiary.presentation.ui.main.diary.calendar.CalendarScreen
 import com.upf464.koonsdiary.presentation.ui.main.diary.detail.DiaryDetailScreen
 
 @Composable
-fun DiaryScreen() {
+internal fun DiaryScreen() {
     val navController = rememberNavController()
     Navigation(navController = navController)
 }
 
 @Composable
-fun Navigation(navController: NavHostController) {
+private fun Navigation(navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = DiaryNavigation.CALENDAR.route
