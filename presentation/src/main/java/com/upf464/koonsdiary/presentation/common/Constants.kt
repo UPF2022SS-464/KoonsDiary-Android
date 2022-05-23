@@ -11,6 +11,7 @@ object Constants {
     const val SIGN_UP_DEBOUNCE_TIME = 1000L
 
     const val PARAM_DIARY_ID = "diaryId"
+    const val PARAM_GROUP_ID = "groupId"
     const val PARAM_DATE = "date"
     const val PARAM_SIGN_UP_TYPE = "signUpType"
 }
