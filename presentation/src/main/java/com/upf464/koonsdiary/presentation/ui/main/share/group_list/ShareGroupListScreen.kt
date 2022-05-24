@@ -1,0 +1,126 @@
+package com.upf464.koonsdiary.presentation.ui.main.share.group_list
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.upf464.koonsdiary.domain.model.ShareGroup
+import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
+import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
+
+@Composable
+internal fun ShareGroupListScreen(
+    viewModel: ShareGroupListViewModel = hiltViewModel()
+) {
+    ShareGroupListScreen(
+//        groupListState = viewModel.groupListStateFlow.collectAsState().value,
+        groupListState = ShareGroupListState.Success(
+            listOf(
+                ShareGroup(name = "테스트 그룹1", imagePath = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg"),
+                ShareGroup(name = "테스트 그룹2", imagePath = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg"),
+                ShareGroup(name = "테스트 그룹3", imagePath = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg"),
+            )
+        ),
+        viewType = viewModel.viewTypeFlow.collectAsState().value
+    )
+}
+
+@Composable
+private fun ShareGroupListScreen(
+    groupListState: ShareGroupListState,
+    viewType: ShareGroupListViewType
+) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        when (groupListState) {
+            ShareGroupListState.Loading -> {}
+            is ShareGroupListState.Success -> {
+                when (viewType) {
+                    ShareGroupListViewType.PAGER ->
+                        ShareGroupPager(groupList = groupListState.groupList)
+                    ShareGroupListViewType.GRID ->
+                        ShareGroupGrid(groupList = groupListState.groupList)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalPagerApi::class)
+private fun ShareGroupPager(
+    groupList: List<ShareGroup>
+) {
+    HorizontalPager(
+        count = groupList.size
+    ) { index ->
+        val model = groupList[index]
+        Card(
+            backgroundColor = KoonsColor.Black5,
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier
+                .padding(horizontal = 48.dp)
+                .fillMaxWidth()
+        ) {
+            Box(modifier = Modifier.height(IntrinsicSize.Min)) {
+                Column(
+                    modifier = Modifier.padding(vertical = 48.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    AsyncImage(
+                        model = model.imagePath,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .padding(horizontal = 32.dp)
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                            .clip(RoundedCornerShape(12.dp))
+                    )
+                    Text(
+                        text = model.name,
+                        style = KoonsTypography.H7,
+                        color = KoonsColor.Black100,
+                        modifier = Modifier.padding(top = 16.dp)
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 48.dp)
+                        .width(12.dp)
+                        .background(KoonsColor.Green)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ShareGroupGrid(
+    groupList: List<ShareGroup>
+) {
+
+}
