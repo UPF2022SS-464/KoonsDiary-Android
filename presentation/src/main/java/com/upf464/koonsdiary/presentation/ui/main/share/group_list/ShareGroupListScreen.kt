@@ -13,19 +13,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.upf464.koonsdiary.domain.model.ShareGroup
+import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 
@@ -42,28 +49,79 @@ internal fun ShareGroupListScreen(
                 ShareGroup(name = "테스트 그룹3", imagePath = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg"),
             )
         ),
-        viewType = viewModel.viewTypeFlow.collectAsState().value
+        viewType = viewModel.viewTypeFlow.collectAsState().value,
+        onChangeViewType = { viewModel.changeViewType(it) }
     )
 }
 
 @Composable
 private fun ShareGroupListScreen(
-    groupListState: ShareGroupListState,
-    viewType: ShareGroupListViewType
+    groupListState: ShareGroupListState = ShareGroupListState.Loading,
+    viewType: ShareGroupListViewType = ShareGroupListViewType.PAGER,
+    onChangeViewType: (ShareGroupListViewType) -> Unit = {},
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        when (groupListState) {
-            ShareGroupListState.Loading -> {}
-            is ShareGroupListState.Success -> {
-                when (viewType) {
-                    ShareGroupListViewType.PAGER ->
-                        ShareGroupPager(groupList = groupListState.groupList)
-                    ShareGroupListViewType.GRID ->
-                        ShareGroupGrid(groupList = groupListState.groupList)
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        ShareGroupTopBar(
+            viewType = viewType,
+            onChangeViewType = onChangeViewType
+        )
+
+        Column(modifier = Modifier.fillMaxSize()) {
+            when (groupListState) {
+                ShareGroupListState.Loading -> {}
+                is ShareGroupListState.Success -> {
+                    when (viewType) {
+                        ShareGroupListViewType.PAGER ->
+                            ShareGroupPager(groupList = groupListState.groupList)
+                        ShareGroupListViewType.GRID ->
+                            ShareGroupGrid(groupList = groupListState.groupList)
+                    }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun ShareGroupTopBar(
+    viewType: ShareGroupListViewType,
+    onChangeViewType: (ShareGroupListViewType) -> Unit
+) {
+    TopAppBar(
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp,
+        title = {
+            Text(
+                text = stringResource(id = R.string.shareDiary_of),
+                style = KoonsTypography.H5,
+                color = KoonsColor.Black100
+            )
+        },
+        actions = {
+            when (viewType) {
+                ShareGroupListViewType.PAGER -> {
+                    IconButton(onClick = { onChangeViewType(ShareGroupListViewType.GRID) }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_grid),
+                            contentDescription = null,
+                            tint = KoonsColor.Green
+                        )
+                    }
+                }
+                ShareGroupListViewType.GRID -> {
+                    IconButton(onClick = { onChangeViewType(ShareGroupListViewType.PAGER) }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_pager),
+                            contentDescription = null,
+                            tint = KoonsColor.Green
+                        )
+                    }
+                }
+            }
+        }
+    )
 }
 
 @Composable
