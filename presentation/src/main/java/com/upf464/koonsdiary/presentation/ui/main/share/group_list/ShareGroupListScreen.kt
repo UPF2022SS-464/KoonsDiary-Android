@@ -26,11 +26,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,23 +44,39 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.upf464.koonsdiary.domain.model.ShareGroup
 import com.upf464.koonsdiary.presentation.R
+import com.upf464.koonsdiary.presentation.ui.main.share.ShareNavigation
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 
 @Composable
 internal fun ShareGroupListScreen(
-    viewModel: ShareGroupListViewModel = hiltViewModel()
+    viewModel: ShareGroupListViewModel = hiltViewModel(),
+    navController: NavController
 ) {
+    LaunchedEffect(key1 = Unit) {
+        viewModel.eventFlow.collect { event ->
+            when (event) {
+                is ShareGroupListEvent.NavigateToGroup -> {
+                    navController.navigate(ShareNavigation.GROUP_DETAIL.route + "/${event.groupId}")
+                }
+                ShareGroupListEvent.NavigateToAddGroup -> {
+                }
+            }
+        }
+    }
+
     ShareGroupListScreen(
         groupListState = viewModel.groupListStateFlow.collectAsState().value,
         viewType = viewModel.viewTypeFlow.collectAsState().value,
-        onChangeViewType = { viewModel.changeViewType(it) }
+        onChangeViewType = { viewModel.changeViewType(it) },
+        onItemClicked = { viewModel.navigateToGroup(it) }
     )
 }
 
@@ -67,6 +85,7 @@ private fun ShareGroupListScreen(
     groupListState: ShareGroupListState = ShareGroupListState.Loading,
     viewType: ShareGroupListViewType = ShareGroupListViewType.PAGER,
     onChangeViewType: (ShareGroupListViewType) -> Unit = {},
+    onItemClicked: (ShareGroup?) -> Unit = {}
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -82,9 +101,15 @@ private fun ShareGroupListScreen(
                 is ShareGroupListState.Success -> {
                     when (viewType) {
                         ShareGroupListViewType.PAGER ->
-                            ShareGroupPager(groupList = groupListState.groupList)
+                            ShareGroupPager(
+                                groupList = groupListState.groupList,
+                                onItemClicked = onItemClicked
+                            )
                         ShareGroupListViewType.GRID ->
-                            ShareGroupGrid(groupList = groupListState.groupList)
+                            ShareGroupGrid(
+                                groupList = groupListState.groupList,
+                                onItemClicked = onItemClicked
+                            )
                     }
                 }
             }
@@ -135,7 +160,8 @@ private fun ShareGroupTopBar(
 @Composable
 @OptIn(ExperimentalPagerApi::class)
 private fun ColumnScope.ShareGroupPager(
-    groupList: List<ShareGroup>
+    groupList: List<ShareGroup>,
+    onItemClicked: (ShareGroup?) -> Unit
 ) {
     val pagerState = rememberPagerState()
 
@@ -191,14 +217,16 @@ private fun ColumnScope.ShareGroupPager(
                 viewType = ShareGroupListViewType.PAGER,
                 model = null,
                 paddingHorizontal = 32.dp,
-                paddingVertical = 48.dp
+                paddingVertical = 48.dp,
+                onItemClicked = { onItemClicked(null) }
             )
         } else {
             ShareGroupItem(
                 viewType = ShareGroupListViewType.PAGER,
                 model = groupList[index - 1],
                 paddingHorizontal = 32.dp,
-                paddingVertical = 48.dp
+                paddingVertical = 48.dp,
+                onItemClicked = { onItemClicked(groupList[index - 1]) }
             )
         }
     }
@@ -209,7 +237,8 @@ private fun ColumnScope.ShareGroupPager(
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun ShareGroupGrid(
-    groupList: List<ShareGroup>
+    groupList: List<ShareGroup>,
+    onItemClicked: (ShareGroup?) -> Unit
 ) {
     LazyVerticalGrid(
         cells = GridCells.Fixed(2),
@@ -222,7 +251,8 @@ private fun ShareGroupGrid(
                 viewType = ShareGroupListViewType.GRID,
                 model = null,
                 paddingHorizontal = 24.dp,
-                paddingVertical = 32.dp
+                paddingVertical = 32.dp,
+                onItemClicked = { onItemClicked(null) }
             )
         }
 
@@ -231,18 +261,21 @@ private fun ShareGroupGrid(
                 viewType = ShareGroupListViewType.GRID,
                 model = model,
                 paddingHorizontal = 24.dp,
-                paddingVertical = 32.dp
+                paddingVertical = 32.dp,
+                onItemClicked = { onItemClicked(model) }
             )
         }
     }
 }
 
 @Composable
+@OptIn(ExperimentalMaterialApi::class)
 private fun ShareGroupItem(
     viewType: ShareGroupListViewType,
     model: ShareGroup?,
     paddingHorizontal: Dp,
-    paddingVertical: Dp
+    paddingVertical: Dp,
+    onItemClicked: () -> Unit
 ) {
     Card(
         backgroundColor = KoonsColor.Black5,
@@ -251,7 +284,8 @@ private fun ShareGroupItem(
         modifier = when (viewType) {
             ShareGroupListViewType.PAGER -> Modifier.padding(horizontal = 48.dp)
             ShareGroupListViewType.GRID -> Modifier
-        }.fillMaxWidth()
+        }.fillMaxWidth(),
+        onClick = onItemClicked
     ) {
         Box(modifier = Modifier.height(IntrinsicSize.Min)) {
             Column(

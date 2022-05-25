@@ -21,7 +21,9 @@ private fun Navigation(navController: NavHostController) {
         startDestination = ShareNavigation.GROUP_LIST.route
     ) {
         composable(route = ShareNavigation.GROUP_LIST.route) {
-            ShareGroupListScreen()
+            ShareGroupListScreen(
+                navController = navController
+            )
         }
         composable(route = ShareNavigation.GROUP_DETAIL.route + "/{${Constants.PARAM_GROUP_ID}}") {
         }
