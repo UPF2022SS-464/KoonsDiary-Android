@@ -20,6 +20,9 @@
         <activity
             android:name=".ui.security.BiometricActivity"
             android:exported="false" />
+
+        <activity android:name=".ui.main.share.add_group.AddGroupActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
