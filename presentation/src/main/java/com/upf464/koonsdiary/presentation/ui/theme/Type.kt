@@ -47,5 +47,5 @@ object KoonsTypography {
     val BodyRegular = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Normal, fontFamily = NanumGothic)
     val BodyMedium = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Normal, fontFamily = NanumGothic)
     val BodySmall = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Normal, fontFamily = NanumGothic)
-    val BodyMoreSmall = TextStyle(fontSize = 10.sp, fontWeight = FontWeight.Normal, fontFamily = NanumGothic)
+    val BodyMoreSmall = TextStyle(fontSize = 11.sp, fontWeight = FontWeight.Normal, fontFamily = NanumGothic)
 }
