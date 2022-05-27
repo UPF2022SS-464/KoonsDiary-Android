@@ -66,7 +66,9 @@ class MainActivity : ComponentActivity() {
                                     ),
                                 ),
                                 onItemClick = { item ->
-                                    navController.navigate(item.route)
+                                    if (item.route != navController.currentDestination?.route) {
+                                        navController.navigate(item.route)
+                                    }
                                 },
                                 backStackState = backStackState
                             )
