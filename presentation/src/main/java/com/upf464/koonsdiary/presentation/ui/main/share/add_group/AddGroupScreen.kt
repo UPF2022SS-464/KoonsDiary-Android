@@ -1,5 +1,6 @@
 package com.upf464.koonsdiary.presentation.ui.main.share.add_group
 
+import android.app.Activity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,7 +39,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -54,8 +57,11 @@ import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 internal fun AddGroupScreen(
     viewModel: AddGroupViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+
     AddGroupScreen(
-        onSave = { viewModel.save() }
+        onSave = { viewModel.save() },
+        onBackPressed = { (context as? Activity)?.finish() }
     )
 }
 
@@ -72,10 +78,14 @@ private fun AddGroupScreen(
     onKeywordChanged: (String) -> Unit = { },
     searchResult: List<User> = listOf(),
     onInviteClicked: (User) -> Unit = { },
-    isWaitingResult: Boolean = false
+    isWaitingResult: Boolean = false,
+    onBackPressed: () -> Unit = { }
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
-        AddGroupAppBar(onSave = onSave)
+        AddGroupAppBar(
+            onSave = onSave,
+            onBackPressed = onBackPressed
+        )
 
         Column(
             modifier = Modifier
@@ -107,7 +117,8 @@ private fun AddGroupScreen(
 
 @Composable
 private fun AddGroupAppBar(
-    onSave: () -> Unit
+    onSave: () -> Unit,
+    onBackPressed: () -> Unit
 ) {
     TopAppBar(
         title = {
@@ -123,6 +134,17 @@ private fun AddGroupAppBar(
                     imageVector = Icons.Default.Check,
                     contentDescription = null,
                     tint = KoonsColor.Green
+                )
+            }
+        },
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp,
+        modifier = Modifier.padding(top = 32.dp),
+        navigationIcon = {
+            IconButton(onClick = onBackPressed) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_arrow_back),
+                    contentDescription = null
                 )
             }
         }
