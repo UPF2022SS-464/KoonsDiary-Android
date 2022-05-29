@@ -7,22 +7,29 @@
     <application android:theme="@style/Theme.KoonsDiary">
         <activity
             android:name=".ui.account.SignInActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".ui.security.BiometricActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
-        <activity android:name=".ui.main.share.add_group.AddGroupActivity"
-            android:exported="false" />
+        <activity
+            android:name=".ui.main.share.add_group.AddGroupActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
-
 </manifest>

@@ -1,7 +1,5 @@
 package com.upf464.koonsdiary.presentation.ui.account.signup
 
-import android.app.Activity
-import android.view.WindowManager
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -50,7 +48,6 @@ internal fun SignUpScreen(
 ) {
 
     val context = LocalContext.current
-    (context as? Activity)?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
     LaunchedEffect(key1 = Unit) {
         viewModel.eventFlow.collect { event ->
