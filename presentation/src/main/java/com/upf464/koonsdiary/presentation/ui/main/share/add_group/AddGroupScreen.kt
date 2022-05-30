@@ -1,6 +1,8 @@
 package com.upf464.koonsdiary.presentation.ui.main.share.add_group
 
 import android.app.Activity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,6 +38,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,8 +62,21 @@ internal fun AddGroupScreen(
 ) {
     val context = LocalContext.current
 
+    val galleryLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri ->
+        uri?.let {
+            viewModel.setGroupImage(uri.toString())
+        }
+    }
+
     AddGroupScreen(
         onSave = { viewModel.save() },
+        imagePath = viewModel.model.imagePathFlow.collectAsState().value,
+        groupName = viewModel.model.nameFlow.collectAsState().value,
+        onGroupNameChange = { viewModel.model.nameFlow.value = it },
+        onImageClicked = { galleryLauncher.launch("image/*") },
+        onImageResetClicked = { viewModel.resetGroupImage() },
         onBackPressed = { (context as? Activity)?.finish() }
     )
 }
@@ -72,6 +88,7 @@ private fun AddGroupScreen(
     groupName: String = "",
     onGroupNameChange: (String) -> Unit = { },
     onImageClicked: () -> Unit = { },
+    onImageResetClicked: () -> Unit = { },
     inviteUserList: List<User> = listOf(),
     onInviteDeleteClicked: (Int) -> Unit = { },
     keyword: String = "",
@@ -96,7 +113,8 @@ private fun AddGroupScreen(
                 imagePath = imagePath,
                 groupName = groupName,
                 onGroupNameChange = onGroupNameChange,
-                onImageClicked = onImageClicked
+                onImageClicked = onImageClicked,
+                onResetClicked = onImageResetClicked
             )
 
             InviteUserRow(
@@ -156,7 +174,8 @@ private fun GroupInformation(
     imagePath: String?,
     groupName: String,
     onGroupNameChange: (String) -> Unit,
-    onImageClicked: () -> Unit
+    onImageClicked: () -> Unit,
+    onResetClicked: () -> Unit
 ) {
     Card(
         backgroundColor = KoonsColor.Black5,
@@ -181,16 +200,28 @@ private fun GroupInformation(
                             .clickable(onClick = onImageClicked)
                     )
                 } else {
-                    AsyncImage(
-                        model = imagePath,
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f)
-                            .clip(RoundedCornerShape(12.dp))
-                            .clickable(onClick = onImageClicked)
-                    )
+                    Box {
+                        AsyncImage(
+                            model = imagePath,
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(1f)
+                                .clip(RoundedCornerShape(12.dp))
+                                .clickable(onClick = onImageClicked)
+                        )
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_circle_cross),
+                            contentDescription = null,
+                            tint = KoonsColor.Red,
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .clip(CircleShape)
+                                .clickable(onClick = onResetClicked)
+                                .align(Alignment.TopStart)
+                        )
+                    }
                 }
 
                 BasicTextField(
@@ -256,7 +287,7 @@ private fun InviteUserRow(
                     )
 
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_delete),
+                        painter = painterResource(id = R.drawable.ic_circle_minus),
                         contentDescription = null,
                         tint = KoonsColor.Red,
                         modifier = Modifier
