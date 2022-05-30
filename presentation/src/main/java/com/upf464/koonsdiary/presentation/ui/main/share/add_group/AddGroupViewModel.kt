@@ -18,13 +18,11 @@ internal class AddGroupViewModel @Inject constructor(
     private val addGroupUseCase: AddGroupUseCase
 ) : ViewModel() {
 
-    val nameFlow = MutableStateFlow("")
-
     private val _imagePathFlow = MutableStateFlow<String?>(null)
     private val _inviteUserListFlow = MutableStateFlow<List<User>>(listOf())
 
-    private val model = AddGroupModel(
-        nameFlow = nameFlow.asStateFlow(),
+    val model = AddGroupModel(
+        nameFlow = MutableStateFlow(""),
         imagePathFlow = _imagePathFlow.asStateFlow(),
         inviteUserListUser = _inviteUserListFlow.asStateFlow()
     )
@@ -46,5 +44,13 @@ internal class AddGroupViewModel @Inject constructor(
                 // TODO("오류 처리")
             }
         }
+    }
+
+    fun setGroupImage(imagePath: String) {
+        _imagePathFlow.value = imagePath
+    }
+
+    fun resetGroupImage() {
+        _imagePathFlow.value = null
     }
 }
