@@ -38,6 +38,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,12 +48,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.presentation.R
+import com.upf464.koonsdiary.presentation.model.share.add_group.SearchUserResultModel
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 
@@ -61,6 +66,16 @@ internal fun AddGroupScreen(
     viewModel: AddGroupViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.eventFlow.collect { event ->
+            when (event) {
+                is AddGroupEvent.NavigateToGroup -> {
+                    // TODO()
+                }
+            }
+        }
+    }
 
     val galleryLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
@@ -77,6 +92,13 @@ internal fun AddGroupScreen(
         onGroupNameChange = { viewModel.model.nameFlow.value = it },
         onImageClicked = { galleryLauncher.launch("image/*") },
         onImageResetClicked = { viewModel.resetGroupImage() },
+        inviteUserList = viewModel.model.inviteUserListUser.collectAsState().value,
+        onInviteDeleteClicked = { viewModel.deleteInviteUserOn(it) },
+        keyword = viewModel.keywordFlow.collectAsState().value,
+        onKeywordChanged = { viewModel.keywordFlow.value = it },
+        searchResult = viewModel.searchResultFlow.collectAsState().value,
+        onInviteClicked = { viewModel.addInviteUser(it) },
+        isWaitingResult = viewModel.waitingResultFlow.collectAsState().value,
         onBackPressed = { (context as? Activity)?.finish() }
     )
 }
@@ -93,7 +115,7 @@ private fun AddGroupScreen(
     onInviteDeleteClicked: (Int) -> Unit = { },
     keyword: String = "",
     onKeywordChanged: (String) -> Unit = { },
-    searchResult: List<User> = listOf(),
+    searchResult: SearchUserResultModel = SearchUserResultModel("", listOf()),
     onInviteClicked: (User) -> Unit = { },
     isWaitingResult: Boolean = false,
     onBackPressed: () -> Unit = { }
@@ -311,7 +333,7 @@ private fun InviteUserRow(
 private fun InviteUserSearch(
     keyword: String,
     onKeywordChanged: (String) -> Unit,
-    searchResult: List<User>,
+    searchResult: SearchUserResultModel,
     onInviteClicked: (User) -> Unit,
     isWaitingResult: Boolean
 ) {
@@ -333,13 +355,15 @@ private fun InviteUserSearch(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    innerTextField()
-                    if (keyword.isNotEmpty()) {
-                        Text(
-                            text = "초대할 아이디를 입력해주세요.",
-                            style = KoonsTypography.BodyMedium,
-                            color = KoonsColor.Black40
-                        )
+                    Box {
+                        if (keyword.isEmpty()) {
+                            Text(
+                                text = "초대할 아이디를 입력해주세요.",
+                                style = KoonsTypography.BodyMedium,
+                                color = KoonsColor.Black40
+                            )
+                        }
+                        innerTextField()
                     }
                     if (isWaitingResult) {
                         CircularProgressIndicator(
@@ -358,38 +382,56 @@ private fun InviteUserSearch(
         modifier = Modifier.padding(start = 32.dp, end = 32.dp, top = 12.dp)
     )
 
-    searchResult.forEach { user ->
-        Row(
+    if (searchResult.userList.isEmpty() && searchResult.keyword.isNotEmpty()) {
+        Text(
+            text = "검색 결과가 없습니다.",
+            style = KoonsTypography.BodyMedium,
+            color = KoonsColor.Black60,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 32.dp, end = 32.dp, top = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AsyncImage(
-                model = user.image.path,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
+                .padding(top = 32.dp),
+            textAlign = TextAlign.Center
+        )
+    } else {
+        searchResult.userList.forEach { user ->
+            Row(
                 modifier = Modifier
-                    .size(24.dp)
-                    .clip(CircleShape)
-            )
-            Text(
-                text = user.username,
-                color = KoonsColor.Black100,
-                style = KoonsTypography.BodyMedium,
-                modifier = Modifier.padding(start = 4.dp)
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = "초대하기",
-                style = KoonsTypography.BodyMedium,
-                color = KoonsColor.Black100,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(KoonsColor.Black40)
-                    .clickable { onInviteClicked(user) }
-                    .padding(vertical = 2.dp, horizontal = 16.dp)
-            )
+                    .fillMaxWidth()
+                    .padding(start = 32.dp, end = 32.dp, top = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AsyncImage(
+                    model = user.image.path,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clip(CircleShape)
+                )
+                Text(
+                    text = buildAnnotatedString {
+                        append(user.username.substringBefore(searchResult.keyword))
+                        withStyle(SpanStyle(color = KoonsColor.Black100)) {
+                            append(searchResult.keyword)
+                        }
+                        append(user.username.substringAfter(searchResult.keyword))
+                    },
+                    color = KoonsColor.Black60,
+                    style = KoonsTypography.BodyMedium,
+                    modifier = Modifier.padding(start = 4.dp)
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = "초대하기",
+                    style = KoonsTypography.BodyMedium,
+                    color = KoonsColor.Black100,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(KoonsColor.Black40)
+                        .clickable { onInviteClicked(user) }
+                        .padding(vertical = 2.dp, horizontal = 16.dp)
+                )
+            }
         }
     }
 
