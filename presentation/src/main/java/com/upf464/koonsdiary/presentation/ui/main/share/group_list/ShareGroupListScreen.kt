@@ -1,6 +1,5 @@
 package com.upf464.koonsdiary.presentation.ui.main.share.group_list
 
-import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -40,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -54,7 +52,6 @@ import com.google.accompanist.pager.rememberPagerState
 import com.upf464.koonsdiary.domain.model.ShareGroup
 import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.ui.main.share.ShareNavigation
-import com.upf464.koonsdiary.presentation.ui.main.share.add_group.AddGroupActivity
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 
@@ -63,8 +60,6 @@ internal fun ShareGroupListScreen(
     viewModel: ShareGroupListViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val context = LocalContext.current
-
     LaunchedEffect(key1 = Unit) {
         viewModel.eventFlow.collect { event ->
             when (event) {
@@ -72,7 +67,7 @@ internal fun ShareGroupListScreen(
                     navController.navigate(ShareNavigation.GROUP_DETAIL.route + "/${event.groupId}")
                 }
                 ShareGroupListEvent.NavigateToAddGroup -> {
-                    context.startActivity(Intent(context, AddGroupActivity::class.java))
+                    navController.navigate(ShareNavigation.ADD_GROUP.route)
                 }
             }
         }
