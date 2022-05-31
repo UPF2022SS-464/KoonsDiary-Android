@@ -26,10 +26,5 @@
             android:name=".ui.security.BiometricActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
-        <activity
-            android:name=".ui.main.share.add_group.AddGroupActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
     </application>
 </manifest>

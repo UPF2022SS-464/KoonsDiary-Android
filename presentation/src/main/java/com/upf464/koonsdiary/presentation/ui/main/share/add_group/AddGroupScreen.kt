@@ -54,15 +54,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.model.share.add_group.SearchUserResultModel
+import com.upf464.koonsdiary.presentation.ui.main.share.ShareNavigation
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 
 @Composable
 internal fun AddGroupScreen(
+    navController: NavController,
     viewModel: AddGroupViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -71,7 +74,8 @@ internal fun AddGroupScreen(
         viewModel.eventFlow.collect { event ->
             when (event) {
                 is AddGroupEvent.NavigateToGroup -> {
-                    // TODO()
+                    navController.popBackStack()
+                    navController.navigate(ShareNavigation.GROUP_DETAIL.route + "/${event.groupId}")
                 }
             }
         }
