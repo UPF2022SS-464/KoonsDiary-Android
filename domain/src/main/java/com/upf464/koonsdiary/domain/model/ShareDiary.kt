@@ -7,7 +7,8 @@ data class ShareDiary(
     val group: ShareGroup = ShareGroup(),
     val user: User = User(),
     val content: String,
-    val imageList: List<DiaryImage>,
+    val imageList: List<DiaryImage> = listOf(),
+    val commentCount: Int = 0,
     val createdDate: LocalDateTime = LocalDateTime.now(),
     val lastModifiedDate: LocalDateTime = LocalDateTime.now()
 )
