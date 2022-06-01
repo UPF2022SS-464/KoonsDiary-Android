@@ -15,6 +15,8 @@ interface ShareRemoteDataSource {
 
     suspend fun deleteGroup(groupId: Int): Result<Unit>
 
+    suspend fun fetchGroup(diaryId: Int): Result<ShareGroupData>
+
     suspend fun fetchGroupList(): Result<List<ShareGroupData>>
 
     suspend fun addDiary(diary: ShareDiaryData): Result<Int>
@@ -22,6 +24,8 @@ interface ShareRemoteDataSource {
     suspend fun updateDiary(diary: ShareDiaryData): Result<Int>
 
     suspend fun deleteDiary(diaryId: Int): Result<Unit>
+
+    suspend fun fetchDiary(diaryId: Int): Result<ShareDiaryData>
 
     suspend fun fetchDiaryList(groupId: Int): Result<List<ShareDiaryData>>
 

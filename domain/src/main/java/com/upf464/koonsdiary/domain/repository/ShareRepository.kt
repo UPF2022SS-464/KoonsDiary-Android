@@ -15,6 +15,8 @@ interface ShareRepository {
 
     suspend fun deleteGroup(groupId: Int): Result<Unit>
 
+    suspend fun fetchGroup(groupId: Int): Result<ShareGroup>
+
     suspend fun fetchGroupList(): Result<List<ShareGroup>>
 
     suspend fun addDiary(diary: ShareDiary): Result<Int>
@@ -22,6 +24,8 @@ interface ShareRepository {
     suspend fun updateDiary(diary: ShareDiary): Result<Int>
 
     suspend fun deleteDiary(diaryId: Int): Result<Unit>
+
+    suspend fun fetchDiary(diaryId: Int): Result<ShareDiary>
 
     suspend fun fetchDiaryList(groupId: Int): Result<List<ShareDiary>>
 

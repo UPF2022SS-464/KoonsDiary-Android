@@ -46,6 +46,15 @@ internal class ShareRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun fetchGroup(groupId: Int): Result<ShareGroup> {
+        return remote.fetchGroup(groupId).map { group ->
+            group.toDomain()
+        }.errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
+
     override suspend fun fetchGroupList(): Result<List<ShareGroup>> {
         return remote.fetchGroupList().map { groupList ->
             groupList.map { it.toDomain() }
@@ -71,6 +80,15 @@ internal class ShareRepositoryImpl @Inject constructor(
 
     override suspend fun deleteDiary(diaryId: Int): Result<Unit> {
         return remote.deleteDiary(diaryId).errorMap { error ->
+            if (error is ErrorData) error.toDomain()
+            else Exception(error)
+        }
+    }
+
+    override suspend fun fetchDiary(diaryId: Int): Result<ShareDiary> {
+        return remote.fetchDiary(diaryId).map { diary ->
+            diary.toDomain()
+        }.errorMap { error ->
             if (error is ErrorData) error.toDomain()
             else Exception(error)
         }
