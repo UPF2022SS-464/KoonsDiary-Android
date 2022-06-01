@@ -33,7 +33,7 @@ private fun Navigation(navController: NavHostController) {
             )
         }
         composable(route = ShareNavigation.GROUP_DETAIL.route + "/{${Constants.PARAM_GROUP_ID}}") {
-            ShareGroupScreen()
+            ShareGroupScreen(navController = navController)
         }
     }
 }
