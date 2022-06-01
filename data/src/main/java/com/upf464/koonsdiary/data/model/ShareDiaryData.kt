@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 data class ShareDiaryData(
     val id: Int = 0,
-    val group: ShareGroupData,
+    val group: ShareGroupData = ShareGroupData(),
     val user: UserData = UserData(),
     val content: String,
     val imageList: List<DiaryImageData> = listOf(),
