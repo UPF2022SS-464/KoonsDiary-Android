@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.upf464.koonsdiary.presentation.common.Constants
 import com.upf464.koonsdiary.presentation.ui.main.share.add_group.AddGroupScreen
+import com.upf464.koonsdiary.presentation.ui.main.share.group.ShareGroupScreen
 import com.upf464.koonsdiary.presentation.ui.main.share.group_list.ShareGroupListScreen
 
 @Composable
@@ -32,6 +33,7 @@ private fun Navigation(navController: NavHostController) {
             )
         }
         composable(route = ShareNavigation.GROUP_DETAIL.route + "/{${Constants.PARAM_GROUP_ID}}") {
+            ShareGroupScreen()
         }
     }
 }
