@@ -9,6 +9,7 @@ internal fun ShareDiaryData.toDomain() = ShareDiary(
     user = user.toDomain(),
     content = content,
     imageList = imageList.map { it.toDomain() },
+    commentCount = commentCount,
     createdDate = createdDate,
     lastModifiedDate = lastModifiedDate
 )
@@ -19,6 +20,7 @@ internal fun ShareDiary.toData() = ShareDiaryData(
     user = user.toData(),
     content = content,
     imageList = imageList.map { it.toData() },
+    commentCount = commentCount,
     createdDate = createdDate,
     lastModifiedDate = lastModifiedDate
 )
