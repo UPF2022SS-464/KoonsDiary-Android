@@ -18,11 +18,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,11 +34,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.upf464.koonsdiary.domain.model.DiaryImage
 import com.upf464.koonsdiary.domain.model.ShareDiary
-import com.upf464.koonsdiary.domain.model.ShareGroup
-import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
@@ -43,55 +44,28 @@ import java.time.LocalDateTime
 
 @Composable
 internal fun ShareGroupScreen(
-    viewModel: ShareGroupViewModel = hiltViewModel()
+    viewModel: ShareGroupViewModel = hiltViewModel(),
+    navController: NavController
 ) {
+    LaunchedEffect(key1 = Unit) {
+        viewModel.eventFlow.collect { event ->
+            when (event) {
+                is ShareGroupEvent.NavigateToDiary -> {
+                    // TODO("일기 Activity 로 이동")
+                }
+                is ShareGroupEvent.NavigateToSettings -> {
+                    // TODO("설정 Activity 로 이동")
+                }
+            }
+        }
+    }
+
     ShareGroupScreen(
-        groupState = ShareGroupState.Success(
-            ShareGroup(
-                name = "그룹1",
-                imagePath = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg",
-                userList = listOf(
-                    User(
-                        username = "Username1",
-                        nickname = "nickname1",
-                        image = User.Image(path = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg")
-                    )
-                )
-            )
-        ),
-        diaryListState = ShareDiaryListState.Success(
-            listOf(
-                ShareDiary(
-                    user = User(
-                        username = "Username1",
-                        nickname = "nickname1",
-                        image = User.Image(path = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg")
-                    ),
-                    content = "오늘의 할일들\n" +
-                            "아무것도 안한다 끝!",
-                    commentCount = 3,
-                    createdDate = LocalDateTime.of(2022, 6, 1, 17, 30)
-                ),
-                ShareDiary(
-                    user = User(
-                        username = "Username1",
-                        nickname = "nickname1",
-                        image = User.Image(path = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg")
-                    ),
-                    content = "너굴맨은 사실 라쿤이므로 라쿤맨이라고 불러야 한다구\n" +
-                            "좀도둑 처럼 생긴애가 라쿤이고 \n" +
-                            "중범죄 처럼 생긴애가 너구리라구 ...",
-                    imageList = listOf(
-                        DiaryImage(
-                            imagePath = "https://cdn.pixabay.com/photo/2019/08/01/12/36/illustration-4377408_960_720.png",
-                            comment = ""
-                        )
-                    ),
-                    commentCount = 2,
-                    createdDate = LocalDateTime.of(2022, 5, 24, 17, 30)
-                )
-            )
-        ),
+        groupState = viewModel.groupStateFlow.collectAsState().value,
+        diaryListState = viewModel.diaryListStateFlow.collectAsState().value,
+        onBackPressed = { navController.popBackStack() },
+        onSettingsPressed = { viewModel.navigateToGroupSettings() },
+        onDiaryClicked = { viewModel.navigateToDiary(it) },
         formatDateTime = { viewModel.dateTimeUtil.formatDateTimeToBefore(it) }
     )
 }
@@ -102,7 +76,8 @@ private fun ShareGroupScreen(
     diaryListState: ShareDiaryListState = ShareDiaryListState.Loading,
     onBackPressed: () -> Unit = { },
     onSettingsPressed: () -> Unit = { },
-    formatDateTime: (LocalDateTime) -> String = { "" }
+    formatDateTime: (LocalDateTime) -> String = { "" },
+    onDiaryClicked: (ShareDiary) -> Unit = { }
 ) {
     if (groupState is ShareGroupState.Success) {
         val group = groupState.group
@@ -180,7 +155,8 @@ private fun ShareGroupScreen(
                         items(diaryListState.diaryList) { diary ->
                             DiaryCard(
                                 diary = diary,
-                                formatDateTime = formatDateTime
+                                formatDateTime = formatDateTime,
+                                onDiaryClicked = onDiaryClicked
                             )
                         }
                     }
@@ -233,14 +209,17 @@ private fun ShareGroupAppBar(
 }
 
 @Composable
+@OptIn(ExperimentalMaterialApi::class)
 private fun DiaryCard(
     diary: ShareDiary,
-    formatDateTime: (LocalDateTime) -> String
+    formatDateTime: (LocalDateTime) -> String,
+    onDiaryClicked: (ShareDiary) -> Unit
 ) {
     Card(
         backgroundColor = KoonsColor.Black5,
         shape = RoundedCornerShape(24.dp),
-        modifier = Modifier.padding(vertical = 12.dp, horizontal = 24.dp)
+        modifier = Modifier.padding(vertical = 12.dp, horizontal = 24.dp),
+        onClick = { onDiaryClicked(diary) }
     ) {
         Column(modifier = Modifier.padding(vertical = 12.dp, horizontal = 24.dp)) {
             Row {
