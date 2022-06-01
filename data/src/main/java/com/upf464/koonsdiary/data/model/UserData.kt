@@ -4,7 +4,8 @@ data class UserData(
     val id: Int = 0,
     val username: String = "",
     val email: String? = null,
-    val nickname: String = ""
+    val nickname: String = "",
+    val image: Image = Image()
 ) {
 
     data class Image(

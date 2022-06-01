@@ -10,7 +10,26 @@ import javax.inject.Inject
 internal class ShareRemoteDevDataSourceImpl @Inject constructor() : ShareRemoteDataSource {
 
     override suspend fun searchUser(keyword: String): Result<List<UserData>> {
-        return Result.success(emptyList())
+        return Result.success(
+            listOf(
+                UserData(
+                    id = 1,
+                    username = "Username1",
+                    nickname = "Nickname1",
+                    image = UserData.Image(
+                        path = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg"
+                    )
+                ),
+                UserData(
+                    id = 2,
+                    username = "Username2",
+                    nickname = "Nickname2",
+                    image = UserData.Image(
+                        path = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg"
+                    )
+                )
+            )
+        )
     }
 
     override suspend fun addGroup(group: ShareGroupData, inviteUserIdList: List<Int>): Result<Int> {
@@ -26,7 +45,38 @@ internal class ShareRemoteDevDataSourceImpl @Inject constructor() : ShareRemoteD
     }
 
     override suspend fun fetchGroupList(): Result<List<ShareGroupData>> {
-        return Result.success(emptyList())
+        return Result.success(
+            listOf(
+                ShareGroupData(
+                    id = 1,
+                    name = "Name1",
+                    manager = UserData(
+                        id = 1,
+                        username = "Username1",
+                        nickname = "Nickname1"
+                    ),
+                    imagePath = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg",
+                    userList = listOf(
+                        UserData(
+                            id = 1,
+                            username = "Username1",
+                            nickname = "Nickname1",
+                            image = UserData.Image(
+                                path = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg"
+                            )
+                        ),
+                        UserData(
+                            id = 2,
+                            username = "Username2",
+                            nickname = "Nickname2",
+                            image = UserData.Image(
+                                path = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg"
+                            )
+                        )
+                    )
+                )
+            )
+        )
     }
 
     override suspend fun addDiary(diary: ShareDiaryData): Result<Int> {
