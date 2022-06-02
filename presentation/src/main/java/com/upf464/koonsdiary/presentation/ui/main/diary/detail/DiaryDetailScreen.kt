@@ -119,7 +119,7 @@ private fun DeletedDialog(
 }
 
 @Composable
-fun DiaryDetailScreen(
+private fun DiaryDetailScreen(
     diaryState: DiaryDetailState,
     onDelete: () -> Unit,
     onEdit: () -> Unit
@@ -156,7 +156,7 @@ fun DiaryDetailScreen(
 }
 
 @Composable
-fun DetailTopBar(
+private fun DetailTopBar(
     onDelete: () -> Unit,
     onEdit: () -> Unit
 ) {
@@ -180,7 +180,7 @@ fun DetailTopBar(
 }
 
 @Composable
-fun ColumnScope.DetailSuccessBody(model: DiaryDetailModel) {
+private fun ColumnScope.DetailSuccessBody(model: DiaryDetailModel) {
     Text(
         text = stringResource(
             id = R.string.year_month_day,
@@ -220,7 +220,7 @@ fun ColumnScope.DetailSuccessBody(model: DiaryDetailModel) {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun DetailImagePager(imageList: List<DiaryImage>) {
+private fun DetailImagePager(imageList: List<DiaryImage>) {
     Card(
         elevation = 4.dp,
         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
