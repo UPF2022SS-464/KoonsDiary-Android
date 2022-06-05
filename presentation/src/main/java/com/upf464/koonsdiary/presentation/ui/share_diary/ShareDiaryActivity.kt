@@ -36,7 +36,17 @@ class ShareDiaryActivity : ComponentActivity() {
                                 }
                             )
                         ) {
-                            ShareDiaryDetailScreen()
+                            ShareDiaryDetailScreen(navController = navController)
+                        }
+                        composable(
+                            route = ShareDiaryNavigation.Editor.route
+                        ) {
+
+                        }
+                        composable(
+                            route = ShareDiaryNavigation.Editor.route + "/{${Constants.PARAM_DIARY_ID}}"
+                        ) {
+
                         }
                     }
                 }
