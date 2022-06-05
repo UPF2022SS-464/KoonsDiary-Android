@@ -1,5 +1,6 @@
 package com.upf464.koonsdiary.presentation.ui.share_diary.diary
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -20,28 +21,46 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.upf464.koonsdiary.domain.model.DiaryImage
 import com.upf464.koonsdiary.presentation.R
+import com.upf464.koonsdiary.presentation.ui.share_diary.ShareDiaryNavigation
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 import java.time.LocalDateTime
 
 @Composable
 internal fun ShareDiaryDetailScreen(
-    viewModel: ShareDiaryDetailViewModel = hiltViewModel()
+    viewModel: ShareDiaryDetailViewModel = hiltViewModel(),
+    navController: NavController
 ) {
+    val context = LocalContext.current
+    
+    LaunchedEffect(key1 = Unit) {
+        viewModel.eventFlow.collect { event ->
+            when (event) {
+                ShareDiaryEvent.DiaryDeleted ->
+                    (context as Activity).finish()
+                is ShareDiaryEvent.NavigateToEditor ->
+                    navController.navigate(ShareDiaryNavigation.Editor.route + "/${event.diaryId}")
+            }
+        }
+    }
+    
     ShareDiaryDetailScreen(
         diaryState = viewModel.diaryStateFlow.collectAsState().value,
         commentState = viewModel.commentStateFlow.collectAsState().value,
@@ -75,7 +94,9 @@ private fun ShareDiaryDetailScreen(
                 when (diaryState) {
                     ShareDiaryState.Loading -> {
                         CircularProgressIndicator(
-                            modifier = Modifier.padding(20.dp).align(Alignment.CenterHorizontally)
+                            modifier = Modifier
+                                .padding(20.dp)
+                                .align(Alignment.CenterHorizontally)
                         )
                     }
                     is ShareDiaryState.Success -> {
