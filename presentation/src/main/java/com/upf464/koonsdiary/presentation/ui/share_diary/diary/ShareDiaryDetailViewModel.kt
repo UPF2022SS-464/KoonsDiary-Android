@@ -2,10 +2,12 @@ package com.upf464.koonsdiary.presentation.ui.share_diary.diary
 
 import androidx.lifecycle.ViewModel
 import com.upf464.koonsdiary.presentation.common.DateTimeUtil
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
+@HiltViewModel
 internal class ShareDiaryDetailViewModel @Inject constructor(
     val dateTimeUtil: DateTimeUtil
 ) : ViewModel() {

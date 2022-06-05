@@ -1,5 +1,6 @@
 package com.upf464.koonsdiary.presentation.ui.main.share.group
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,6 +40,9 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.upf464.koonsdiary.domain.model.ShareDiary
 import com.upf464.koonsdiary.presentation.R
+import com.upf464.koonsdiary.presentation.common.Constants
+import com.upf464.koonsdiary.presentation.ui.share_diary.ShareDiaryActivity
+import com.upf464.koonsdiary.presentation.ui.share_diary.ShareDiaryNavigation
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 import java.time.LocalDateTime
@@ -47,11 +52,18 @@ internal fun ShareGroupScreen(
     viewModel: ShareGroupViewModel = hiltViewModel(),
     navController: NavController
 ) {
+    val context = LocalContext.current
+
     LaunchedEffect(key1 = Unit) {
         viewModel.eventFlow.collect { event ->
             when (event) {
                 is ShareGroupEvent.NavigateToDiary -> {
-                    // TODO("일기 Activity 로 이동")
+                    context.startActivity(
+                        Intent(context, ShareDiaryActivity::class.java).apply {
+                            putExtra(Constants.EXTRA_SHARE_DIARY_ROUTE, ShareDiaryNavigation.DiaryDetail.route)
+                            putExtra(Constants.EXTRA_SHARE_DIARY_ID, event.diaryId)
+                        }
+                    )
                 }
                 is ShareGroupEvent.NavigateToSettings -> {
                     // TODO("설정 Activity 로 이동")
