@@ -14,4 +14,6 @@ object Constants {
     const val PARAM_GROUP_ID = "groupId"
     const val PARAM_DATE = "date"
     const val PARAM_SIGN_UP_TYPE = "signUpType"
+
+    const val EXTRA_SHARE_DIARY_ROUTE = "shareDiaryRoute"
 }
