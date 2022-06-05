@@ -24,7 +24,7 @@ class ShareGroupViewModel @Inject constructor(
     private val fetchShareDiaryListUseCase: FetchShareDiaryListUseCase
 ) : ViewModel() {
 
-    private val groupId = savedStateHandle.get<Int>(Constants.PARAM_GROUP_ID) ?: 0
+    private val groupId = savedStateHandle.get<String>(Constants.PARAM_GROUP_ID)?.toIntOrNull() ?: 0
 
     private val _eventFlow = MutableSharedFlow<ShareGroupEvent>(extraBufferCapacity = 1)
     val eventFlow = _eventFlow.asSharedFlow()
