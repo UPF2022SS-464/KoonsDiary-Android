@@ -14,7 +14,8 @@
     <string name="year_month">%d년 %d월</string>
     <string name="diary_detail_sentiment">일기에 나타난 감정은 ...</string>
 
-    <string name="shareDiary_of">%s님의 공유일기장</string>
+    <string name="shareDiaryGroups_of">%s님의 공유일기장</string>
+    <string name="shareDiary_of">%s님의 일기</string>
 
     <string-array name="WeekDay">
         <item>일</item>
