@@ -127,14 +127,45 @@ internal class ShareRemoteDevDataSourceImpl @Inject constructor() : ShareRemoteD
                     )
                 ),
                 commentCount = 2,
-                createdDate = LocalDateTime.of(2022, 5, 24, 17, 30),
-
+                createdDate = LocalDateTime.of(2022, 5, 24, 17, 30)
             )
         )
     }
 
     override suspend fun fetchDiaryList(groupId: Int): Result<List<ShareDiaryData>> {
-        return Result.success(emptyList())
+        return Result.success(
+            listOf(
+                ShareDiaryData(
+                    user = UserData(
+                        username = "Username1",
+                        nickname = "nickname1",
+                        image = UserData.Image(path = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg")
+                    ),
+                    content = "오늘의 할일들\n" +
+                            "아무것도 안한다 끝!",
+                    commentCount = 3,
+                    createdDate = LocalDateTime.of(2022, 6, 1, 17, 30)
+                ),
+                ShareDiaryData(
+                    user = UserData(
+                        username = "Username1",
+                        nickname = "nickname1",
+                        image = UserData.Image(path = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg")
+                    ),
+                    content = "너굴맨은 사실 라쿤이므로 라쿤맨이라고 불러야 한다구\n" +
+                            "좀도둑 처럼 생긴애가 라쿤이고 \n" +
+                            "중범죄 처럼 생긴애가 너구리라구 ...",
+                    imageList = listOf(
+                        DiaryImageData(
+                            imagePath = "https://cdn.pixabay.com/photo/2019/08/01/12/36/illustration-4377408_960_720.png",
+                            comment = ""
+                        )
+                    ),
+                    commentCount = 2,
+                    createdDate = LocalDateTime.of(2022, 5, 24, 17, 30)
+                )
+            )
+        )
     }
 
     override suspend fun addComment(comment: CommentData): Result<Unit> {
