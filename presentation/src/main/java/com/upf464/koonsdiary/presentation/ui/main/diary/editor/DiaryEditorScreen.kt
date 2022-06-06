@@ -105,9 +105,9 @@ internal fun DiaryEditorScreen(
     }
 
     when (viewModel.loadingStateFlow.collectAsState().value) {
-        LoadingState.Loading -> LoadingDialog()
-        LoadingState.Error -> LoadingDialog(isError = true)
-        LoadingState.Closed -> {}
+        DiaryLoadingState.Loading -> LoadingDialog()
+        DiaryLoadingState.Error -> LoadingDialog(isError = true)
+        DiaryLoadingState.Closed -> {}
     }
 
     SentimentDialog(
