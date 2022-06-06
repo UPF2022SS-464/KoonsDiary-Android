@@ -67,8 +67,8 @@ internal class DiaryEditorViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     private val _loadingStateFlow = MutableStateFlow(
-        if (model.diaryId != null) LoadingState.Loading
-        else LoadingState.Closed
+        if (model.diaryId != null) DiaryLoadingState.Loading
+        else DiaryLoadingState.Closed
     )
     val loadingStateFlow = _loadingStateFlow.asStateFlow()
 
@@ -82,10 +82,10 @@ internal class DiaryEditorViewModel @Inject constructor(
                         _imageListFlow.value = diary.imageList.map { it.toEditorModel() }
                         contentFlow.value = diary.content
                         model.sentiment = diary.sentiment
-                        _loadingStateFlow.value = LoadingState.Closed
+                        _loadingStateFlow.value = DiaryLoadingState.Closed
                     }
                     .onFailure {
-                        _loadingStateFlow.value = LoadingState.Error
+                        _loadingStateFlow.value = DiaryLoadingState.Error
                     }
             }
         }
