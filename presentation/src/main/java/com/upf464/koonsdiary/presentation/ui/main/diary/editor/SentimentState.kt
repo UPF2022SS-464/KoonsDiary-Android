@@ -1,4 +1,4 @@
-package com.upf464.koonsdiary.presentation.ui.main.diary.add
+package com.upf464.koonsdiary.presentation.ui.main.diary.editor
 
 import com.upf464.koonsdiary.domain.model.Sentiment
 

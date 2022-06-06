@@ -1,4 +1,4 @@
-package com.upf464.koonsdiary.presentation.ui.main.diary.add
+package com.upf464.koonsdiary.presentation.ui.main.diary.editor
 
 sealed class LoadingState {
     object Loading : LoadingState()
