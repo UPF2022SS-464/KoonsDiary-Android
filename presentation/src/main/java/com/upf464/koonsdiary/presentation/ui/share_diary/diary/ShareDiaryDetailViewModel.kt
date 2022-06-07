@@ -26,6 +26,7 @@ internal class ShareDiaryDetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val diaryId = savedStateHandle.get<Int>(Constants.PARAM_DIARY_ID) ?: 0
+    private var groupId = 0
 
     private val _diaryStateFlow = MutableStateFlow<ShareDiaryState>(ShareDiaryState.Loading)
     val diaryStateFlow = _diaryStateFlow.asStateFlow()
@@ -41,6 +42,7 @@ internal class ShareDiaryDetailViewModel @Inject constructor(
             fetchShareDiaryUseCase(FetchShareDiaryUseCase.Request(diaryId = diaryId))
                 .onSuccess { response ->
                     _diaryStateFlow.value = ShareDiaryState.Success(response.diary)
+                    groupId = response.diary.group.id
                 }
                 .onFailure {
                     // TODO("오류 처리")
@@ -59,7 +61,12 @@ internal class ShareDiaryDetailViewModel @Inject constructor(
     }
 
     fun edit() {
-        _eventFlow.tryEmit(ShareDiaryEvent.NavigateToEditor(diaryId))
+        _eventFlow.tryEmit(
+            ShareDiaryEvent.NavigateToEditor(
+                groupId = groupId,
+                diaryId = diaryId
+            )
+        )
     }
 
     fun delete() {

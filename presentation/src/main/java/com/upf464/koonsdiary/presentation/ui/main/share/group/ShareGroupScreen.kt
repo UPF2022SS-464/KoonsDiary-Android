@@ -60,7 +60,7 @@ internal fun ShareGroupScreen(
                 is ShareGroupEvent.NavigateToDiary -> {
                     context.startActivity(
                         Intent(context, ShareDiaryActivity::class.java).apply {
-                            putExtra(Constants.EXTRA_SHARE_DIARY_ROUTE, ShareDiaryNavigation.DiaryDetail.route)
+                            putExtra(Constants.EXTRA_SHARE_DIARY_ROUTE, ShareDiaryNavigation.DIARY_DETAIL.route)
                             putExtra(Constants.EXTRA_SHARE_DIARY_ID, event.diaryId)
                         }
                     )
