@@ -56,7 +56,7 @@ internal fun ShareDiaryDetailScreen(
                 ShareDiaryEvent.DiaryDeleted ->
                     (context as Activity).finish()
                 is ShareDiaryEvent.NavigateToEditor ->
-                    navController.navigate(ShareDiaryNavigation.Editor.route + "/${event.diaryId}")
+                    navController.navigate(ShareDiaryNavigation.EDITOR.route + "/${event.groupId}/${event.diaryId}")
             }
         }
     }
