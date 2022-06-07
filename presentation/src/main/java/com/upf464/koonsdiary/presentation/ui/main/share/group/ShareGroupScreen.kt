@@ -20,8 +20,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
@@ -68,6 +70,14 @@ internal fun ShareGroupScreen(
                 is ShareGroupEvent.NavigateToSettings -> {
                     // TODO("설정 Activity 로 이동")
                 }
+                is ShareGroupEvent.NavigateToNewDiary -> {
+                    context.startActivity(
+                        Intent(context, ShareDiaryActivity::class.java).apply {
+                            putExtra(Constants.EXTRA_SHARE_DIARY_ROUTE, ShareDiaryNavigation.EDITOR.route)
+                            putExtra(Constants.PARAM_GROUP_ID, event.groupId)
+                        }
+                    )
+                }
             }
         }
     }
@@ -78,7 +88,8 @@ internal fun ShareGroupScreen(
         onBackPressed = { navController.popBackStack() },
         onSettingsPressed = { viewModel.navigateToGroupSettings() },
         onDiaryClicked = { viewModel.navigateToDiary(it) },
-        formatDateTime = { viewModel.dateTimeUtil.formatDateTimeToBefore(it) }
+        formatDateTime = { viewModel.dateTimeUtil.formatDateTimeToBefore(it) },
+        onNewDiaryClicked = { viewModel.navigateToAddDiary() }
     )
 }
 
@@ -89,18 +100,33 @@ private fun ShareGroupScreen(
     onBackPressed: () -> Unit = { },
     onSettingsPressed: () -> Unit = { },
     formatDateTime: (LocalDateTime) -> String = { "" },
-    onDiaryClicked: (ShareDiary) -> Unit = { }
+    onDiaryClicked: (ShareDiary) -> Unit = { },
+    onNewDiaryClicked: () -> Unit = { }
 ) {
     if (groupState is ShareGroupState.Success) {
         val group = groupState.group
 
-        Column(modifier = Modifier.fillMaxSize()) {
-            ShareGroupAppBar(
-                groupName = group.name,
-                onBackPressed = onBackPressed,
-                onSettingsPressed = onSettingsPressed
-            )
-
+        Scaffold(
+            topBar = {
+                ShareGroupAppBar(
+                    groupName = group.name,
+                    onBackPressed = onBackPressed,
+                    onSettingsPressed = onSettingsPressed
+                )
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = onNewDiaryClicked,
+                    backgroundColor = KoonsColor.Black5
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_new_diary),
+                        contentDescription = null,
+                        tint = KoonsColor.Green
+                    )
+                }
+            }
+        ) {
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 item {
                     Spacer(modifier = Modifier.height(16.dp))

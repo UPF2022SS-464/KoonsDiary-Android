@@ -32,10 +32,15 @@ class ShareDiaryActivity : ComponentActivity() {
                             route = ShareDiaryNavigation.DIARY_DETAIL.route,
                             arguments = listOf(
                                 navArgument(Constants.PARAM_DIARY_ID) {
-                                    type = NavType.IntType
-                                    defaultValue = intent.getIntExtra(Constants.PARAM_DIARY_ID, 0)
+                                    type = NavType.StringType
+                                    defaultValue = intent.getIntExtra(Constants.PARAM_DIARY_ID, 0).toString()
                                 }
                             )
+                        ) {
+                            ShareDiaryDetailScreen(navController = navController)
+                        }
+                        composable(
+                            route = ShareDiaryNavigation.DIARY_DETAIL.route + "/{${Constants.PARAM_DIARY_ID}}"
                         ) {
                             ShareDiaryDetailScreen(navController = navController)
                         }
@@ -44,7 +49,7 @@ class ShareDiaryActivity : ComponentActivity() {
                             arguments = listOf(
                                 navArgument(Constants.PARAM_GROUP_ID) {
                                     type = NavType.StringType
-                                    defaultValue = intent.getIntExtra(Constants.PARAM_GROUP_ID, 0)
+                                    defaultValue = intent.getIntExtra(Constants.PARAM_GROUP_ID, 0).toString()
                                 }
                             )
                         ) {

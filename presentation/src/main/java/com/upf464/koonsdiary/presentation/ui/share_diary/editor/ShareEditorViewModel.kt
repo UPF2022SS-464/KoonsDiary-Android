@@ -27,8 +27,8 @@ internal class ShareEditorViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val diaryId = savedStateHandle.get<String>(Constants.PARAM_DIARY_ID)?.toInt()
-    private val groupId = savedStateHandle.get<String>(Constants.PARAM_GROUP_ID)?.toInt() ?: 0
+    private val diaryId = savedStateHandle.get<String>(Constants.PARAM_DIARY_ID)?.toIntOrNull()
+    private val groupId = savedStateHandle.get<String>(Constants.PARAM_GROUP_ID)?.toIntOrNull() ?: 0
 
     private val _imageListFlow = MutableStateFlow<List<DiaryImageModel>>(emptyList())
     val imageListFlow = _imageListFlow.asStateFlow()

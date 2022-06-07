@@ -25,7 +25,7 @@ internal class ShareDiaryDetailViewModel @Inject constructor(
     private val deleteShareDiaryUseCase: DeleteShareDiaryUseCase
 ) : ViewModel() {
 
-    private val diaryId = savedStateHandle.get<Int>(Constants.PARAM_DIARY_ID) ?: 0
+    private val diaryId = savedStateHandle.get<String>(Constants.PARAM_DIARY_ID)?.toIntOrNull() ?: 0
     private var groupId = 0
 
     private val _diaryStateFlow = MutableStateFlow<ShareDiaryState>(ShareDiaryState.Loading)

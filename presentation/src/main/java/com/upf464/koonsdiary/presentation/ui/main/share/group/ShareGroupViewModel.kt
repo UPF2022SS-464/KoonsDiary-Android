@@ -62,4 +62,8 @@ class ShareGroupViewModel @Inject constructor(
     fun navigateToGroupSettings() {
         _eventFlow.tryEmit(ShareGroupEvent.NavigateToSettings(groupId))
     }
+
+    fun navigateToAddDiary() {
+        _eventFlow.tryEmit(ShareGroupEvent.NavigateToNewDiary(groupId))
+    }
 }
