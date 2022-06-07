@@ -3,12 +3,14 @@ package com.upf464.koonsdiary.presentation.ui.share_diary.diary
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.upf464.koonsdiary.domain.usecase.share.AddCommentUseCase
 import com.upf464.koonsdiary.domain.usecase.share.DeleteShareDiaryUseCase
 import com.upf464.koonsdiary.domain.usecase.share.FetchCommentListUseCase
 import com.upf464.koonsdiary.domain.usecase.share.FetchShareDiaryUseCase
 import com.upf464.koonsdiary.presentation.common.Constants
 import com.upf464.koonsdiary.presentation.common.DateTimeUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -22,7 +24,8 @@ internal class ShareDiaryDetailViewModel @Inject constructor(
     private val fetchShareDiaryUseCase: FetchShareDiaryUseCase,
     private val fetchCommentListUseCase: FetchCommentListUseCase,
     savedStateHandle: SavedStateHandle,
-    private val deleteShareDiaryUseCase: DeleteShareDiaryUseCase
+    private val deleteShareDiaryUseCase: DeleteShareDiaryUseCase,
+    private val addCommentUseCase: AddCommentUseCase
 ) : ViewModel() {
 
     private val diaryId = savedStateHandle.get<String>(Constants.PARAM_DIARY_ID)?.toIntOrNull() ?: 0
@@ -34,8 +37,12 @@ internal class ShareDiaryDetailViewModel @Inject constructor(
     private val _commentStateFlow = MutableStateFlow<ShareDiaryCommentState>(ShareDiaryCommentState.Loading)
     val commentStateFlow = _commentStateFlow.asStateFlow()
 
+    val commentFlow = MutableStateFlow("")
+
     private val _eventFlow = MutableSharedFlow<ShareDiaryEvent>(extraBufferCapacity = 1)
     val eventFlow = _eventFlow.asSharedFlow()
+
+    private var sendCommentJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -78,6 +85,23 @@ internal class ShareDiaryDetailViewModel @Inject constructor(
                 .onFailure {
                     // TODO("오류 처리")
                 }
+        }
+    }
+
+    fun sendComment() {
+        if (sendCommentJob == null || sendCommentJob?.isCompleted == true) {
+            sendCommentJob = viewModelScope.launch {
+                addCommentUseCase(
+                    AddCommentUseCase.Request(
+                        diaryId = diaryId,
+                        content = commentFlow.value
+                    )
+                ).onSuccess {
+                    commentFlow.value = ""
+                }.onFailure {
+                    // TODO("오류 처리")
+                }
+            }
         }
     }
 }

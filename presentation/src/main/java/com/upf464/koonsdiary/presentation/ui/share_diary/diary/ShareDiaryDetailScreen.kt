@@ -1,6 +1,8 @@
 package com.upf464.koonsdiary.presentation.ui.share_diary.diary
 
 import android.app.Activity
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -10,6 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
@@ -27,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -48,7 +53,7 @@ internal fun ShareDiaryDetailScreen(
     navController: NavController
 ) {
     val context = LocalContext.current
-    
+
     LaunchedEffect(key1 = Unit) {
         viewModel.eventFlow.collect { event ->
             when (event) {
@@ -59,13 +64,16 @@ internal fun ShareDiaryDetailScreen(
             }
         }
     }
-    
+
     ShareDiaryDetailScreen(
         diaryState = viewModel.diaryStateFlow.collectAsState().value,
         commentState = viewModel.commentStateFlow.collectAsState().value,
         onDelete = { viewModel.delete() },
         onEdit = { viewModel.edit() },
-        formatDateTime = { viewModel.dateTimeUtil.formatDateTimeToBefore(it) }
+        formatDateTime = { viewModel.dateTimeUtil.formatDateTimeToBefore(it) },
+        comment = viewModel.commentFlow.collectAsState().value,
+        onCommentChanged = { viewModel.commentFlow.value = it },
+        onSendCommentClicked = { viewModel.sendComment() }
     )
 }
 
@@ -75,7 +83,10 @@ private fun ShareDiaryDetailScreen(
     commentState: ShareDiaryCommentState = ShareDiaryCommentState.Loading,
     onDelete: () -> Unit = { },
     onEdit: () -> Unit = { },
-    formatDateTime: (LocalDateTime) -> String = { "" }
+    formatDateTime: (LocalDateTime) -> String = { "" },
+    comment: String = "",
+    onCommentChanged: (String) -> Unit = { },
+    onSendCommentClicked: () -> Unit = { }
 ) {
     Column(
         modifier = Modifier.fillMaxHeight()
@@ -127,9 +138,11 @@ private fun ShareDiaryDetailScreen(
                 }
                 is ShareDiaryCommentState.Success -> {
                     items(commentState.commentList) { comment ->
-                        Row(modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 24.dp, start = 16.dp, end = 16.dp)) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 24.dp, start = 16.dp, end = 16.dp)
+                        ) {
                             AsyncImage(
                                 model = comment.user.image.path,
                                 contentDescription = null,
@@ -162,6 +175,12 @@ private fun ShareDiaryDetailScreen(
                 }
             }
         }
+
+        ShareDiaryCommentWriter(
+            comment = comment,
+            onCommentChanged = onCommentChanged,
+            onSendCommentClicked = onSendCommentClicked
+        )
     }
 }
 
@@ -213,6 +232,50 @@ private fun DetailImagePager(imageList: List<DiaryImage>) {
                         .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun ShareDiaryCommentWriter(
+    comment: String,
+    onCommentChanged: (String) -> Unit,
+    onSendCommentClicked: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        BasicTextField(
+            value = comment,
+            onValueChange = onCommentChanged,
+            textStyle = KoonsTypography.BodyMedium.copy(color = KoonsColor.Black100),
+            decorationBox = { innerTextField ->
+                Box {
+                    innerTextField()
+                    if (comment.isEmpty()) {
+                        Text(
+                            text = "댓글을 남겨보세요.",
+                            style = KoonsTypography.BodyMedium,
+                            color = KoonsColor.Black60
+                        )
+                    }
+                }
+            },
+            modifier = Modifier
+                .weight(1f)
+                .clip(RoundedCornerShape(16.dp))
+                .background(KoonsColor.Black5)
+                .padding(16.dp)
+        )
+        IconButton(onClick = onSendCommentClicked) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_comment),
+                contentDescription = null,
+                tint = KoonsColor.Red
+            )
         }
     }
 }
