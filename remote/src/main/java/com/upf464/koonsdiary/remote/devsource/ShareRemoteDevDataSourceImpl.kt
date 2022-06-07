@@ -117,9 +117,11 @@ internal class ShareRemoteDevDataSourceImpl @Inject constructor() : ShareRemoteD
                     nickname = "nickname1",
                     image = UserData.Image(path = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg")
                 ),
-                content = "너굴맨은 사실 라쿤이므로 라쿤맨이라고 불러야 한다구\n" +
-                        "좀도둑 처럼 생긴애가 라쿤이고 \n" +
-                        "중범죄 처럼 생긴애가 너구리라구 ...",
+                content = """
+                    너굴맨은 사실 라쿤이므로 라쿤맨이라고 불러야 한다구
+                    좀도둑 처럼 생긴애가 라쿤이고
+                    중범죄 처럼 생긴애가 너구리라구 ...
+                """.trimIndent(),
                 imageList = listOf(
                     DiaryImageData(
                         imagePath = "https://cdn.pixabay.com/photo/2019/08/01/12/36/illustration-4377408_960_720.png",
@@ -141,8 +143,10 @@ internal class ShareRemoteDevDataSourceImpl @Inject constructor() : ShareRemoteD
                         nickname = "nickname1",
                         image = UserData.Image(path = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg")
                     ),
-                    content = "오늘의 할일들\n" +
-                            "아무것도 안한다 끝!",
+                    content = """
+                        오늘의 할일들
+                        아무것도 안한다 끝!
+                    """.trimIndent(),
                     commentCount = 3,
                     createdDate = LocalDateTime.of(2022, 6, 1, 17, 30)
                 ),
@@ -152,9 +156,11 @@ internal class ShareRemoteDevDataSourceImpl @Inject constructor() : ShareRemoteD
                         nickname = "nickname1",
                         image = UserData.Image(path = "https://i.pinimg.com/originals/3f/ba/d9/3fbad97c5829c3df9d857dae7857c7ce.jpg")
                     ),
-                    content = "너굴맨은 사실 라쿤이므로 라쿤맨이라고 불러야 한다구\n" +
-                            "좀도둑 처럼 생긴애가 라쿤이고 \n" +
-                            "중범죄 처럼 생긴애가 너구리라구 ...",
+                    content = """
+                        너굴맨은 사실 라쿤이므로 라쿤맨이라고 불러야 한다구
+                        좀도둑 처럼 생긴애가 라쿤이고
+                        중범죄 처럼 생긴애가 너구리라구 ...
+                    """.trimIndent(),
                     imageList = listOf(
                         DiaryImageData(
                             imagePath = "https://cdn.pixabay.com/photo/2019/08/01/12/36/illustration-4377408_960_720.png",
