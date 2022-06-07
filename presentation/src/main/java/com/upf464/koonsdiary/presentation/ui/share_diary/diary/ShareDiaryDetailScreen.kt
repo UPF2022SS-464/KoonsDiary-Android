@@ -133,9 +133,7 @@ private fun ShareDiaryDetailScreen(
             }
 
             when (commentState) {
-                ShareDiaryCommentState.Loading -> {
-
-                }
+                ShareDiaryCommentState.Loading -> {}
                 is ShareDiaryCommentState.Success -> {
                     items(commentState.commentList) { comment ->
                         Row(
