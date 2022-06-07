@@ -4,7 +4,6 @@ import android.app.Activity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -88,7 +87,7 @@ private fun ShareDiaryDetailScreen(
 
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.weight(1f)
         ) {
             item {
                 when (diaryState) {
@@ -113,7 +112,10 @@ private fun ShareDiaryDetailScreen(
 
                         Text(
                             text = stringResource(id = R.string.shareDiary_of, diary.user.nickname),
-                            modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                            textAlign = TextAlign.End
                         )
                     }
                 }
