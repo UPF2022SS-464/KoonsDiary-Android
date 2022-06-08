@@ -17,13 +17,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
@@ -51,6 +48,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.upf464.koonsdiary.domain.model.ShareGroup
 import com.upf464.koonsdiary.presentation.R
+import com.upf464.koonsdiary.presentation.ui.components.ShareUserListRow
 import com.upf464.koonsdiary.presentation.ui.main.share.ShareNavigation
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
@@ -181,31 +179,7 @@ private fun ColumnScope.ShareGroupPager(
                 modifier = Modifier.padding(start = 24.dp)
             )
 
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(24.dp)
-            ) {
-                items(currentGroup.userList) { item ->
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        AsyncImage(
-                            model = item.image.path,
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .size(64.dp)
-                                .clip(CircleShape)
-                        )
-                        Text(
-                            text = item.nickname,
-                            style = KoonsTypography.BodyMoreSmall,
-                            color = KoonsColor.Black100,
-                            modifier = Modifier.padding(top = 4.dp)
-                        )
-                    }
-                }
-            }
+            ShareUserListRow(userList = currentGroup.userList)
         }
     }
 

@@ -1,10 +1,8 @@
 package com.upf464.koonsdiary.presentation.ui.main.share.group
 
 import android.content.Intent
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,9 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
@@ -31,7 +27,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -43,6 +38,7 @@ import coil.compose.AsyncImage
 import com.upf464.koonsdiary.domain.model.ShareDiary
 import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.common.Constants
+import com.upf464.koonsdiary.presentation.ui.components.ShareUserListRow
 import com.upf464.koonsdiary.presentation.ui.share_diary.ShareDiaryActivity
 import com.upf464.koonsdiary.presentation.ui.share_diary.ShareDiaryNavigation
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
@@ -149,31 +145,7 @@ private fun ShareGroupScreen(
                         modifier = Modifier.padding(start = 24.dp)
                     )
 
-                    LazyRow(
-                        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(24.dp)
-                    ) {
-                        items(group.userList) { item ->
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                AsyncImage(
-                                    model = item.image.path,
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .size(64.dp)
-                                        .clip(CircleShape)
-                                )
-                                Text(
-                                    text = item.nickname,
-                                    style = KoonsTypography.BodyMoreSmall,
-                                    color = KoonsColor.Black100,
-                                    modifier = Modifier.padding(top = 4.dp)
-                                )
-                            }
-                        }
-                    }
+                    ShareUserListRow(userList = group.userList)
                 }
 
                 when (diaryListState) {
@@ -189,6 +161,7 @@ private fun ShareGroupScreen(
                             }
                         }
                     }
+                    // TODO: UI 변경 반영
                     is ShareDiaryListState.Success -> {
                         items(diaryListState.diaryList) { diary ->
                             DiaryCard(

@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -59,6 +58,7 @@ import coil.compose.AsyncImage
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.model.share.add_group.SearchUserResultModel
+import com.upf464.koonsdiary.presentation.ui.components.ShareUserListRow
 import com.upf464.koonsdiary.presentation.ui.main.share.ShareNavigation
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
@@ -143,9 +143,12 @@ private fun AddGroupScreen(
                 onResetClicked = onImageResetClicked
             )
 
-            InviteUserRow(
-                inviteUserList = inviteUserList,
-                onDeleteClicked = onInviteDeleteClicked
+            // TODO: 같은 사람 중복 추가 안되도록 수정
+            ShareUserListRow(
+                userList = inviteUserList,
+                onDeleteClicked = onInviteDeleteClicked,
+                contentPadding = PaddingValues(top = 48.dp, start = 24.dp, end = 24.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             )
 
             InviteUserSearch(
@@ -280,53 +283,6 @@ private fun GroupInformation(
                         .background(KoonsColor.Green)
                 )
                 Spacer(modifier = Modifier.weight(1f))
-            }
-        }
-    }
-}
-
-@Composable
-private fun InviteUserRow(
-    inviteUserList: List<User>,
-    onDeleteClicked: (Int) -> Unit
-) {
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 24.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .padding(top = 48.dp)
-            .fillMaxWidth()
-    ) {
-        items(inviteUserList.size) { index ->
-            val item = inviteUserList[index]
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Box {
-                    AsyncImage(
-                        model = item.image.path,
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(64.dp)
-                            .clip(CircleShape)
-                    )
-
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_circle_minus),
-                        contentDescription = null,
-                        tint = KoonsColor.Red,
-                        modifier = Modifier
-                            .clickable { onDeleteClicked(index) }
-                            .align(Alignment.TopEnd)
-                    )
-                }
-                Text(
-                    text = item.nickname,
-                    style = KoonsTypography.BodyMoreSmall,
-                    color = KoonsColor.Black100,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
             }
         }
     }
