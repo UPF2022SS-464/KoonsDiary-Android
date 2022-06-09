@@ -11,14 +11,19 @@ import com.upf464.koonsdiary.domain.usecase.share.SearchUserUseCase
 import com.upf464.koonsdiary.domain.usecase.share.UpdateGroupUseCase
 import com.upf464.koonsdiary.domain.usecase.user.UpdateUserUseCase
 import com.upf464.koonsdiary.presentation.common.Constants
+import com.upf464.koonsdiary.presentation.model.share.add_group.SearchUserResultModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(FlowPreview::class)
 @HiltViewModel
 internal class ShareGroupSettingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -53,7 +58,7 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
     private val _searchWaitingFlow = MutableStateFlow(false)
     val searchWaitingFlow = _searchWaitingFlow.asStateFlow()
 
-    private val _searchResultFlow = MutableStateFlow<List<User>>(listOf())
+    private val _searchResultFlow = MutableStateFlow(SearchUserResultModel("", listOf()))
     val searchResultFlow = _searchResultFlow.asStateFlow()
 
     private val _eventFlow = MutableSharedFlow<ShareGroupSettingsEvent>()
@@ -75,6 +80,31 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
                 }
                 .onFailure {
                     // TODO: 오류 처리
+                }
+        }
+
+        viewModelScope.launch {
+            keywordFlow
+                .onEach { keyword ->
+                    _searchWaitingFlow.value = keyword.isNotEmpty()
+                }
+                .debounce(SEARCH_TIMEOUT)
+                .collect { keyword ->
+                    if (keyword.isEmpty()) {
+                        _searchResultFlow.value = SearchUserResultModel(keyword, listOf())
+                    } else {
+                        searchUserUseCase(
+                            SearchUserUseCase.Request(keyword = keyword)
+                        ).onSuccess { response ->
+                            _searchResultFlow.value = SearchUserResultModel(
+                                keyword = keyword,
+                                userList = response.userList
+                            )
+                        }.onFailure {
+                            // TODO("오류 처리")
+                        }
+                    }
+                    _searchWaitingFlow.value = false
                 }
         }
     }
@@ -144,5 +174,19 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
         viewModelScope.launch {
             _eventFlow.emit(event)
         }
+    }
+
+    fun deleteInviteUserOn(index: Int) {
+        val userList = _inviteUserListFlow.value
+        _inviteUserListFlow.value = userList.subList(0, index) + userList.subList(index + 1, userList.size)
+    }
+
+    fun addInviteUser(user: User) {
+        val userList = _inviteUserListFlow.value
+        _inviteUserListFlow.value = listOf(user) + userList
+    }
+
+    companion object {
+        private const val SEARCH_TIMEOUT = 1000L
     }
 }
