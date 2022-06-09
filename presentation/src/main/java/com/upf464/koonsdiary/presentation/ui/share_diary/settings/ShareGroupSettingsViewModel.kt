@@ -32,7 +32,12 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
     private val groupId = savedStateHandle.get<String>(Constants.PARAM_GROUP_ID)?.toIntOrNull() ?: 0
     private lateinit var group: ShareGroup
 
+    // TODO: 내 정보 받아와서 표시
+    private val _meFlow = MutableStateFlow(User())
+    val meFlow = _meFlow.asStateFlow()
+
     val groupNameFlow = MutableStateFlow("")
+    val nicknameFlow = MutableStateFlow("")
 
     private val _imagePathFlow = MutableStateFlow("")
     val imagePathFlow = _imagePathFlow.asStateFlow()
@@ -56,6 +61,23 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
 
     private val _groupNameStateFlow = MutableStateFlow<ShareGroupDialogState>(ShareGroupDialogState.Closed)
     val groupNameStateFlow = _groupNameStateFlow.asStateFlow()
+
+    private val _nicknameStateFlow = MutableStateFlow<ShareGroupDialogState>(ShareGroupDialogState.Closed)
+    val nicknameStateFlow = _nicknameStateFlow.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            fetchGroupUseCase(FetchGroupUseCase.Request(groupId))
+                .onSuccess { response ->
+                    group = response.group
+                    _groupStateFlow.value = ShareGroupState.Success(group)
+
+                }
+                .onFailure {
+                    // TODO: 오류 처리
+                }
+        }
+    }
 
     fun openGroupNameDialog() {
         groupNameFlow.value = group.name
@@ -87,6 +109,35 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
 
     fun closeGroupNameDialog() {
         _groupNameStateFlow.value = ShareGroupDialogState.Closed
+    }
+
+    fun openNicknameDialog() {
+        nicknameFlow.value = meFlow.value.nickname
+        _nicknameStateFlow.value = ShareGroupDialogState.Opened
+    }
+
+    fun saveNickname() {
+        _nicknameStateFlow.value = ShareGroupDialogState.Loading
+        if (nicknameFlow.value != meFlow.value.nickname) {
+            viewModelScope.launch {
+                updateUserUseCase(
+                    UpdateUserUseCase.Request(
+                        nickname = nicknameFlow.value
+                    )
+                ).onSuccess {
+                    _meFlow.value = _meFlow.value.copy(nickname = nicknameFlow.value)
+                }.onFailure {
+                    triggerEvent(ShareGroupSettingsEvent.SaveNicknameFailed)
+                }
+                closeNicknameDialog()
+            }
+        } else {
+            closeNicknameDialog()
+        }
+    }
+
+    fun closeNicknameDialog() {
+        _nicknameStateFlow.value = ShareGroupDialogState.Closed
     }
 
     fun triggerEvent(event: ShareGroupSettingsEvent) {
