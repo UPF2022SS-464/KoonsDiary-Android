@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.upf464.koonsdiary.domain.model.ShareGroup
 import com.upf464.koonsdiary.domain.model.User
+import com.upf464.koonsdiary.domain.usecase.share.DeleteGroupUseCase
 import com.upf464.koonsdiary.domain.usecase.share.FetchGroupUseCase
 import com.upf464.koonsdiary.domain.usecase.share.InviteUserUseCase
 import com.upf464.koonsdiary.domain.usecase.share.KickUserUseCase
@@ -33,7 +34,8 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
     private val inviteUserUseCase: InviteUserUseCase,
     private val updateGroupUseCase: UpdateGroupUseCase,
     private val updateUserUseCase: UpdateUserUseCase,
-    private val kickUserUseCase: KickUserUseCase
+    private val kickUserUseCase: KickUserUseCase,
+    private val deleteGroupUseCase: DeleteGroupUseCase
 ) : ViewModel() {
 
     private val groupId = savedStateHandle.get<String>(Constants.PARAM_GROUP_ID)?.toIntOrNull() ?: 0
@@ -217,6 +219,18 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
                 )
             ).onSuccess {
                 // TODO: 실시간 목록 반영
+            }.onFailure {
+                // TODO: 오류 처리
+            }
+        }
+    }
+
+    fun deleteGroup() {
+        viewModelScope.launch {
+            deleteGroupUseCase(
+                DeleteGroupUseCase.Request(groupId)
+            ).onSuccess {
+                _eventFlow.tryEmit(ShareGroupSettingsEvent.DeleteGroupSuccess)
             }.onFailure {
                 // TODO: 오류 처리
             }
