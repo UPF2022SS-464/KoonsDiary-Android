@@ -190,6 +190,21 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
         // TODO: 탈퇴 멤버 정보 삭제
     }
 
+    fun inviteUserList() {
+        viewModelScope.launch {
+            inviteUserUseCase(
+                InviteUserUseCase.Request(
+                    groupId = groupId,
+                    userIdList = inviteUserListFlow.value.map { it.id }
+                )
+            ).onSuccess {
+                _eventFlow.tryEmit(ShareGroupSettingsEvent.InviteUserSuccess)
+            }.onFailure {
+                // TODO: 오류 처리
+            }
+        }
+    }
+
     companion object {
         private const val SEARCH_TIMEOUT = 1000L
     }
