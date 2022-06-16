@@ -7,6 +7,7 @@ import com.upf464.koonsdiary.domain.model.ShareGroup
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.domain.usecase.share.FetchGroupUseCase
 import com.upf464.koonsdiary.domain.usecase.share.InviteUserUseCase
+import com.upf464.koonsdiary.domain.usecase.share.KickUserUseCase
 import com.upf464.koonsdiary.domain.usecase.share.SearchUserUseCase
 import com.upf464.koonsdiary.domain.usecase.share.UpdateGroupUseCase
 import com.upf464.koonsdiary.domain.usecase.user.UpdateUserUseCase
@@ -31,7 +32,8 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
     private val searchUserUseCase: SearchUserUseCase,
     private val inviteUserUseCase: InviteUserUseCase,
     private val updateGroupUseCase: UpdateGroupUseCase,
-    private val updateUserUseCase: UpdateUserUseCase
+    private val updateUserUseCase: UpdateUserUseCase,
+    private val kickUserUseCase: KickUserUseCase
 ) : ViewModel() {
 
     private val groupId = savedStateHandle.get<String>(Constants.PARAM_GROUP_ID)?.toIntOrNull() ?: 0
@@ -188,6 +190,7 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
 
     fun removeResignedUser(user: User) {
         // TODO: 탈퇴 멤버 정보 삭제
+        // TODO: 실시간 목록 반영
     }
 
     fun inviteUserList() {
@@ -199,6 +202,21 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
                 )
             ).onSuccess {
                 _eventFlow.tryEmit(ShareGroupSettingsEvent.InviteUserSuccess)
+            }.onFailure {
+                // TODO: 오류 처리
+            }
+        }
+    }
+
+    fun kickUser(user: User) {
+        viewModelScope.launch {
+            kickUserUseCase(
+                KickUserUseCase.Request(
+                    groupId = groupId,
+                    userId = user.id
+                )
+            ).onSuccess {
+                // TODO: 실시간 목록 반영
             }.onFailure {
                 // TODO: 오류 처리
             }
