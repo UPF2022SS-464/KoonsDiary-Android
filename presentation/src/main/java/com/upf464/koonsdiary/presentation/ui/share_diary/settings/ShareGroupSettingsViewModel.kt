@@ -186,6 +186,10 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
         _inviteUserListFlow.value = listOf(user) + userList
     }
 
+    fun removeResignedUser(user: User) {
+        // TODO: 탈퇴 멤버 정보 삭제
+    }
+
     companion object {
         private const val SEARCH_TIMEOUT = 1000L
     }
