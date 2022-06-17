@@ -5,4 +5,5 @@ sealed class ShareGroupSettingsEvent {
     object SaveNicknameFailed : ShareGroupSettingsEvent()
     object InviteUserSuccess : ShareGroupSettingsEvent()
     object DeleteGroupSuccess : ShareGroupSettingsEvent()
+    object SaveGroupImageFailed : ShareGroupSettingsEvent()
 }

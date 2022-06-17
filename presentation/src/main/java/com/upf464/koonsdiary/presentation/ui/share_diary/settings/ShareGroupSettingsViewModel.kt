@@ -48,9 +48,6 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
     val groupNameFlow = MutableStateFlow("")
     val nicknameFlow = MutableStateFlow("")
 
-    private val _imagePathFlow = MutableStateFlow("")
-    val imagePathFlow = _imagePathFlow.asStateFlow()
-
     private val _groupStateFlow = MutableStateFlow<ShareGroupState>(ShareGroupState.Loading)
     val groupStateFlow = _groupStateFlow.asStateFlow()
 
@@ -167,6 +164,23 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
             }
         } else {
             closeNicknameDialog()
+        }
+    }
+
+    fun setImage(imagePath: String?) {
+        viewModelScope.launch {
+            updateGroupUseCase(
+                UpdateGroupUseCase.Request(
+                    groupId = groupId,
+                    name = group.name,
+                    imagePath = imagePath
+                )
+            ).onSuccess {
+                group = group.copy(imagePath = imagePath)
+                _groupStateFlow.value = ShareGroupState.Success(group)
+            }.onFailure {
+                triggerEvent(ShareGroupSettingsEvent.SaveGroupImageFailed)
+            }
         }
     }
 
