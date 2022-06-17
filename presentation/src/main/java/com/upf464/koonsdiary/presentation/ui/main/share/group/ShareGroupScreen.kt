@@ -64,7 +64,12 @@ internal fun ShareGroupScreen(
                     )
                 }
                 is ShareGroupEvent.NavigateToSettings -> {
-                    // TODO("설정 Activity 로 이동")
+                    context.startActivity(
+                        Intent(context, ShareDiaryActivity::class.java).apply {
+                            putExtra(Constants.EXTRA_SHARE_DIARY_ROUTE, ShareDiaryNavigation.SETTINGS.route)
+                            putExtra(Constants.PARAM_GROUP_ID, event.groupId)
+                        }
+                    )
                 }
                 is ShareGroupEvent.NavigateToNewDiary -> {
                     context.startActivity(
