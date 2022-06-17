@@ -13,6 +13,7 @@ import androidx.navigation.navArgument
 import com.upf464.koonsdiary.presentation.common.Constants
 import com.upf464.koonsdiary.presentation.ui.share_diary.diary.ShareDiaryDetailScreen
 import com.upf464.koonsdiary.presentation.ui.share_diary.editor.ShareEditorScreen
+import com.upf464.koonsdiary.presentation.ui.share_diary.settings.ShareGroupSettingsScreen
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsDiaryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -59,6 +60,17 @@ class ShareDiaryActivity : ComponentActivity() {
                             route = ShareDiaryNavigation.EDITOR.route + "/{${Constants.PARAM_GROUP_ID}}/{${Constants.PARAM_DIARY_ID}}"
                         ) {
                             ShareEditorScreen(navController = navController)
+                        }
+                        composable(
+                            route = ShareDiaryNavigation.SETTINGS.route,
+                            arguments = listOf(
+                                navArgument(Constants.PARAM_GROUP_ID) {
+                                    type = NavType.StringType
+                                    defaultValue = intent.getIntExtra(Constants.PARAM_GROUP_ID, 0).toString()
+                                }
+                            )
+                        ) {
+                            ShareGroupSettingsScreen(navController = navController)
                         }
                     }
                 }
