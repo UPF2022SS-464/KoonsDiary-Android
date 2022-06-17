@@ -60,7 +60,7 @@ import com.upf464.koonsdiary.domain.model.Sentiment
 import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.model.diary.detail.DiaryImageModel
 import com.upf464.koonsdiary.presentation.ui.main.diary.DiaryNavigation
-import com.upf464.koonsdiary.presentation.ui.theme.Black100
+import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.colorOf
 import com.upf464.koonsdiary.presentation.ui.theme.transparentTextColors
 import java.time.LocalDate
@@ -235,7 +235,7 @@ private fun DiaryEditorDate(
         Divider(
             modifier = Modifier
                 .weight(1f)
-                .background(Black100)
+                .background(KoonsColor.Black100)
         )
         Text(
             text = stringResource(
@@ -249,7 +249,7 @@ private fun DiaryEditorDate(
         Divider(
             modifier = Modifier
                 .weight(1f)
-                .background(Black100)
+                .background(KoonsColor.Black100)
         )
     }
 }
