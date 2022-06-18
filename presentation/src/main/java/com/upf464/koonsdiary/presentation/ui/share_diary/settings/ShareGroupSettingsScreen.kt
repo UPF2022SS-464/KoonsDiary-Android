@@ -13,20 +13,25 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -78,12 +83,13 @@ internal fun ShareGroupSettingsScreen(
         onCloseGroupName = { viewModel.closeGroupNameDialog() },
         onImageClicked = { galleryLauncher.launch("image/*") },
         onImageReset = { viewModel.setImage(null) },
-        onNicknameClicked = { },
+        me = viewModel.meFlow.collectAsState().value,
+        onNicknameClicked = { viewModel.openNicknameDialog() },
         nicknameState = viewModel.nicknameStateFlow.collectAsState().value,
-        nickname = "",
-        onNicknameChanged = { },
-        onSaveNickname = { },
-        onCloseNickname = { },
+        nickname = viewModel.nicknameFlow.collectAsState().value,
+        onNicknameChanged = { viewModel.nicknameFlow.value = it },
+        onSaveNickname = { viewModel.saveNickname() },
+        onCloseNickname = { viewModel.closeNicknameDialog() },
         onKickClicked = { },
         keyword = "",
         onKeywordChanged = { },
@@ -106,6 +112,7 @@ private fun ShareGroupSettingsScreen(
     onCloseGroupName: () -> Unit,
     onImageClicked: () -> Unit,
     onImageReset: () -> Unit,
+    me: User,
     onNicknameClicked: () -> Unit,
     nicknameState: ShareGroupDialogState,
     nickname: String,
@@ -127,28 +134,83 @@ private fun ShareGroupSettingsScreen(
             )
         }
     ) {
-        when (groupNameState) {
-            ShareGroupDialogState.Closed -> {}
-            ShareGroupDialogState.Loading -> LoadingDialog()
-            ShareGroupDialogState.Opened -> ChangeContentDialog(
-                title = "닉네임을 변경하시겠습니까?",
-                subTitle = "닉네임은 해당 공유 일기장에서만 적용됩니다.",
-                content = groupName,
-                onContentChanged = onGroupNameChanged,
-                onClose = onCloseGroupName,
-                onSave = onSaveGroupName
-            )
-        }
-
-        when (groupState) {
-            is ShareGroupState.Success -> {
-                GroupContent(
-                    group = groupState.group,
-                    onImageClicked = onImageClicked,
-                    onResetClicked = onImageReset,
-                    onGroupNameClicked = onGroupNameClicked
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            when (groupNameState) {
+                ShareGroupDialogState.Closed -> {}
+                ShareGroupDialogState.Loading -> LoadingDialog()
+                ShareGroupDialogState.Opened -> ChangeContentDialog(
+                    title = "공유일기장 제목을 변경하시겠습니까?",
+                    subTitle = "변경한 내용으로 친구들에게도 보여집니다.",
+                    content = groupName,
+                    onContentChanged = onGroupNameChanged,
+                    onClose = onCloseGroupName,
+                    onSave = onSaveGroupName
                 )
             }
+
+            when (nicknameState) {
+                ShareGroupDialogState.Closed -> {}
+                ShareGroupDialogState.Loading -> LoadingDialog()
+                ShareGroupDialogState.Opened -> ChangeContentDialog(
+                    title = "닉네임을 변경하시겠습니까?",
+                    subTitle = "닉네임은 해당 공유 일기장에서만 적용됩니다.",
+                    content = nickname,
+                    onContentChanged = onNicknameChanged,
+                    onClose = onCloseNickname,
+                    onSave = onSaveNickname
+                )
+            }
+
+            when (groupState) {
+                is ShareGroupState.Success -> {
+                    GroupContent(
+                        group = groupState.group,
+                        onImageClicked = onImageClicked,
+                        onResetClicked = onImageReset,
+                        onGroupNameClicked = onGroupNameClicked
+                    )
+                }
+                ShareGroupState.Loading -> LoadingDialog()
+            }
+
+            Text(
+                text = "개인설정",
+                style = KoonsTypography.BodySmall,
+                color = KoonsColor.Black60,
+                modifier = Modifier.padding(start = 16.dp, top = 48.dp)
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_account),
+                    contentDescription = null,
+                    tint = KoonsColor.Green
+                )
+
+                Text(
+                    text = "닉네임 : ${me.nickname}",
+                    style = KoonsTypography.BodyMedium,
+                    color = KoonsColor.Black100,
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .weight(1f)
+                )
+
+                TextButton(onClick = onNicknameClicked) {
+                    Text(
+                        text = "수정하기",
+                        style = KoonsTypography.BodyMedium,
+                        color = KoonsColor.Green
+                    )
+                }
+            }
+            Divider(color = KoonsColor.Black20)
         }
     }
 }
