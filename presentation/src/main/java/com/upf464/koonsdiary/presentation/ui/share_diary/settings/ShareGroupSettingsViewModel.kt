@@ -224,12 +224,12 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
         }
     }
 
-    fun kickUser(user: User) {
+    fun kickUser(index: Int) {
         viewModelScope.launch {
             kickUserUseCase(
                 KickUserUseCase.Request(
                     groupId = groupId,
-                    userId = user.id
+                    userId = group.userList[index].id
                 )
             ).onSuccess {
                 // TODO: 실시간 목록 반영
