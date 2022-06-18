@@ -70,7 +70,7 @@ class ShareDiaryActivity : ComponentActivity() {
                                 }
                             )
                         ) {
-                            ShareGroupSettingsScreen(navController = navController)
+                            ShareGroupSettingsScreen()
                         }
                     }
                 }

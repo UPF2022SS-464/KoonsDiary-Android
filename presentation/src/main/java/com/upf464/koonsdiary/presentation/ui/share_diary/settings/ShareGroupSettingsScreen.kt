@@ -1,5 +1,6 @@
 package com.upf464.koonsdiary.presentation.ui.share_diary.settings
 
+import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
@@ -24,6 +27,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
@@ -45,24 +50,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.upf464.koonsdiary.domain.model.ShareGroup
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.presentation.R
+import com.upf464.koonsdiary.presentation.model.share.add_group.SearchUserResultModel
+import com.upf464.koonsdiary.presentation.ui.components.ShareUserListRow
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 
 @Composable
 internal fun ShareGroupSettingsScreen(
-    viewModel: ShareGroupSettingsViewModel = hiltViewModel(),
-    navController: NavController
+    viewModel: ShareGroupSettingsViewModel = hiltViewModel()
 ) {
 
+    val context = LocalContext.current
     val galleryLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri ->
@@ -72,7 +84,7 @@ internal fun ShareGroupSettingsScreen(
     }
 
     ShareGroupSettingsScreen(
-        onBackPressed = { navController.popBackStack() },
+        onBackPressed = { (context as Activity).finish() },
         onDeleteGroupClicked = { viewModel.deleteGroup() },
         groupState = viewModel.groupStateFlow.collectAsState().value,
         onGroupNameClicked = { viewModel.openGroupNameDialog() },
@@ -90,12 +102,15 @@ internal fun ShareGroupSettingsScreen(
         onNicknameChanged = { viewModel.nicknameFlow.value = it },
         onSaveNickname = { viewModel.saveNickname() },
         onCloseNickname = { viewModel.closeNicknameDialog() },
-        onKickClicked = { },
-        keyword = "",
-        onKeywordChanged = { },
-        onInviteUser = { },
-        onDeleteButtonClicked = { },
-        onInviteButtonClicked = { },
+        onKickClicked = { viewModel.kickUser(it) },
+        keyword = viewModel.keywordFlow.collectAsState().value,
+        onKeywordChanged = { viewModel.keywordFlow.value = it },
+        isWaitingResult = viewModel.searchWaitingFlow.collectAsState().value,
+        searchResult = viewModel.searchResultFlow.collectAsState().value,
+        onInviteUser = { viewModel.addInviteUser(it) },
+        inviteUserList = viewModel.inviteUserListFlow.collectAsState().value,
+        onDeleteButtonClicked = {  },
+        onInviteButtonClicked = { viewModel.inviteUserList() },
     )
 }
 
@@ -119,10 +134,13 @@ private fun ShareGroupSettingsScreen(
     onNicknameChanged: (String) -> Unit,
     onSaveNickname: () -> Unit,
     onCloseNickname: () -> Unit,
-    onKickClicked: (User) -> Unit,
+    onKickClicked: (Int) -> Unit,
     keyword: String,
     onKeywordChanged: (String) -> Unit,
+    isWaitingResult: Boolean,
+    searchResult: SearchUserResultModel,
     onInviteUser: (User) -> Unit,
+    inviteUserList: List<User>,
     onDeleteButtonClicked: (Int) -> Unit,
     onInviteButtonClicked: () -> Unit
 ) {
@@ -137,6 +155,7 @@ private fun ShareGroupSettingsScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             when (groupNameState) {
@@ -173,44 +192,210 @@ private fun ShareGroupSettingsScreen(
                         onResetClicked = onImageReset,
                         onGroupNameClicked = onGroupNameClicked
                     )
+
+                    Text(
+                        text = "개인설정",
+                        style = KoonsTypography.BodySmall,
+                        color = KoonsColor.Black60,
+                        modifier = Modifier.padding(top = 48.dp)
+                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(top = 16.dp, end = 16.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_account),
+                            contentDescription = null,
+                            tint = KoonsColor.Green
+                        )
+
+                        Text(
+                            text = "닉네임 : ${me.nickname}",
+                            style = KoonsTypography.BodyMedium,
+                            color = KoonsColor.Black100,
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .weight(1f)
+                        )
+
+                        TextButton(onClick = onNicknameClicked) {
+                            Text(
+                                text = "수정하기",
+                                style = KoonsTypography.BodyMedium,
+                                color = KoonsColor.Green
+                            )
+                        }
+                    }
+                    Divider(color = KoonsColor.Black20)
+
+                    Text(
+                        text = "함께하는 친구들 설정",
+                        style = KoonsTypography.BodySmall,
+                        color = KoonsColor.Black60,
+                        modifier = Modifier.padding(top = 12.dp)
+                    )
+
+                    Text(
+                        text = "일기장에 함께하는 친구들",
+                        style = KoonsTypography.BodyMedium,
+                        color = KoonsColor.Black100,
+                        modifier = Modifier.padding(top = 16.dp)
+                    )
+
+                    ShareUserListRow(
+                        userList = groupState.group.userList,
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
+                        onDeleteClicked = onKickClicked
+                    )
+
+                    Text(
+                        text = "일기장에 초대할 친구들 (초대 보내기)",
+                        style = KoonsTypography.BodyMedium,
+                        color = KoonsColor.Black100,
+                        modifier = Modifier.padding(top = 16.dp)
+                    )
+
+                    ShareUserListRow(
+                        userList = inviteUserList,
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
+                    )
+
+                    BasicTextField(
+                        value = keyword,
+                        onValueChange = onKeywordChanged,
+                        textStyle = KoonsTypography.BodyMedium.copy(color = KoonsColor.Black100),
+                        singleLine = true,
+                        decorationBox = { innerTextField ->
+                            Column {
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Box {
+                                        if (keyword.isEmpty()) {
+                                            Text(
+                                                text = "초대할 아이디를 입력해주세요.",
+                                                style = KoonsTypography.BodyMedium,
+                                                color = KoonsColor.Black40
+                                            )
+                                        }
+                                        innerTextField()
+                                    }
+                                    if (isWaitingResult) {
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.size(
+                                                with(LocalDensity.current) {
+                                                    KoonsTypography.BodyMedium.fontSize.toDp()
+                                                }
+                                            ),
+                                            strokeWidth = 2.dp
+                                        )
+                                    }
+                                }
+                            }
+                        },
+                        modifier = Modifier.padding(top = 12.dp)
+                    )
+                    Divider(color = KoonsColor.Black100, modifier = Modifier.padding(top = 4.dp))
+
+                    if (searchResult.userList.isEmpty() && searchResult.keyword.isNotEmpty()) {
+                        Text(
+                            text = "검색 결과가 없습니다.",
+                            style = KoonsTypography.BodyMedium,
+                            color = KoonsColor.Black60,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    } else {
+                        searchResult.userList.forEach { user ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                AsyncImage(
+                                    model = user.image.path,
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .clip(CircleShape)
+                                )
+                                Text(
+                                    text = buildAnnotatedString {
+                                        append(user.username.substringBefore(searchResult.keyword))
+                                        withStyle(SpanStyle(color = KoonsColor.Black100)) {
+                                            append(searchResult.keyword)
+                                        }
+                                        append(user.username.substringAfter(searchResult.keyword))
+                                    },
+                                    color = KoonsColor.Black60,
+                                    style = KoonsTypography.BodyMedium,
+                                    modifier = Modifier.padding(start = 4.dp)
+                                )
+                                Spacer(modifier = Modifier.weight(1f))
+                                Text(
+                                    text = "초대하기",
+                                    style = KoonsTypography.BodyMedium,
+                                    color = KoonsColor.Black100,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(4.dp))
+                                        .background(KoonsColor.Black40)
+                                        .clickable { onInviteUser(user) }
+                                        .padding(vertical = 2.dp, horizontal = 16.dp)
+                                )
+                            }
+                        }
+                    }
+
+                    Text(
+                        text = "일기장에 초대한 친구들 (초대 수락 대기중)",
+                        style = KoonsTypography.BodyMedium,
+                        color = KoonsColor.Black100,
+                        modifier = Modifier.padding(top = 16.dp)
+                    )
+
+                    ShareUserListRow(
+                        // TODO: 필터 추가
+                        userList = groupState.group.userList,
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
+                    )
+
+                    Text(
+                        text = "일기장에서 탈퇴한 친구들",
+                        style = KoonsTypography.BodyMedium,
+                        color = KoonsColor.Black100,
+                        modifier = Modifier.padding(top = 16.dp)
+                    )
+
+                    ShareUserListRow(
+                        // TODO: 필터 추가
+                        userList = groupState.group.userList,
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
+                        onDeleteClicked = { user ->
+                            onDeleteButtonClicked(user)
+                        }
+                    )
+                    
+                    Button(
+                        onClick = onInviteButtonClicked,
+                        colors = ButtonDefaults.buttonColors(backgroundColor = KoonsColor.Green),
+                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 48.dp)
+                    ) {
+                        Text(
+                            text = "설정완료",
+                            style = KoonsTypography.BodyMedium,
+                            color = KoonsColor.Black5,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    }
                 }
                 ShareGroupState.Loading -> LoadingDialog()
             }
-
-            Text(
-                text = "개인설정",
-                style = KoonsTypography.BodySmall,
-                color = KoonsColor.Black60,
-                modifier = Modifier.padding(start = 16.dp, top = 48.dp)
-            )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_account),
-                    contentDescription = null,
-                    tint = KoonsColor.Green
-                )
-
-                Text(
-                    text = "닉네임 : ${me.nickname}",
-                    style = KoonsTypography.BodyMedium,
-                    color = KoonsColor.Black100,
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .weight(1f)
-                )
-
-                TextButton(onClick = onNicknameClicked) {
-                    Text(
-                        text = "수정하기",
-                        style = KoonsTypography.BodyMedium,
-                        color = KoonsColor.Green
-                    )
-                }
-            }
-            Divider(color = KoonsColor.Black20)
         }
     }
 }

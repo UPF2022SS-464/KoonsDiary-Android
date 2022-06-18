@@ -336,11 +336,11 @@ private fun InviteUserSearch(
                         )
                     }
                 }
-                Divider(color = KoonsColor.Black100, modifier = Modifier.padding(top = 4.dp))
             }
         },
         modifier = Modifier.padding(start = 32.dp, end = 32.dp, top = 12.dp)
     )
+    Divider(color = KoonsColor.Black100, modifier = Modifier.padding(top = 4.dp))
 
     if (searchResult.userList.isEmpty() && searchResult.keyword.isNotEmpty()) {
         Text(
