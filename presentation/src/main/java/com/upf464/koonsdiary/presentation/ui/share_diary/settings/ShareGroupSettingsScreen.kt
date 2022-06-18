@@ -109,7 +109,7 @@ internal fun ShareGroupSettingsScreen(
         searchResult = viewModel.searchResultFlow.collectAsState().value,
         onInviteUser = { viewModel.addInviteUser(it) },
         inviteUserList = viewModel.inviteUserListFlow.collectAsState().value,
-        onDeleteButtonClicked = {  },
+        onDeleteButtonClicked = { },
         onInviteButtonClicked = { viewModel.inviteUserList() },
     )
 }
@@ -379,12 +379,14 @@ private fun ShareGroupSettingsScreen(
                             onDeleteButtonClicked(user)
                         }
                     )
-                    
+
                     Button(
                         onClick = onInviteButtonClicked,
                         colors = ButtonDefaults.buttonColors(backgroundColor = KoonsColor.Green),
                         shape = RoundedCornerShape(16.dp),
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 48.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 48.dp)
                     ) {
                         Text(
                             text = "설정완료",

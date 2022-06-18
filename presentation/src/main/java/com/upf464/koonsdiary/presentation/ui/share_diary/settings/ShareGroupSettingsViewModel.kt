@@ -77,7 +77,6 @@ internal class ShareGroupSettingsViewModel @Inject constructor(
                 .onSuccess { response ->
                     group = response.group
                     _groupStateFlow.value = ShareGroupState.Success(group)
-
                 }
                 .onFailure {
                     // TODO: 오류 처리
