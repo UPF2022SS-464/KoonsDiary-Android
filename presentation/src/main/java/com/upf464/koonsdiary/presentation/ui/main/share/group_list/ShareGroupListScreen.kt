@@ -127,7 +127,7 @@ private fun ShareGroupTopBar(
         title = {
             Text(
                 text = stringResource(id = R.string.shareDiaryGroups_of),
-                style = KoonsTypography.H5,
+                style = KoonsTypography.H3,
                 color = KoonsColor.Black100
             )
         },
