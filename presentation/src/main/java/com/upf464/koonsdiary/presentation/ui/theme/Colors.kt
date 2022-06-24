@@ -1,5 +1,6 @@
 package com.upf464.koonsdiary.presentation.ui.theme
 
+import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -24,6 +25,14 @@ object KoonsColor {
     val KakaoBackground = Color(0xFFF7E600)
     val KakaoContent = Color(0xFF3A1D1D)
 }
+
+@Composable
+fun koonsSwitchColor() = SwitchDefaults.colors(
+    checkedThumbColor = KoonsColor.Black5,
+    checkedTrackColor = KoonsColor.Green,
+    uncheckedThumbColor = KoonsColor.Black5,
+    uncheckedTrackColor = KoonsColor.Black20,
+)
 
 @Composable
 fun transparentTextColors() = TextFieldDefaults.textFieldColors(
