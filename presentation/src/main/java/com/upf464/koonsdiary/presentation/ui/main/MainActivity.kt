@@ -21,6 +21,7 @@ import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.ui.main.components.BottomNavigationBar
 import com.upf464.koonsdiary.presentation.ui.main.components.MainNavigationItem
 import com.upf464.koonsdiary.presentation.ui.main.diary.DiaryScreen
+import com.upf464.koonsdiary.presentation.ui.main.notification.NotificationScreen
 import com.upf464.koonsdiary.presentation.ui.main.share.ShareScreen
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsDiaryTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -98,6 +99,8 @@ fun Navigation(navController: NavHostController) {
         }
         composable(route = MainNavigation.COTTON.route) { }
         composable(route = MainNavigation.REPORT.route) { }
-        composable(route = MainNavigation.NOTIFICATION.route) { }
+        composable(route = MainNavigation.NOTIFICATION.route) {
+            NotificationScreen()
+        }
     }
 }

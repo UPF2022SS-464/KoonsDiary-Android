@@ -6,6 +6,10 @@
 
     <application android:theme="@style/Theme.KoonsDiary">
         <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.KoonsDiary" />
+        <activity
             android:name="com.upf464.koonsdiary.presentation.ui.share_diary.ShareDiaryActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
