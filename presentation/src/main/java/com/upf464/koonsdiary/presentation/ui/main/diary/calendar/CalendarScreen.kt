@@ -23,6 +23,7 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -185,30 +186,37 @@ private fun CalendarHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 48.dp, horizontal = 32.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(vertical = 32.dp, horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = Icons.Default.ArrowBack,
-            contentDescription = null,
-            modifier = Modifier.clickable {
+        IconButton(
+            onClick = {
                 if (month == 1) onMonthChanged(year - 1, 12)
                 else onMonthChanged(year, month - 1)
             }
-        )
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = null,
+            )
+        }
         Text(
             text = stringResource(id = R.string.year_month, year, month),
             style = KoonsTypography.H4,
             color = KoonsColor.Black100
         )
-        Icon(
-            imageVector = Icons.Default.ArrowForward,
-            contentDescription = null,
-            modifier = Modifier.clickable {
+        IconButton(
+            onClick = {
                 if (month == 12) onMonthChanged(year + 1, 1)
                 else onMonthChanged(year, month + 1)
             }
-        )
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowForward,
+                contentDescription = null
+            )
+        }
     }
 }
 
