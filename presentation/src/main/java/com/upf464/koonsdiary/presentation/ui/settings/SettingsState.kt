@@ -9,8 +9,5 @@ data class SettingsState(
     val email: String = "",
     val usePassword: Boolean = false,
     val useBiometric: Boolean = false,
-    val isTypingPassword: Boolean = false,
-    val isTypingPasswordConfirm: Boolean = false,
-    val isPasswordSuccess: Boolean = false,
     val isSelectingImage: Boolean = false,
 )

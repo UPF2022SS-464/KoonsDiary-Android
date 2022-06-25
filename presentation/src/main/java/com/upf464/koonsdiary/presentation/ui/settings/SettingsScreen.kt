@@ -35,6 +35,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.presentation.R
+import com.upf464.koonsdiary.presentation.ui.settings.password.PasswordScreen
+import com.upf464.koonsdiary.presentation.ui.settings.password.PasswordState
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 import com.upf464.koonsdiary.presentation.ui.theme.koonsSwitchColor
@@ -44,18 +46,30 @@ internal fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
 
-    SettingsScreen(
-        state = SettingsState(
-            userImage = User.Image(path = "https://avatars.githubusercontent.com/u/46339857?v=4"),
-            usePassword = true,
-        ),
-        onBackPressed = { },
-        onImageClicked = { },
-        onNicknameClicked = { },
-        onUsePasswordChanged = { },
-        onChangePasswordClicked = { },
-        onUseBiometricChanged = { },
-    )
+    val state = SettingsState()
+    val passwordState = PasswordState()
+
+    if (passwordState.isShowing) {
+        PasswordScreen(
+            state = passwordState,
+            length = 0,
+            maxLength = 4,
+            onNumberClicked = { },
+            onBackspaceClicked = { },
+            onExitClicked = { },
+            onPasswordSuccessConfirmed = { }
+        )
+    } else {
+        SettingsScreen(
+            state = state,
+            onBackPressed = { },
+            onImageClicked = { },
+            onNicknameClicked = { },
+            onUsePasswordChanged = { },
+            onChangePasswordClicked = { },
+            onUseBiometricChanged = { },
+        )
+    }
 }
 
 @Composable
