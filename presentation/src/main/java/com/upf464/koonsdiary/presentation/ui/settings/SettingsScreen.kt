@@ -35,6 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.presentation.R
+import com.upf464.koonsdiary.presentation.ui.components.ChangeContentDialog
 import com.upf464.koonsdiary.presentation.ui.settings.password.PasswordScreen
 import com.upf464.koonsdiary.presentation.ui.settings.password.PasswordState
 import com.upf464.koonsdiary.presentation.ui.settings.profile.ProfileScreen
@@ -48,7 +49,9 @@ internal fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
 
-    val state = SettingsState()
+    val state = SettingsState(
+        isEditingNickname = true
+    )
     val passwordState = PasswordState()
     val profileState = ProfileState(
         isShowing = true,
@@ -92,6 +95,18 @@ internal fun SettingsScreen(
             )
         }
     }
+
+    if (state.isEditingNickname) {
+        ChangeContentDialog(
+            title = "닉네임을 변경하시겠습니까?",
+            subTitle = "",
+            hint = "닉네임을 입력해주세요",
+            content = "",
+            onContentChanged = { },
+            onCancel = { },
+            onConfirm = { }
+        )
+    }
 }
 
 @Composable
@@ -104,7 +119,6 @@ private fun SettingsScreen(
     onChangePasswordClicked: () -> Unit,
     onUseBiometricChanged: (Boolean) -> Unit,
 ) {
-
     Scaffold(
         topBar = {
             AppBar(
