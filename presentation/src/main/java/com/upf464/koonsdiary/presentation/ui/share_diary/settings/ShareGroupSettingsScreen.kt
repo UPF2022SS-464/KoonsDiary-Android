@@ -39,8 +39,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
@@ -65,6 +63,7 @@ import com.upf464.koonsdiary.domain.model.ShareGroup
 import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.model.share.add_group.SearchUserResultModel
+import com.upf464.koonsdiary.presentation.ui.components.ChangeContentDialog
 import com.upf464.koonsdiary.presentation.ui.components.ShareUserListRow
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
@@ -164,10 +163,11 @@ private fun ShareGroupSettingsScreen(
                 ShareGroupDialogState.Opened -> ChangeContentDialog(
                     title = "공유일기장 제목을 변경하시겠습니까?",
                     subTitle = "변경한 내용으로 친구들에게도 보여집니다.",
+                    hint = "공유일기장 제목을 입력해 주세요",
                     content = groupName,
                     onContentChanged = onGroupNameChanged,
-                    onClose = onCloseGroupName,
-                    onSave = onSaveGroupName
+                    onCancel = onCloseGroupName,
+                    onConfirm = onSaveGroupName
                 )
             }
 
@@ -177,10 +177,11 @@ private fun ShareGroupSettingsScreen(
                 ShareGroupDialogState.Opened -> ChangeContentDialog(
                     title = "닉네임을 변경하시겠습니까?",
                     subTitle = "닉네임은 해당 공유 일기장에서만 적용됩니다.",
+                    hint = "닉네임을 입력해주세요",
                     content = nickname,
                     onContentChanged = onNicknameChanged,
-                    onClose = onCloseNickname,
-                    onSave = onSaveNickname
+                    onCancel = onCloseNickname,
+                    onConfirm = onSaveNickname
                 )
             }
 
@@ -526,76 +527,6 @@ private fun GroupContent(
                 )
                 Spacer(modifier = Modifier.weight(1f))
             }
-        }
-    }
-}
-
-@Composable
-private fun ChangeContentDialog(
-    title: String,
-    subTitle: String,
-    content: String,
-    onContentChanged: (String) -> Unit,
-    onClose: () -> Unit,
-    onSave: () -> Unit
-) {
-    Dialog(onDismissRequest = onClose) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .clip(RoundedCornerShape(16.dp))
-                .background(KoonsColor.Black5)
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                IconButton(onClick = onClose) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = null,
-                        tint = KoonsColor.Red
-                    )
-                }
-                IconButton(onClick = onSave) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = null,
-                        tint = KoonsColor.Green
-                    )
-                }
-            }
-
-            Text(
-                text = title,
-                style = KoonsTypography.H4,
-                color = KoonsColor.Black100
-            )
-            Text(
-                text = subTitle,
-                style = KoonsTypography.H8,
-                color = KoonsColor.Black60,
-                modifier = Modifier.padding(top = 4.dp)
-            )
-
-            BasicTextField(
-                value = content,
-                onValueChange = onContentChanged,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                textStyle = KoonsTypography.BodySmall.copy(color = KoonsColor.Black100),
-                decorationBox = { innerTextField ->
-                    innerTextField()
-                    if (content.isEmpty()) {
-                        Text(
-                            text = "닉네임을 입력해주세요",
-                            style = KoonsTypography.BodySmall,
-                            color = KoonsColor.Black60,
-                        )
-                    }
-                }
-            )
         }
     }
 }
