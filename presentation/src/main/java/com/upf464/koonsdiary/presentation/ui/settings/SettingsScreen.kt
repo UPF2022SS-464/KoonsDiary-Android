@@ -37,6 +37,8 @@ import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.ui.settings.password.PasswordScreen
 import com.upf464.koonsdiary.presentation.ui.settings.password.PasswordState
+import com.upf464.koonsdiary.presentation.ui.settings.profile.ProfileScreen
+import com.upf464.koonsdiary.presentation.ui.settings.profile.ProfileState
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 import com.upf464.koonsdiary.presentation.ui.theme.koonsSwitchColor
@@ -48,27 +50,47 @@ internal fun SettingsScreen(
 
     val state = SettingsState()
     val passwordState = PasswordState()
+    val profileState = ProfileState(
+        isShowing = true,
+        imageList = listOf(
+            User.Image(path = "https://github.com/svclaw2000.png"),
+            User.Image(path = "https://github.com/svclaw2000.png"),
+            User.Image(path = "https://github.com/svclaw2000.png"),
+        ),
+        selectedIndex = 1
+    )
 
-    if (passwordState.isShowing) {
-        PasswordScreen(
-            state = passwordState,
-            length = 0,
-            maxLength = 4,
-            onNumberClicked = { },
-            onBackspaceClicked = { },
-            onExitClicked = { },
-            onPasswordSuccessConfirmed = { }
-        )
-    } else {
-        SettingsScreen(
-            state = state,
-            onBackPressed = { },
-            onImageClicked = { },
-            onNicknameClicked = { },
-            onUsePasswordChanged = { },
-            onChangePasswordClicked = { },
-            onUseBiometricChanged = { },
-        )
+    when {
+        passwordState.isShowing -> {
+            PasswordScreen(
+                state = passwordState,
+                length = 0,
+                maxLength = 4,
+                onNumberClicked = { },
+                onBackspaceClicked = { },
+                onExitClicked = { },
+                onPasswordSuccessConfirmed = { }
+            )
+        }
+        profileState.isShowing -> {
+            ProfileScreen(
+                state = profileState,
+                onBackPressed = { },
+                onImageClicked = { },
+                onConfirm = { }
+            )
+        }
+        else -> {
+            SettingsScreen(
+                state = state,
+                onBackPressed = { },
+                onImageClicked = { },
+                onNicknameClicked = { },
+                onUsePasswordChanged = { },
+                onChangePasswordClicked = { },
+                onUseBiometricChanged = { },
+            )
+        }
     }
 }
 
