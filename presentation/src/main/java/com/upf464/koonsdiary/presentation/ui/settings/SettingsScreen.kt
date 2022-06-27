@@ -84,17 +84,17 @@ internal fun SettingsScreen(
         profileState.isShowing -> {
             ProfileScreen(
                 state = profileState,
-                onBackPressed = { },
-                onImageClicked = { },
-                onConfirm = { }
+                onBackPressed = viewModel::back,
+                onImageClicked = viewModel::selectImageAt,
+                onConfirm = viewModel::confirmImage
             )
         }
         else -> {
             SettingsScreen(
                 state = state,
                 onBackPressed = viewModel::back,
-                onImageClicked = { },
-                onNicknameClicked = { },
+                onImageClicked = viewModel::openProfileScreen,
+                onNicknameClicked = viewModel::openNicknameDialog,
                 onUsePasswordChanged = viewModel::changeUsePassword,
                 onChangePasswordClicked = viewModel::openPasswordDialog,
                 onUseBiometricChanged = { },
@@ -107,10 +107,10 @@ internal fun SettingsScreen(
             title = "닉네임을 변경하시겠습니까?",
             subTitle = "",
             hint = "닉네임을 입력해주세요",
-            content = "",
-            onContentChanged = { },
-            onCancel = { },
-            onConfirm = { }
+            content = viewModel.nicknameFlow.collectAsState().value,
+            onContentChanged = { viewModel.nicknameFlow.value = it },
+            onCancel = viewModel::closeNicknameDialog,
+            onConfirm = viewModel::confirmNickname
         )
     }
 }
