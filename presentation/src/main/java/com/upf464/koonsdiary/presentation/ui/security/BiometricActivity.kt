@@ -5,18 +5,21 @@ import android.os.Build
 import android.os.Bundle
 import android.os.ResultReceiver
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
+import androidx.fragment.app.FragmentActivity
 import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.common.Constants
 import com.upf464.koonsdiary.presentation.error.BiometricViewError
+import com.upf464.koonsdiary.presentation.ui.theme.KoonsDiaryTheme
 
-internal class BiometricActivity : AppCompatActivity() {
+internal class BiometricActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { }
+        setContent {
+            KoonsDiaryTheme { }
+        }
 
         intent.getBundleExtra(Constants.KEY_BUNDLE)
             ?.getParcelable<ResultReceiver>(Constants.KEY_RESULT_RECEIVER)?.let { resultReceiver ->
@@ -65,13 +68,14 @@ internal class BiometricActivity : AppCompatActivity() {
         val promptInfoBuilder = BiometricPrompt.PromptInfo.Builder()
             .setTitle(getString(R.string.biometric_title))
             .setSubtitle(getString(R.string.biometric_subtitle))
-            .setNegativeButtonText(getString(R.string.biometric_cancel))
 
         // 안면 인식
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             promptInfoBuilder.setAllowedAuthenticators(
                 BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL
             )
+        } else {
+            promptInfoBuilder.setNegativeButtonText(getString(R.string.biometric_cancel))
         }
 
         prompt.authenticate(promptInfoBuilder.build())
