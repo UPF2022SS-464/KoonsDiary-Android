@@ -294,7 +294,6 @@ private fun PersonalSettings(
     Divider(color = KoonsColor.Black20)
 }
 
-
 @Composable
 private fun CustomSettings(
     usePassword: Boolean,
