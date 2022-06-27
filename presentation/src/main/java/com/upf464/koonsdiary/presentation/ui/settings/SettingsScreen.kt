@@ -1,6 +1,7 @@
 package com.upf464.koonsdiary.presentation.ui.settings
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -61,6 +62,21 @@ internal fun SettingsScreen(
                 is SettingsEvent.Finish -> {
                     (context as Activity).finish()
                 }
+                SettingsEvent.ShowBiometricFailedError -> {
+                    Toast.makeText(context, R.string.biometric_error_failed, Toast.LENGTH_SHORT).show()
+                }
+                SettingsEvent.ShowBiometricTimeoutError -> {
+                    Toast.makeText(context, R.string.biometric_error_timeout, Toast.LENGTH_SHORT).show()
+                }
+                SettingsEvent.ShowBiometricUnavailableError -> {
+                    Toast.makeText(context, R.string.biometric_error_unavailable, Toast.LENGTH_SHORT).show()
+                }
+                SettingsEvent.ShowLockBiometricError -> {
+                    Toast.makeText(context, R.string.biometric_error_lockout, Toast.LENGTH_SHORT).show()
+                }
+                SettingsEvent.ShowNoBiometricError -> {
+                    Toast.makeText(context, R.string.biometric_error_no_credential, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -97,7 +113,7 @@ internal fun SettingsScreen(
                 onNicknameClicked = viewModel::openNicknameDialog,
                 onUsePasswordChanged = viewModel::changeUsePassword,
                 onChangePasswordClicked = viewModel::openPasswordDialog,
-                onUseBiometricChanged = { },
+                onUseBiometricChanged = viewModel::changeUseBiometric,
             )
         }
     }

@@ -2,6 +2,8 @@ package com.upf464.koonsdiary.presentation.ui.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.upf464.koonsdiary.domain.error.SecurityError
+import com.upf464.koonsdiary.domain.usecase.security.AuthenticateWithBiometricUseCase
 import com.upf464.koonsdiary.domain.usecase.user.FetchUserImageListUseCase
 import com.upf464.koonsdiary.presentation.ui.settings.password.PasswordState
 import com.upf464.koonsdiary.presentation.ui.settings.profile.ProfileState
@@ -18,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class SettingsViewModel @Inject constructor(
-    private val fetchUserImageListUseCase: FetchUserImageListUseCase
+    private val fetchUserImageListUseCase: FetchUserImageListUseCase,
+    private val biometricUseCase: AuthenticateWithBiometricUseCase,
 ) : ViewModel() {
 
     private val _eventFlow = MutableSharedFlow<SettingsEvent>()
@@ -110,7 +113,8 @@ internal class SettingsViewModel @Inject constructor(
         if (_profileStateFlow.value.selectedIndex != -1) {
             // TODO: 프로필 이미지 변경
             _profileStateFlow.value = _profileStateFlow.value.copy(isShowing = false)
-            _settingsStateFlow.value = _settingsStateFlow.value.copy(userImage = _profileStateFlow.value.imageList[_profileStateFlow.value.selectedIndex])
+            _settingsStateFlow.value =
+                _settingsStateFlow.value.copy(userImage = _profileStateFlow.value.imageList[_profileStateFlow.value.selectedIndex])
         }
     }
 
@@ -128,6 +132,30 @@ internal class SettingsViewModel @Inject constructor(
 
     fun closeNicknameDialog() {
         _settingsStateFlow.value = _settingsStateFlow.value.copy(isEditingNickname = false)
+    }
+
+    fun changeUseBiometric(flag: Boolean) {
+        if (flag) {
+            viewModelScope.launch {
+                biometricUseCase()
+                    .onSuccess {
+                        // TODO: 지문 인증 설정 완료
+                        _settingsStateFlow.value = _settingsStateFlow.value.copy(useBiometric = true)
+                    }
+                    .onFailure { error ->
+                        when (error) {
+                            SecurityError.AuthenticateFailed -> triggerEvent(SettingsEvent.ShowBiometricFailedError)
+                            SecurityError.HardwareUnavailable -> triggerEvent(SettingsEvent.ShowBiometricUnavailableError)
+                            SecurityError.Lockout -> triggerEvent(SettingsEvent.ShowLockBiometricError)
+                            SecurityError.NoCredential -> triggerEvent(SettingsEvent.ShowNoBiometricError)
+                            SecurityError.Timeout -> triggerEvent(SettingsEvent.ShowBiometricTimeoutError)
+                        }
+                    }
+            }
+        } else {
+            // TODO: 지문 인증 취소
+            _settingsStateFlow.value = _settingsStateFlow.value.copy(useBiometric = false)
+        }
     }
 
     fun back() {
