@@ -31,6 +31,7 @@ internal class SecurityServiceImpl @Inject constructor(
                         putParcelable(Constants.KEY_RESULT_RECEIVER, resultReceiver(continuation))
                     }
                 )
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
             context.startActivity(intent)
         }
