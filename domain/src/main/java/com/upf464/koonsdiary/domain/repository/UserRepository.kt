@@ -37,7 +37,7 @@ interface UserRepository {
 
     suspend fun getAutoSignInToken(): Result<String>
 
-    suspend fun updateUser(nickname: String): Result<Unit>
+    suspend fun updateUser(nickname: String?, imageId: Int?): Result<Unit>
 
     suspend fun fetchUserImageList(): Result<List<User.Image>>
 }

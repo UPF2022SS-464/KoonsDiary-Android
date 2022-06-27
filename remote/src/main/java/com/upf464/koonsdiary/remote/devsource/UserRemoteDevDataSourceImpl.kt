@@ -43,7 +43,7 @@ internal class UserRemoteDevDataSourceImpl @Inject constructor() : UserRemoteDat
         return Result.success("")
     }
 
-    override suspend fun updateUser(nickname: String): Result<Unit> {
+    override suspend fun updateUser(nickname: String?, imageId: Int?): Result<Unit> {
         return Result.success(Unit)
     }
 

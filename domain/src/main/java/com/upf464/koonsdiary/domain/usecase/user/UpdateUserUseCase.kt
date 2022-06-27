@@ -11,14 +11,19 @@ class UpdateUserUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(request: Request): Result<Unit> {
-        if (!userValidator.isNicknameValid(request.nickname)) {
+        if (request.nickname == null && request.imageId == null) {
+            return Result.failure(SignUpError.NotEnoughInformation)
+        }
+
+        if (request.nickname != null && !userValidator.isNicknameValid(request.nickname)) {
             return Result.failure(SignUpError.InvalidNickname)
         }
 
-        return userRepository.updateUser(request.nickname)
+        return userRepository.updateUser(request.nickname, request.imageId)
     }
 
     data class Request(
-        val nickname: String
+        val nickname: String? = null,
+        val imageId: Int? = null
     )
 }
