@@ -22,7 +22,7 @@ interface UserRemoteDataSource {
 
     suspend fun fetchSaltOf(username: String): Result<String>
 
-    suspend fun updateUser(nickname: String): Result<Unit>
+    suspend fun updateUser(nickname: String?, imageId: Int?): Result<Unit>
 
     suspend fun fetchUserImageList(): Result<List<UserData.Image>>
 }

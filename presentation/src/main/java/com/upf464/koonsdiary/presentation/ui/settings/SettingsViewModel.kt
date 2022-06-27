@@ -9,6 +9,7 @@ import com.upf464.koonsdiary.domain.usecase.security.DeletePINUseCase
 import com.upf464.koonsdiary.domain.usecase.security.SavePINUseCase
 import com.upf464.koonsdiary.domain.usecase.security.SetBiometricUseCase
 import com.upf464.koonsdiary.domain.usecase.user.FetchUserImageListUseCase
+import com.upf464.koonsdiary.domain.usecase.user.UpdateUserUseCase
 import com.upf464.koonsdiary.presentation.ui.settings.password.PasswordState
 import com.upf464.koonsdiary.presentation.ui.settings.profile.ProfileState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +30,7 @@ internal class SettingsViewModel @Inject constructor(
     private val setBiometricUseCase: SetBiometricUseCase,
     private val savePINUseCase: SavePINUseCase,
     private val deletePINUseCase: DeletePINUseCase,
+    private val updateUserUseCase: UpdateUserUseCase
 ) : ViewModel() {
 
     private val _eventFlow = MutableSharedFlow<SettingsEvent>()
@@ -124,10 +126,14 @@ internal class SettingsViewModel @Inject constructor(
 
     fun confirmImage() {
         if (_profileStateFlow.value.selectedIndex != -1) {
-            // TODO: 프로필 이미지 변경
-            _profileStateFlow.value = _profileStateFlow.value.copy(isShowing = false)
-            _settingsStateFlow.value =
-                _settingsStateFlow.value.copy(userImage = _profileStateFlow.value.imageList[_profileStateFlow.value.selectedIndex])
+            val image = _profileStateFlow.value.imageList[_profileStateFlow.value.selectedIndex]
+            viewModelScope.launch {
+                updateUserUseCase(UpdateUserUseCase.Request(imageId = image.id))
+                    .onSuccess {
+                        _profileStateFlow.value = _profileStateFlow.value.copy(isShowing = false)
+                        _settingsStateFlow.value = _settingsStateFlow.value.copy(userImage = image)
+                    }
+            }
         }
     }
 
@@ -137,9 +143,14 @@ internal class SettingsViewModel @Inject constructor(
     }
 
     fun confirmNickname() {
-        if (nicknameFlow.value.isNotEmpty()) {
-            // TODO: 닉네임 변경
-            _settingsStateFlow.value = _settingsStateFlow.value.copy(isEditingNickname = false, nickname = nicknameFlow.value)
+        val nickname = nicknameFlow.value
+        if (nickname.isNotEmpty()) {
+            viewModelScope.launch {
+                updateUserUseCase(UpdateUserUseCase.Request(nickname = nicknameFlow.value))
+                    .onSuccess {
+                        _settingsStateFlow.value = _settingsStateFlow.value.copy(isEditingNickname = false, nickname = nickname)
+                    }
+            }
         }
     }
 

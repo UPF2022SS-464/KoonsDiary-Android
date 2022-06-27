@@ -132,8 +132,8 @@ internal class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateUser(nickname: String): Result<Unit> {
-        return remote.updateUser(nickname).errorMap { error ->
+    override suspend fun updateUser(nickname: String?, imageId: Int?): Result<Unit> {
+        return remote.updateUser(nickname, imageId).errorMap { error ->
             if (error is ErrorData) error.toDomain()
             else Exception(error)
         }

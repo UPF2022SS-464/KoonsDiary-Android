@@ -6,16 +6,11 @@ sealed class SignUpError(
 ) : Exception(message, cause) {
 
     object InvalidUsername : SignUpError()
-
     object InvalidPassword : SignUpError()
-
     object InvalidEmail : SignUpError()
-
     object InvalidNickname : SignUpError()
-
+    object NotEnoughInformation : SignUpError()
     object DuplicatedUsername : SignUpError()
-
     object DuplicatedEmail : SignUpError()
-
     object DuplicatedKakaoUser : SignUpError()
 }
