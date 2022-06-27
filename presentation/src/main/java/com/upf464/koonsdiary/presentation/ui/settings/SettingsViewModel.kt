@@ -2,6 +2,7 @@ package com.upf464.koonsdiary.presentation.ui.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.upf464.koonsdiary.domain.usecase.user.FetchUserImageListUseCase
 import com.upf464.koonsdiary.presentation.ui.settings.password.PasswordState
 import com.upf464.koonsdiary.presentation.ui.settings.profile.ProfileState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class SettingsViewModel @Inject constructor(
-
+    private val fetchUserImageListUseCase: FetchUserImageListUseCase
 ) : ViewModel() {
 
     private val _eventFlow = MutableSharedFlow<SettingsEvent>()
@@ -38,6 +39,17 @@ internal class SettingsViewModel @Inject constructor(
 
     private val _profileStateFlow = MutableStateFlow(ProfileState())
     val profileStateFlow = _profileStateFlow.asStateFlow()
+
+    val nicknameFlow = MutableStateFlow("")
+
+    init {
+        viewModelScope.launch {
+            fetchUserImageListUseCase()
+                .onSuccess { response ->
+                    _profileStateFlow.value = ProfileState(imageList = response.imageList)
+                }
+        }
+    }
 
     fun changeUsePassword(flag: Boolean) {
         if (flag) {
@@ -86,10 +98,45 @@ internal class SettingsViewModel @Inject constructor(
         _passwordStateFlow.value = _passwordStateFlow.value.copy(isShowing = false)
     }
 
+    fun openProfileScreen() {
+        _profileStateFlow.value = _profileStateFlow.value.copy(isShowing = true, selectedIndex = -1)
+    }
+
+    fun selectImageAt(index: Int) {
+        _profileStateFlow.value = _profileStateFlow.value.copy(selectedIndex = index)
+    }
+
+    fun confirmImage() {
+        if (_profileStateFlow.value.selectedIndex != -1) {
+            // TODO: 프로필 이미지 변경
+            _profileStateFlow.value = _profileStateFlow.value.copy(isShowing = false)
+            _settingsStateFlow.value = _settingsStateFlow.value.copy(userImage = _profileStateFlow.value.imageList[_profileStateFlow.value.selectedIndex])
+        }
+    }
+
+    fun openNicknameDialog() {
+        nicknameFlow.value = ""
+        _settingsStateFlow.value = _settingsStateFlow.value.copy(isEditingNickname = true)
+    }
+
+    fun confirmNickname() {
+        if (nicknameFlow.value.isNotEmpty()) {
+            // TODO: 닉네임 변경
+            _settingsStateFlow.value = _settingsStateFlow.value.copy(isEditingNickname = false, nickname = nicknameFlow.value)
+        }
+    }
+
+    fun closeNicknameDialog() {
+        _settingsStateFlow.value = _settingsStateFlow.value.copy(isEditingNickname = false)
+    }
+
     fun back() {
         when {
             _passwordStateFlow.value.isShowing -> {
                 _passwordStateFlow.value = _passwordStateFlow.value.copy(isShowing = false)
+            }
+            _profileStateFlow.value.isShowing -> {
+                _profileStateFlow.value = _profileStateFlow.value.copy(isShowing = false)
             }
             else -> {
                 triggerEvent(SettingsEvent.Finish)

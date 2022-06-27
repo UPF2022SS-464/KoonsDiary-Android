@@ -28,6 +28,7 @@ internal fun ProfileScreen(
             AppBar(
                 onBackPressed = onBackPressed,
                 onConfirm = onConfirm,
+                showConfirm = state.selectedIndex != -1,
             )
         }
     ) {
@@ -42,7 +43,8 @@ internal fun ProfileScreen(
 @Composable
 private fun AppBar(
     onBackPressed: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
+    showConfirm: Boolean
 ) {
     TopAppBar(
         title = {
@@ -64,12 +66,14 @@ private fun AppBar(
             }
         },
         actions = {
-            IconButton(onClick = onConfirm) {
-                Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = null,
-                    tint = KoonsColor.Green
-                )
+            if (showConfirm) {
+                IconButton(onClick = onConfirm) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = null,
+                        tint = KoonsColor.Green
+                    )
+                }
             }
         }
     )
