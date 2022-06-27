@@ -1,5 +1,7 @@
 package com.upf464.koonsdiary.presentation.ui.settings
 
+import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -23,12 +25,15 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,9 +42,7 @@ import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.presentation.R
 import com.upf464.koonsdiary.presentation.ui.components.ChangeContentDialog
 import com.upf464.koonsdiary.presentation.ui.settings.password.PasswordScreen
-import com.upf464.koonsdiary.presentation.ui.settings.password.PasswordState
 import com.upf464.koonsdiary.presentation.ui.settings.profile.ProfileScreen
-import com.upf464.koonsdiary.presentation.ui.settings.profile.ProfileState
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 import com.upf464.koonsdiary.presentation.ui.theme.koonsSwitchColor
@@ -49,30 +52,33 @@ internal fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
 
-    val state = SettingsState(
-        isEditingNickname = true
-    )
-    val passwordState = PasswordState()
-    val profileState = ProfileState(
-        isShowing = true,
-        imageList = listOf(
-            User.Image(path = "https://github.com/svclaw2000.png"),
-            User.Image(path = "https://github.com/svclaw2000.png"),
-            User.Image(path = "https://github.com/svclaw2000.png"),
-        ),
-        selectedIndex = 1
-    )
+    BackHandler(onBack = viewModel::back)
+
+    val context = LocalContext.current
+    LaunchedEffect(key1 = Unit) {
+        viewModel.eventFlow.collect { event ->
+            when (event) {
+                is SettingsEvent.Finish -> {
+                    (context as Activity).finish()
+                }
+            }
+        }
+    }
+
+    val state = viewModel.settingsStateFlow.collectAsState().value
+    val passwordState = viewModel.passwordStateFlow.collectAsState().value
+    val profileState = viewModel.profileStateFlow.collectAsState().value
 
     when {
         passwordState.isShowing -> {
             PasswordScreen(
                 state = passwordState,
-                length = 0,
-                maxLength = 4,
-                onNumberClicked = { },
-                onBackspaceClicked = { },
-                onExitClicked = { },
-                onPasswordSuccessConfirmed = { }
+                length = viewModel.passwordLengthFlow.collectAsState().value,
+                maxLength = SettingsViewModel.PASSWORD_MAX_LENGTH,
+                onNumberClicked = viewModel::clickPasswordNumber,
+                onBackspaceClicked = viewModel::clearOneNumber,
+                onExitClicked = viewModel::closePasswordDialog,
+                onPasswordSuccessConfirmed = viewModel::closePasswordDialog
             )
         }
         profileState.isShowing -> {
@@ -86,11 +92,11 @@ internal fun SettingsScreen(
         else -> {
             SettingsScreen(
                 state = state,
-                onBackPressed = { },
+                onBackPressed = viewModel::back,
                 onImageClicked = { },
                 onNicknameClicked = { },
-                onUsePasswordChanged = { },
-                onChangePasswordClicked = { },
+                onUsePasswordChanged = viewModel::changeUsePassword,
+                onChangePasswordClicked = viewModel::openPasswordDialog,
                 onUseBiometricChanged = { },
             )
         }
