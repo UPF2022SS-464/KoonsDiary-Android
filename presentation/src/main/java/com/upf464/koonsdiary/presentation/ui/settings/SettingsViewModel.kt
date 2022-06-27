@@ -2,8 +2,12 @@ package com.upf464.koonsdiary.presentation.ui.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.upf464.koonsdiary.common.extension.flatMap
 import com.upf464.koonsdiary.domain.error.SecurityError
 import com.upf464.koonsdiary.domain.usecase.security.AuthenticateWithBiometricUseCase
+import com.upf464.koonsdiary.domain.usecase.security.DeletePINUseCase
+import com.upf464.koonsdiary.domain.usecase.security.SavePINUseCase
+import com.upf464.koonsdiary.domain.usecase.security.SetBiometricUseCase
 import com.upf464.koonsdiary.domain.usecase.user.FetchUserImageListUseCase
 import com.upf464.koonsdiary.presentation.ui.settings.password.PasswordState
 import com.upf464.koonsdiary.presentation.ui.settings.profile.ProfileState
@@ -22,6 +26,9 @@ import javax.inject.Inject
 internal class SettingsViewModel @Inject constructor(
     private val fetchUserImageListUseCase: FetchUserImageListUseCase,
     private val biometricUseCase: AuthenticateWithBiometricUseCase,
+    private val setBiometricUseCase: SetBiometricUseCase,
+    private val savePINUseCase: SavePINUseCase,
+    private val deletePINUseCase: DeletePINUseCase,
 ) : ViewModel() {
 
     private val _eventFlow = MutableSharedFlow<SettingsEvent>()
@@ -47,10 +54,9 @@ internal class SettingsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            fetchUserImageListUseCase()
-                .onSuccess { response ->
-                    _profileStateFlow.value = ProfileState(imageList = response.imageList)
-                }
+            fetchUserImageListUseCase().onSuccess { response ->
+                _profileStateFlow.value = ProfileState(imageList = response.imageList)
+            }
         }
     }
 
@@ -58,8 +64,11 @@ internal class SettingsViewModel @Inject constructor(
         if (flag) {
             openPasswordDialog()
         } else {
-            _settingsStateFlow.value = _settingsStateFlow.value.copy(usePassword = false)
-            // TODO: 암호 제거
+            viewModelScope.launch {
+                deletePINUseCase().onSuccess {
+                    _settingsStateFlow.value = _settingsStateFlow.value.copy(usePassword = false)
+                }
+            }
         }
     }
 
@@ -80,9 +89,13 @@ internal class SettingsViewModel @Inject constructor(
             if (!passwordStateFlow.value.isConfirm) {
                 _passwordStateFlow.value = _passwordStateFlow.value.copy(isConfirm = true)
             } else if (passwordFlow.value == passwordConfirmFlow.value) {
-                // TODO: 암호 설정 완료
-                _passwordStateFlow.value = _passwordStateFlow.value.copy(isSuccess = true)
-                _settingsStateFlow.value = _settingsStateFlow.value.copy(usePassword = true)
+                viewModelScope.launch {
+                    savePINUseCase(SavePINUseCase.Request(passwordFlow.value))
+                        .onSuccess {
+                            _passwordStateFlow.value = _passwordStateFlow.value.copy(isSuccess = true)
+                            _settingsStateFlow.value = _settingsStateFlow.value.copy(usePassword = true)
+                        }
+                }
             } else {
                 openPasswordDialog()
             }
@@ -137,24 +150,26 @@ internal class SettingsViewModel @Inject constructor(
     fun changeUseBiometric(flag: Boolean) {
         if (flag) {
             viewModelScope.launch {
-                biometricUseCase()
-                    .onSuccess {
-                        // TODO: 지문 인증 설정 완료
-                        _settingsStateFlow.value = _settingsStateFlow.value.copy(useBiometric = true)
+                biometricUseCase().flatMap {
+                    setBiometricUseCase(SetBiometricUseCase.Request(true))
+                }.onSuccess {
+                    _settingsStateFlow.value = _settingsStateFlow.value.copy(useBiometric = true)
+                }.onFailure { error ->
+                    when (error) {
+                        SecurityError.AuthenticateFailed -> triggerEvent(SettingsEvent.ShowBiometricFailedError)
+                        SecurityError.HardwareUnavailable -> triggerEvent(SettingsEvent.ShowBiometricUnavailableError)
+                        SecurityError.Lockout -> triggerEvent(SettingsEvent.ShowLockBiometricError)
+                        SecurityError.NoCredential -> triggerEvent(SettingsEvent.ShowNoBiometricError)
+                        SecurityError.Timeout -> triggerEvent(SettingsEvent.ShowBiometricTimeoutError)
                     }
-                    .onFailure { error ->
-                        when (error) {
-                            SecurityError.AuthenticateFailed -> triggerEvent(SettingsEvent.ShowBiometricFailedError)
-                            SecurityError.HardwareUnavailable -> triggerEvent(SettingsEvent.ShowBiometricUnavailableError)
-                            SecurityError.Lockout -> triggerEvent(SettingsEvent.ShowLockBiometricError)
-                            SecurityError.NoCredential -> triggerEvent(SettingsEvent.ShowNoBiometricError)
-                            SecurityError.Timeout -> triggerEvent(SettingsEvent.ShowBiometricTimeoutError)
-                        }
-                    }
+                }
             }
         } else {
-            // TODO: 지문 인증 취소
-            _settingsStateFlow.value = _settingsStateFlow.value.copy(useBiometric = false)
+            viewModelScope.launch {
+                setBiometricUseCase(SetBiometricUseCase.Request(false)).onSuccess {
+                    _settingsStateFlow.value = _settingsStateFlow.value.copy(useBiometric = false)
+                }
+            }
         }
     }
 
