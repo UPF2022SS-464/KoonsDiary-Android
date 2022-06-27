@@ -9,9 +9,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class NotificationViewModel @Inject constructor(
-
-) : ViewModel() {
+internal class NotificationViewModel @Inject constructor() : ViewModel() {
 
     private val _eventFlow = MutableSharedFlow<NotificationEvent>()
     val eventFlow = _eventFlow.asSharedFlow()

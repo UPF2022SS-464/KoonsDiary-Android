@@ -35,7 +35,7 @@ class UpdateUserUseCaseTest {
         } returns true
 
         coEvery {
-            userRepository.updateUser("nickname")
+            userRepository.updateUser("nickname", null)
         } returns Result.success(Unit)
 
         val result = useCase(UpdateUserUseCase.Request("nickname"))

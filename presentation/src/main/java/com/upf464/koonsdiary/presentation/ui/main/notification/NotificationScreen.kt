@@ -50,9 +50,7 @@ private fun NotificationScreen(
                 onSettingsClicked = onSettingsClicked,
             )
         }
-    ) {
-
-    }
+    ) { }
 }
 
 @Composable
