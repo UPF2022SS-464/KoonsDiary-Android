@@ -6,15 +6,7 @@ plugins {
 }
 
 version = '0.1.0'
-
-task exportLib(type: Copy) {
-    from('build/outputs/aar/')
-    into('release/')
-    include("${project.name}-release.aar")
-    rename("${project.name}-release.aar", "${project.name}-${version}.aar")
-}
-
-exportLib.dependsOn("assembleRelease")
+apply from: file('../android_publish.gradle')
 
 android {
     compileSdk 31
@@ -91,6 +83,6 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
 
-    implementation project(path: ':domain')
-    implementation project(path: ':common')
+    implementation "com.upf464.koonsdiary:common:$common_version"
+    implementation "com.upf464.koonsdiary:domain:$domain_version"
 }
