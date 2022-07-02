@@ -2,23 +2,26 @@ plugins {
     id 'java-library'
     id 'org.jetbrains.kotlin.jvm'
     id 'kotlin-kapt'
+    id 'maven-publish'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.java
+                groupId = 'com.upf464.koonsdiary'
+                artifactId = project.name
+                version = '0.1.0'
+            }
+        }
+    }
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
-
-version = '0.1.0'
-
-task exportLib(type: Copy) {
-    from('build/libs/')
-    into('release/')
-    include("${project.name}-${version}.jar")
-    rename("${project.name}-${version}.jar", "${project.name}-${version}.jar")
-}
-
-exportLib.dependsOn(build)
 
 dependencies {
 
