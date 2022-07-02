@@ -61,24 +61,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
 
-//    implementation files(
-//            "../presentation/release/presentation-${presentation_version}.aar",
-//            "../local/release/local-${local_version}.aar",
-//            "../kakao/release/kakao-${kakao_version}.aar",
-//            "../firebase/release/firebase-${firebase_version}.aar",
-//
-//            "../domain/release/domain-${domain_version}.jar",
-//            "../remote/release/remote-${remote_version}.jar",
-//            "../data/release/data-${data_version}.jar",
-//            "../common/release/common-${common_version}.jar"
-//    )
-
-    implementation project(":presentation")
-    implementation project(":domain")
-    implementation project(":remote")
-    implementation project(":data")
-    implementation project(":local")
-    implementation project(":kakao")
-    implementation project(":firebase")
-    implementation project(":common")
+    implementation "com.upf464.koonsdiary:presentation:$presentation_version"
+    implementation "com.upf464.koonsdiary:local:$local_version"
+    implementation "com.upf464.koonsdiary:kakao:$kakao_version"
+    implementation "com.upf464.koonsdiary:firebase:$firebase_version"
+    implementation "com.upf464.koonsdiary:domain:$domain_version"
+    implementation "com.upf464.koonsdiary:remote:$remote_version"
+    implementation "com.upf464.koonsdiary:data:$data_version"
+    implementation "com.upf464.koonsdiary:common:$common_version"
 }

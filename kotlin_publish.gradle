@@ -1,0 +1,45 @@
+apply plugin: 'maven-publish'
+
+def githubProperties = new Properties()
+githubProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
+publishing {
+    repositories {
+        maven {
+            name = 'GithubPackages'
+            url = uri("https://maven.pkg.github.com/UPF2022SS-464/KoonsDiary-Android")
+            credentials {
+                username = githubProperties['github_username'] ?: System.getenv("github_username")
+                password = githubProperties['github_access_token'] ?: System.getenv("github_access_token")
+            }
+        }
+        maven {
+            name = 'CustomMavenRepo'
+            url = "file://${buildDir}/repo"
+        }
+    }
+    publications {
+        deploy(MavenPublication) {
+            groupId 'com.upf464.koonsdiary'
+            artifactId project.name
+            artifact("$buildDir/libs/${project.name}-${version}.jar")
+
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+
+                //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
+                configurations.api.allDependencies.each {
+                    def dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', it.group)
+                    dependencyNode.appendNode('artifactId', it.name)
+                    dependencyNode.appendNode('version', it.version)
+                }
+            }
+        }
+    }
+}
+
+task deploy
+publishDeployPublicationToCustomMavenRepoRepository.dependsOn(build)
+publishDeployPublicationToGithubPackagesRepository.dependsOn(publishDeployPublicationToCustomMavenRepoRepository)
+deploy.dependsOn(publishDeployPublicationToGithubPackagesRepository)

@@ -6,12 +6,23 @@ pluginManagement {
     }
 }
 
+def githubProperties = new Properties()
+githubProperties.load(new FileInputStream(new File('local.properties')))
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
         maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
+        maven {
+            name = 'GithubPackages'
+            url = uri("https://maven.pkg.github.com/UPF2022SS-464/KoonsDiary-Android")
+            credentials {
+                username = githubProperties['github_username'] ?: System.getenv("github_username")
+                password = githubProperties['github_access_token'] ?: System.getenv("github_access_token")
+            }
+        }
     }
 }
 
