@@ -9,6 +9,17 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+version = '0.1.0'
+
+task exportLib(type: Copy) {
+    from('build/libs/')
+    into('release/')
+    include("${project.name}-${version}.jar")
+    rename("${project.name}-${version}.jar", "${project.name}-${version}.jar")
+}
+
+exportLib.dependsOn(build)
+
 dependencies {
 
     implementation "com.google.dagger:hilt-core:$hilt_version"
