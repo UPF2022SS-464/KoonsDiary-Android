@@ -2,18 +2,21 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'maven-publish'
 }
 
-version = '0.1.0'
-
-task exportLib(type: Copy) {
-    from('build/outputs/aar/')
-    into('release/')
-    include("${project.name}-release.aar")
-    rename("${project.name}-release.aar", "${project.name}-${version}.aar")
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.upf464.koonsdiary'
+                artifactId = project.name
+                version = '0.1.0'
+            }
+        }
+    }
 }
-
-exportLib.dependsOn("assembleRelease")
 
 android {
     compileSdk 31
