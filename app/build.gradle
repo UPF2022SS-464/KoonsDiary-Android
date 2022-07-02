@@ -46,6 +46,7 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
 
     androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
@@ -53,12 +54,24 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
-    implementation "com.kakao.sdk:v2-user:$kakao_version"
+    implementation "com.kakao.sdk:v2-user:$kakao_sdk_version"
 
     implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
+
+//    implementation files(
+//            "../presentation/release/presentation-${presentation_version}.aar",
+//            "../local/release/local-${local_version}.aar",
+//            "../kakao/release/kakao-${kakao_version}.aar",
+//            "../firebase/release/firebase-${firebase_version}.aar",
+//
+//            "../domain/release/domain-${domain_version}.jar",
+//            "../remote/release/remote-${remote_version}.jar",
+//            "../data/release/data-${data_version}.jar",
+//            "../common/release/common-${common_version}.jar"
+//    )
 
     implementation project(":presentation")
     implementation project(":domain")
@@ -67,5 +80,5 @@ dependencies {
     implementation project(":local")
     implementation project(":kakao")
     implementation project(":firebase")
-    implementation project(path: ':common')
+    implementation project(":common")
 }

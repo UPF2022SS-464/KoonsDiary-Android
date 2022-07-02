@@ -4,6 +4,17 @@ plugins {
     id 'kotlin-kapt'
 }
 
+version = '0.1.0'
+
+task exportLib(type: Copy) {
+    from('build/outputs/aar/')
+    into('release/')
+    include("${project.name}-release.aar")
+    rename("${project.name}-release.aar", "${project.name}-${version}.aar")
+}
+
+exportLib.dependsOn("assembleRelease")
+
 android {
     compileSdk 31
 
