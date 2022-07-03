@@ -20,7 +20,7 @@ class ChangeTrackerPlugin : Plugin<Project> {
             val projectList = rootProject.allprojects.map { it.name }
             val changedModuleList = diffs.mapNotNull { diff ->
                 val module = diff.newPath.substringBefore('/')
-                module.ifEmpty { rootProject.name }
+                module.ifEmpty { if (diff.newPath.firstOrNull() == '/') null else rootProject.name }
             }.filter {
                 projectList.contains(it)
             }
