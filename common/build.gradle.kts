@@ -5,7 +5,7 @@ plugins {
 }
 
 version = "0.1.0"
-apply(from = "../kotlin_publish.gradle")
+apply(from = "../publish_kotlin.gradle")
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
