@@ -27,6 +27,7 @@ object Dependencies {
     const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Version.FIREBASE_BOM}"
     const val FIREBASE_MESSAGING = "com.google.firebase:firebase-messaging"
     const val FIREBASE_ANALYTICS = "com.google.firebase:firebase-analytics"
+    const val KAKAO_SDK_USER = "com.kakao.sdk:v2-user:${Version.KAKAO_SDK}"
 
     const val CORE_KTX = "androidx.core:core-ktx:${Version.CORE_KTX}"
     const val APPCOMPAT = "androidx.appcompat:appcompat:${Version.APPCOMPAT}"
@@ -50,6 +51,7 @@ object Dependencies {
         const val COROUTINES = "1.6.0"
 
         const val FIREBASE_BOM = "29.1.0"
+        const val KAKAO_SDK = "2.8.6"
 
         const val CORE_KTX = "1.7.0"
         const val APPCOMPAT = "1.4.1"
