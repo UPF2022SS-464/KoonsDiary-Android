@@ -15,14 +15,18 @@ object Dependencies {
     const val FIREBASE = "com.upf464.koonsdiary:firebase:${Version.FIREBASE}"
 
     const val JGIT = "org.eclipse.jgit:org.eclipse.jgit:${Version.JGIT}"
+
     const val HILT_CORE = "com.google.dagger:hilt-core:${Version.HILT}"
     const val HILT_ANDROID = "com.google.dagger:hilt-android:${Version.HILT}"
     const val HILT_KAPT = "com.google.dagger:hilt-android-compiler:${Version.HILT}"
+    const val HILT_NAVIGATION_COMPOSE = "androidx.hilt:hilt-navigation-compose:${Version.HILT_NAVIGATION_COMPOSE}"
+
     const val JUNIT = "junit:junit:${Version.JUNIT}"
     const val JUNIT_EXT = "androidx.test.ext:junit:${Version.JUNIT_EXT}"
     const val ESPRESSO = "androidx.test.espresso:espresso-core:${Version.ESPRESSO}"
     const val MOCKK = "io.mockk:mockk:${Version.MOCKK}"
     const val COROUTINES_CORE = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Version.COROUTINES}"
+    const val COROUTINES_TEST = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Version.COROUTINES}"
 
     const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Version.FIREBASE_BOM}"
     const val FIREBASE_MESSAGING = "com.google.firebase:firebase-messaging"
@@ -36,7 +40,24 @@ object Dependencies {
     const val ROOM_KTX = "androidx.room:room-ktx:${Version.ROOM}"
     const val ROOM_KAPT = "androidx.room:room-compiler:${Version.ROOM}"
 
-    private object Version {
+    const val MATERIAL = "com.google.android.material:material:${Version.MATERIAL}"
+    const val CONSTRAINT_LAYOUT = "androidx.constraintlayout:constraintlayout:${Version.CONSTRAINT_LAYOUT}"
+    const val BIOMETRIC = "androidx.biometric:biometric:${Version.BIOMETRIC}"
+
+    const val COMPOSE_MATERIAL = "androidx.compose.material:material:${Version.COMPOSE}"
+    const val COMPOSE_UI = "androidx.compose.ui:ui:${Version.COMPOSE}"
+    const val COMPOSE_PREVIEW = "androidx.compose.ui:ui-tooling-preview:${Version.COMPOSE}"
+    const val COMPOSE_TOOLING = "androidx.compose.ui:ui-tooling:${Version.COMPOSE}"
+    const val COMPOSE_TEST_JUNIT4 = "androidx.compose.ui:ui-test-junit4:${Version.COMPOSE}"
+    const val COMPOSE_TEST_MANIFEST = "androidx.compose.ui:ui-test-manifest:${Version.COMPOSE}"
+
+    const val ACCOMPANIST_PAGER = "com.google.accompanist:accompanist-pager:${Version.ACCOMPANIST_PAGER}"
+    const val COIL = "io.coil-kt:coil-compose:${Version.COIL}"
+    const val LIFECYCLE_RUNTIME = "androidx.lifecycle:lifecycle-runtime-ktx:${Version.LIFECYCLE}"
+    const val LIFECYCLE_VIEWMODEL = "androidx.lifecycle:lifecycle-viewmodel-compose:${Version.LIFECYCLE}"
+    const val ACTIVITY_COMPOSE = "androidx.activity:activity-compose:${Version.ACTIVITY_COMPOSE}"
+
+    object Version {
         const val COMMON = "0.1.0"
         const val DOMAIN = "0.1.0"
         const val DATA = "0.1.0"
@@ -47,7 +68,10 @@ object Dependencies {
         const val FIREBASE = "0.1.0"
 
         const val JGIT = "6.2.0.202206071550-r"
+
         const val HILT = "2.41"
+        const val HILT_NAVIGATION_COMPOSE = "1.0.0"
+
         const val JUNIT = "4.13.2"
         const val JUNIT_EXT = "1.1.3"
         const val ESPRESSO = "3.4.0"
@@ -61,5 +85,16 @@ object Dependencies {
         const val APPCOMPAT = "1.4.1"
         const val PREFERENCE = "1.2.0"
         const val ROOM = "2.4.2"
+
+        const val COMPOSE = "1.1.1"
+
+        const val MATERIAL = "1.5.0"
+        const val CONSTRAINT_LAYOUT = "2.1.3"
+        const val BIOMETRIC = "1.1.0"
+
+        const val ACCOMPANIST_PAGER = "0.23.1"
+        const val COIL = "2.0.0-rc01"
+        const val LIFECYCLE = "2.5.0"
+        const val ACTIVITY_COMPOSE = "1.4.0"
     }
 }
