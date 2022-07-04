@@ -19,8 +19,8 @@ object Dependencies {
     const val HILT_ANDROID = "com.google.dagger:hilt-android:${Version.HILT}"
     const val HILT_KAPT = "com.google.dagger:hilt-android-compiler:${Version.HILT}"
     const val JUNIT = "junit:junit:${Version.JUNIT}"
-    const val JUNIT_EXT = "androidx.test.ext:junit:${Version.JUNIT}"
-    const val ESPRESSO = "androidx.test.espresso:espresso-core:${Version.JUNIT}"
+    const val JUNIT_EXT = "androidx.test.ext:junit:${Version.JUNIT_EXT}"
+    const val ESPRESSO = "androidx.test.espresso:espresso-core:${Version.ESPRESSO}"
     const val MOCKK = "io.mockk:mockk:${Version.MOCKK}"
     const val COROUTINES_CORE = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Version.COROUTINES}"
 
@@ -31,6 +31,10 @@ object Dependencies {
 
     const val CORE_KTX = "androidx.core:core-ktx:${Version.CORE_KTX}"
     const val APPCOMPAT = "androidx.appcompat:appcompat:${Version.APPCOMPAT}"
+    const val PREFERENCE = "androidx.preference:preference-ktx:${Version.PREFERENCE}"
+    const val ROOM_COMMON = "androidx.room:room-common:${Version.ROOM}"
+    const val ROOM_KTX = "androidx.room:room-ktx:${Version.ROOM}"
+    const val ROOM_KAPT = "androidx.room:room-compiler:${Version.ROOM}"
 
     private object Version {
         const val COMMON = "0.1.0"
@@ -55,5 +59,7 @@ object Dependencies {
 
         const val CORE_KTX = "1.7.0"
         const val APPCOMPAT = "1.4.1"
+        const val PREFERENCE = "1.2.0"
+        const val ROOM = "2.4.2"
     }
 }
