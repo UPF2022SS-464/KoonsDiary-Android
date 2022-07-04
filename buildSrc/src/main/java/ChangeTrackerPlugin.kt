@@ -23,7 +23,7 @@ class ChangeTrackerPlugin : Plugin<Project> {
                 module.ifEmpty { if (diff.newPath.firstOrNull() == '/') null else rootProject.name }
             }.filter {
                 projectList.contains(it)
-            }
+            }.toSet()
 
             val rebuildModuleList = when {
                 changedModuleList.contains(rootProject.name) -> rootProject.subprojects.map { it.name }
