@@ -2,6 +2,8 @@ object Apps {
     const val minSdkVersion = 26
     const val targetSdkVersion = 31
     const val compileSdkVersion = 31
+    const val versionCode = 1
+    const val versionName = "1.0"
 }
 
 object Dependencies {
@@ -31,6 +33,7 @@ object Dependencies {
     const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Version.FIREBASE_BOM}"
     const val FIREBASE_MESSAGING = "com.google.firebase:firebase-messaging"
     const val FIREBASE_ANALYTICS = "com.google.firebase:firebase-analytics"
+    const val FIREBASE_CRASHLYTICS = "com.google.firebase:firebase-crashlytics"
     const val KAKAO_SDK_USER = "com.kakao.sdk:v2-user:${Version.KAKAO_SDK}"
 
     const val CORE_KTX = "androidx.core:core-ktx:${Version.CORE_KTX}"
