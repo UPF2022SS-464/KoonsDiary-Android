@@ -1,3 +1,9 @@
+object Apps {
+    const val minSdkVersion = 26
+    const val targetSdkVersion = 31
+    const val compileSdkVersion = 31
+}
+
 object Dependencies {
     const val COMMON = "com.upf464.koonsdiary:common:${Version.COMMON}"
     const val DOMAIN = "com.upf464.koonsdiary:domain:${Version.DOMAIN}"
@@ -10,10 +16,20 @@ object Dependencies {
 
     const val JGIT = "org.eclipse.jgit:org.eclipse.jgit:${Version.JGIT}"
     const val HILT_CORE = "com.google.dagger:hilt-core:${Version.HILT}"
+    const val HILT_ANDROID = "com.google.dagger:hilt-android:${Version.HILT}"
     const val HILT_KAPT = "com.google.dagger:hilt-android-compiler:${Version.HILT}"
     const val JUNIT = "junit:junit:${Version.JUNIT}"
+    const val JUNIT_EXT = "androidx.test.ext:junit:${Version.JUNIT}"
+    const val ESPRESSO = "androidx.test.espresso:espresso-core:${Version.JUNIT}"
     const val MOCKK = "io.mockk:mockk:${Version.MOCKK}"
     const val COROUTINES_CORE = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Version.COROUTINES}"
+
+    const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Version.FIREBASE_BOM}"
+    const val FIREBASE_MESSAGING = "com.google.firebase:firebase-messaging"
+    const val FIREBASE_ANALYTICS = "com.google.firebase:firebase-analytics"
+
+    const val CORE_KTX = "androidx.core:core-ktx:${Version.CORE_KTX}"
+    const val APPCOMPAT = "androidx.appcompat:appcompat:${Version.APPCOMPAT}"
 
     private object Version {
         const val COMMON = "0.1.0"
@@ -28,7 +44,14 @@ object Dependencies {
         const val JGIT = "6.2.0.202206071550-r"
         const val HILT = "2.41"
         const val JUNIT = "4.13.2"
+        const val JUNIT_EXT = "1.1.3"
+        const val ESPRESSO = "3.4.0"
         const val MOCKK = "1.12.3"
         const val COROUTINES = "1.6.0"
+
+        const val FIREBASE_BOM = "29.1.0"
+
+        const val CORE_KTX = "1.7.0"
+        const val APPCOMPAT = "1.4.1"
     }
 }
