@@ -6,6 +6,22 @@ object Apps {
     const val versionName = "1.0"
 }
 
+object Plugins {
+
+    const val JGIT = "org.eclipse.jgit:org.eclipse.jgit:${Version.JGIT}"
+    const val HILT = "com.google.dagger:hilt-android-gradle-plugin:${Version.HILT}"
+    const val CRASHLYTICS_GRADLE = "com.google.firebase:firebase-crashlytics-gradle:${Version.CRASHLYTICS_GRADLE}"
+    const val GOOGLE_SERVICES = "com.google.gms:google-services:${Version.GOOGLE_SERVICES}"
+
+    object Version {
+
+        const val JGIT = "6.2.0.202206071550-r"
+        const val GOOGLE_SERVICES = "4.3.13"
+        const val CRASHLYTICS_GRADLE = "2.9.1"
+        const val HILT = "2.41"
+    }
+}
+
 object Dependencies {
     const val COMMON = "com.upf464.koonsdiary:common:${Version.COMMON}"
     const val DOMAIN = "com.upf464.koonsdiary:domain:${Version.DOMAIN}"
@@ -15,8 +31,6 @@ object Dependencies {
     const val PRESENTATION = "com.upf464.koonsdiary:presentation:${Version.PRESENTATION}"
     const val KAKAO = "com.upf464.koonsdiary:kakao:${Version.KAKAO}"
     const val FIREBASE = "com.upf464.koonsdiary:firebase:${Version.FIREBASE}"
-
-    const val JGIT = "org.eclipse.jgit:org.eclipse.jgit:${Version.JGIT}"
 
     const val HILT_CORE = "com.google.dagger:hilt-core:${Version.HILT}"
     const val HILT_ANDROID = "com.google.dagger:hilt-android:${Version.HILT}"
@@ -69,8 +83,6 @@ object Dependencies {
         const val PRESENTATION = "0.1.0"
         const val KAKAO = "0.1.0"
         const val FIREBASE = "0.1.0"
-
-        const val JGIT = "6.2.0.202206071550-r"
 
         const val HILT = "2.41"
         const val HILT_NAVIGATION_COMPOSE = "1.0.0"
