@@ -6,7 +6,7 @@ plugins {
 }
 
 version = "0.1.0"
-apply(from = "../android_publish.gradle")
+apply(from = "../publish_android.gradle")
 
 android {
     compileSdk = Apps.compileSdkVersion
