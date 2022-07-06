@@ -44,29 +44,29 @@ android {
 
 dependencies {
 
-    implementation(Dependencies.CORE_KTX)
-    implementation(Dependencies.APPCOMPAT)
-    implementation(Dependencies.MATERIAL)
+    implementation(Dependencies.AndroidX.CORE_KTX)
+    implementation(Dependencies.AndroidX.APPCOMPAT)
+    implementation(Dependencies.Google.MATERIAL)
 
-    androidTestImplementation(Dependencies.JUNIT_EXT)
-    androidTestImplementation(Dependencies.ESPRESSO)
+    kapt(Dependencies.Hilt.KAPT)
+    implementation(Dependencies.Hilt.ANDROID)
 
-    implementation(Dependencies.HILT_ANDROID)
-    kapt(Dependencies.HILT_KAPT)
+    androidTestImplementation(Dependencies.AndroidTest.JUNIT_EXT)
+    androidTestImplementation(Dependencies.AndroidTest.ESPRESSO)
 
-    implementation(Dependencies.KAKAO_SDK_USER)
+    implementation(Dependencies.Kakao.USER)
 
-    implementation(platform(Dependencies.FIREBASE_BOM))
-    implementation(Dependencies.FIREBASE_MESSAGING)
-    implementation(Dependencies.FIREBASE_ANALYTICS)
-    implementation(Dependencies.FIREBASE_CRASHLYTICS)
+    implementation(platform(Dependencies.Firebase.BOM))
+    implementation(Dependencies.Firebase.MESSAGING)
+    implementation(Dependencies.Firebase.ANALYTICS)
+    implementation(Dependencies.Firebase.CRASHLYTICS)
 
-    implementation(Dependencies.PRESENTATION)
-    implementation(Dependencies.LOCAL)
-    implementation(Dependencies.KAKAO)
-    implementation(Dependencies.FIREBASE)
-    implementation(Dependencies.DOMAIN)
-    implementation(Dependencies.REMOTE)
-    implementation(Dependencies.DATA)
-    implementation(Dependencies.COMMON)
+    implementation(Dependencies.Module.PRESENTATION)
+    implementation(Dependencies.Module.LOCAL)
+    implementation(Dependencies.Module.KAKAO)
+    implementation(Dependencies.Module.FIREBASE)
+    implementation(Dependencies.Module.DOMAIN)
+    implementation(Dependencies.Module.REMOTE)
+    implementation(Dependencies.Module.DATA)
+    implementation(Dependencies.Module.COMMON)
 }

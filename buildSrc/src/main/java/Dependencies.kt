@@ -1,115 +1,91 @@
-object Apps {
-    const val minSdkVersion = 26
-    const val targetSdkVersion = 31
-    const val compileSdkVersion = 31
-    const val versionCode = 1
-    const val versionName = "1.0"
-}
+interface Dependencies {
 
-object Plugins {
+    object Kotlin {
 
-    const val JGIT = "org.eclipse.jgit:org.eclipse.jgit:${Version.JGIT}"
-    const val HILT = "com.google.dagger:hilt-android-gradle-plugin:${Version.HILT}"
-    const val CRASHLYTICS_GRADLE = "com.google.firebase:firebase-crashlytics-gradle:${Version.CRASHLYTICS_GRADLE}"
-    const val GOOGLE_SERVICES = "com.google.gms:google-services:${Version.GOOGLE_SERVICES}"
-
-    object Version {
-
-        const val JGIT = "6.2.0.202206071550-r"
-        const val GOOGLE_SERVICES = "4.3.13"
-        const val CRASHLYTICS_GRADLE = "2.9.1"
-        const val HILT = "2.41"
+        const val COROUTINES_CORE = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.COROUTINES}"
     }
-}
 
-object Dependencies {
-    const val COMMON = "com.upf464.koonsdiary:common:${Version.COMMON}"
-    const val DOMAIN = "com.upf464.koonsdiary:domain:${Version.DOMAIN}"
-    const val DATA = "com.upf464.koonsdiary:data:${Version.DATA}"
-    const val LOCAL = "com.upf464.koonsdiary:local:${Version.LOCAL}"
-    const val REMOTE = "com.upf464.koonsdiary:remote:${Version.REMOTE}"
-    const val PRESENTATION = "com.upf464.koonsdiary:presentation:${Version.PRESENTATION}"
-    const val KAKAO = "com.upf464.koonsdiary:kakao:${Version.KAKAO}"
-    const val FIREBASE = "com.upf464.koonsdiary:firebase:${Version.FIREBASE}"
+    object AndroidX {
 
-    const val HILT_CORE = "com.google.dagger:hilt-core:${Version.HILT}"
-    const val HILT_ANDROID = "com.google.dagger:hilt-android:${Version.HILT}"
-    const val HILT_KAPT = "com.google.dagger:hilt-android-compiler:${Version.HILT}"
-    const val HILT_NAVIGATION_COMPOSE = "androidx.hilt:hilt-navigation-compose:${Version.HILT_NAVIGATION_COMPOSE}"
+        const val CORE_KTX = "androidx.core:core-ktx:${Versions.CORE_KTX}"
+        const val APPCOMPAT = "androidx.appcompat:appcompat:${Versions.APPCOMPAT}"
+        const val PREFERENCE = "androidx.preference:preference-ktx:${Versions.PREFERENCE}"
+        const val CONSTRAINT_LAYOUT = "androidx.constraintlayout:constraintlayout:${Versions.CONSTRAINT_LAYOUT}"
+        const val BIOMETRIC = "androidx.biometric:biometric:${Versions.BIOMETRIC}"
 
-    const val JUNIT = "junit:junit:${Version.JUNIT}"
-    const val JUNIT_EXT = "androidx.test.ext:junit:${Version.JUNIT_EXT}"
-    const val ESPRESSO = "androidx.test.espresso:espresso-core:${Version.ESPRESSO}"
-    const val MOCKK = "io.mockk:mockk:${Version.MOCKK}"
-    const val COROUTINES_CORE = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Version.COROUTINES}"
-    const val COROUTINES_TEST = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Version.COROUTINES}"
+        const val ROOM_COMMON = "androidx.room:room-common:${Versions.ROOM}"
+        const val ROOM_KTX = "androidx.room:room-ktx:${Versions.ROOM}"
+        const val ROOM_KAPT = "androidx.room:room-compiler:${Versions.ROOM}"
 
-    const val FIREBASE_BOM = "com.google.firebase:firebase-bom:${Version.FIREBASE_BOM}"
-    const val FIREBASE_MESSAGING = "com.google.firebase:firebase-messaging"
-    const val FIREBASE_ANALYTICS = "com.google.firebase:firebase-analytics"
-    const val FIREBASE_CRASHLYTICS = "com.google.firebase:firebase-crashlytics"
-    const val KAKAO_SDK_USER = "com.kakao.sdk:v2-user:${Version.KAKAO_SDK}"
+        const val ACTIVITY_COMPOSE = "androidx.activity:activity-compose:${Versions.ACTIVITY_COMPOSE}"
+    }
 
-    const val CORE_KTX = "androidx.core:core-ktx:${Version.CORE_KTX}"
-    const val APPCOMPAT = "androidx.appcompat:appcompat:${Version.APPCOMPAT}"
-    const val PREFERENCE = "androidx.preference:preference-ktx:${Version.PREFERENCE}"
-    const val ROOM_COMMON = "androidx.room:room-common:${Version.ROOM}"
-    const val ROOM_KTX = "androidx.room:room-ktx:${Version.ROOM}"
-    const val ROOM_KAPT = "androidx.room:room-compiler:${Version.ROOM}"
+    object Google {
 
-    const val MATERIAL = "com.google.android.material:material:${Version.MATERIAL}"
-    const val CONSTRAINT_LAYOUT = "androidx.constraintlayout:constraintlayout:${Version.CONSTRAINT_LAYOUT}"
-    const val BIOMETRIC = "androidx.biometric:biometric:${Version.BIOMETRIC}"
+        const val MATERIAL = "com.google.android.material:material:${Versions.MATERIAL}"
+        const val ACCOMPANIST_PAGER = "com.google.accompanist:accompanist-pager:${Versions.ACCOMPANIST_PAGER}"
+    }
 
-    const val COMPOSE_MATERIAL = "androidx.compose.material:material:${Version.COMPOSE}"
-    const val COMPOSE_UI = "androidx.compose.ui:ui:${Version.COMPOSE}"
-    const val COMPOSE_PREVIEW = "androidx.compose.ui:ui-tooling-preview:${Version.COMPOSE}"
-    const val COMPOSE_TOOLING = "androidx.compose.ui:ui-tooling:${Version.COMPOSE}"
-    const val COMPOSE_TEST_JUNIT4 = "androidx.compose.ui:ui-test-junit4:${Version.COMPOSE}"
-    const val COMPOSE_TEST_MANIFEST = "androidx.compose.ui:ui-test-manifest:${Version.COMPOSE}"
+    object Compose {
 
-    const val ACCOMPANIST_PAGER = "com.google.accompanist:accompanist-pager:${Version.ACCOMPANIST_PAGER}"
-    const val COIL = "io.coil-kt:coil-compose:${Version.COIL}"
-    const val LIFECYCLE_RUNTIME = "androidx.lifecycle:lifecycle-runtime-ktx:${Version.LIFECYCLE}"
-    const val LIFECYCLE_VIEWMODEL = "androidx.lifecycle:lifecycle-viewmodel-compose:${Version.LIFECYCLE}"
-    const val ACTIVITY_COMPOSE = "androidx.activity:activity-compose:${Version.ACTIVITY_COMPOSE}"
+        const val MATERIAL = "androidx.compose.material:material:${Versions.COMPOSE}"
+        const val UI = "androidx.compose.ui:ui:${Versions.COMPOSE}"
+        const val PREVIEW = "androidx.compose.ui:ui-tooling-preview:${Versions.COMPOSE}"
+        const val TOOLING = "androidx.compose.ui:ui-tooling:${Versions.COMPOSE}"
+        const val COIL = "io.coil-kt:coil-compose:${Versions.COIL}"
+    }
 
-    object Version {
-        const val COMMON = "0.1.0"
-        const val DOMAIN = "0.1.0"
-        const val DATA = "0.1.0"
-        const val LOCAL = "0.1.0"
-        const val REMOTE = "0.1.0"
-        const val PRESENTATION = "0.1.0"
-        const val KAKAO = "0.1.0"
-        const val FIREBASE = "0.1.0"
+    object LifeCycle {
 
-        const val HILT = "2.41"
-        const val HILT_NAVIGATION_COMPOSE = "1.0.0"
+        const val RUNTIME = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.LIFECYCLE}"
+        const val VIEWMODEL = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.LIFECYCLE}"
+    }
 
-        const val JUNIT = "4.13.2"
-        const val JUNIT_EXT = "1.1.3"
-        const val ESPRESSO = "3.4.0"
-        const val MOCKK = "1.12.3"
-        const val COROUTINES = "1.6.0"
+    object Hilt {
 
-        const val FIREBASE_BOM = "29.1.0"
-        const val KAKAO_SDK = "2.8.6"
+        const val CORE = "com.google.dagger:hilt-core:${Versions.HILT}"
+        const val ANDROID = "com.google.dagger:hilt-android:${Versions.HILT}"
+        const val KAPT = "com.google.dagger:hilt-android-compiler:${Versions.HILT}"
+        const val NAVIGATION_COMPOSE = "androidx.hilt:hilt-navigation-compose:${Versions.HILT_NAVIGATION_COMPOSE}"
+    }
 
-        const val CORE_KTX = "1.7.0"
-        const val APPCOMPAT = "1.4.1"
-        const val PREFERENCE = "1.2.0"
-        const val ROOM = "2.4.2"
+    object UnitTest {
 
-        const val COMPOSE = "1.1.1"
+        const val JUNIT = "junit:junit:${Versions.JUNIT}"
+        const val MOCKK = "io.mockk:mockk:${Versions.MOCKK}"
+        const val COROUTINES_TEST = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.COROUTINES}"
+    }
 
-        const val MATERIAL = "1.5.0"
-        const val CONSTRAINT_LAYOUT = "2.1.3"
-        const val BIOMETRIC = "1.1.0"
+    object AndroidTest {
 
-        const val ACCOMPANIST_PAGER = "0.23.1"
-        const val COIL = "2.0.0-rc01"
-        const val LIFECYCLE = "2.5.0"
-        const val ACTIVITY_COMPOSE = "1.4.0"
+        const val JUNIT_EXT = "androidx.test.ext:junit:${Versions.JUNIT_EXT}"
+        const val ESPRESSO = "androidx.test.espresso:espresso-core:${Versions.ESPRESSO}"
+        const val COMPOSE_JUNIT4 = "androidx.compose.ui:ui-test-junit4:${Versions.COMPOSE}"
+        const val COMPOSE_MANIFEST = "androidx.compose.ui:ui-test-manifest:${Versions.COMPOSE}"
+    }
+
+    object Firebase {
+
+        const val BOM = "com.google.firebase:firebase-bom:${Versions.FIREBASE_BOM}"
+        const val MESSAGING = "com.google.firebase:firebase-messaging"
+        const val ANALYTICS = "com.google.firebase:firebase-analytics"
+        const val CRASHLYTICS = "com.google.firebase:firebase-crashlytics"
+    }
+
+    object Kakao {
+
+        const val USER = "com.kakao.sdk:v2-user:${Versions.KAKAO_SDK}"
+    }
+
+    object Module {
+
+        const val COMMON = "com.upf464.koonsdiary:common:${Versions.COMMON}"
+        const val DOMAIN = "com.upf464.koonsdiary:domain:${Versions.DOMAIN}"
+        const val DATA = "com.upf464.koonsdiary:data:${Versions.DATA}"
+        const val LOCAL = "com.upf464.koonsdiary:local:${Versions.LOCAL}"
+        const val REMOTE = "com.upf464.koonsdiary:remote:${Versions.REMOTE}"
+        const val PRESENTATION = "com.upf464.koonsdiary:presentation:${Versions.PRESENTATION}"
+        const val KAKAO = "com.upf464.koonsdiary:kakao:${Versions.KAKAO}"
+        const val FIREBASE = "com.upf464.koonsdiary:firebase:${Versions.FIREBASE}"
     }
 }

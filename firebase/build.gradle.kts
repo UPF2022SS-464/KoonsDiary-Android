@@ -37,23 +37,24 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.CORE_KTX)
-    implementation(Dependencies.APPCOMPAT)
 
-    testImplementation(Dependencies.JUNIT)
-    testImplementation(Dependencies.MOCKK)
-    androidTestImplementation(Dependencies.JUNIT_EXT)
-    androidTestImplementation(Dependencies.ESPRESSO)
+    implementation(Dependencies.Kotlin.COROUTINES_CORE)
 
-    implementation(Dependencies.HILT_ANDROID)
-    kapt(Dependencies.HILT_KAPT)
+    implementation(Dependencies.AndroidX.CORE_KTX)
+    implementation(Dependencies.AndroidX.APPCOMPAT)
 
-    implementation(Dependencies.COROUTINES_CORE)
+    kapt(Dependencies.Hilt.KAPT)
+    implementation(Dependencies.Hilt.ANDROID)
 
-    implementation(platform(Dependencies.FIREBASE_BOM))
-    implementation(Dependencies.FIREBASE_MESSAGING)
-    implementation(Dependencies.FIREBASE_ANALYTICS)
+    testImplementation(Dependencies.UnitTest.JUNIT)
+    testImplementation(Dependencies.UnitTest.MOCKK)
+    androidTestImplementation(Dependencies.AndroidTest.JUNIT_EXT)
+    androidTestImplementation(Dependencies.AndroidTest.ESPRESSO)
 
-    implementation(Dependencies.DATA)
-    implementation(Dependencies.COMMON)
+    implementation(platform(Dependencies.Firebase.BOM))
+    implementation(Dependencies.Firebase.MESSAGING)
+    implementation(Dependencies.Firebase.ANALYTICS)
+
+    implementation(Dependencies.Module.DATA)
+    implementation(Dependencies.Module.COMMON)
 }
