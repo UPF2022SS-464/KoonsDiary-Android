@@ -14,11 +14,11 @@ java {
 
 dependencies {
 
-    implementation(Dependencies.HILT_CORE)
-    kapt(Dependencies.HILT_KAPT)
+    implementation(Dependencies.Kotlin.COROUTINES_CORE)
 
-    testImplementation(Dependencies.JUNIT)
-    testImplementation(Dependencies.MOCKK)
+    kapt(Dependencies.Hilt.KAPT)
+    implementation(Dependencies.Hilt.CORE)
 
-    implementation(Dependencies.COROUTINES_CORE)
+    testImplementation(Dependencies.UnitTest.JUNIT)
+    testImplementation(Dependencies.UnitTest.MOCKK)
 }

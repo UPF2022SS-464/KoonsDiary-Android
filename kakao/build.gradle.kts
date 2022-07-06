@@ -36,21 +36,22 @@ android {
 }
 
 dependencies {
-    implementation(Dependencies.CORE_KTX)
-    implementation(Dependencies.APPCOMPAT)
 
-    testImplementation(Dependencies.JUNIT)
-    testImplementation(Dependencies.MOCKK)
-    androidTestImplementation(Dependencies.JUNIT_EXT)
-    androidTestImplementation(Dependencies.ESPRESSO)
+    implementation(Dependencies.Kotlin.COROUTINES_CORE)
 
-    implementation(Dependencies.HILT_ANDROID)
-    kapt(Dependencies.HILT_KAPT)
+    implementation(Dependencies.AndroidX.CORE_KTX)
+    implementation(Dependencies.AndroidX.APPCOMPAT)
 
-    implementation(Dependencies.KAKAO_SDK_USER)
+    kapt(Dependencies.Hilt.KAPT)
+    implementation(Dependencies.Hilt.ANDROID)
 
-    implementation(Dependencies.COROUTINES_CORE)
+    testImplementation(Dependencies.UnitTest.JUNIT)
+    testImplementation(Dependencies.UnitTest.MOCKK)
+    androidTestImplementation(Dependencies.AndroidTest.JUNIT_EXT)
+    androidTestImplementation(Dependencies.AndroidTest.ESPRESSO)
 
-    implementation(Dependencies.DATA)
-    implementation(Dependencies.COMMON)
+    implementation(Dependencies.Kakao.USER)
+
+    implementation(Dependencies.Module.DATA)
+    implementation(Dependencies.Module.COMMON)
 }

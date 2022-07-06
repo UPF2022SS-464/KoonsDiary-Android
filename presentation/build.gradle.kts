@@ -40,7 +40,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Dependencies.Version.COMPOSE
+        kotlinCompilerExtensionVersion = Versions.COMPOSE
     }
 
     buildFeatures {
@@ -55,36 +55,37 @@ android {
 
 dependencies {
 
-    implementation(Dependencies.CORE_KTX)
-    implementation(Dependencies.APPCOMPAT)
-    implementation(Dependencies.MATERIAL)
-    implementation(Dependencies.CONSTRAINT_LAYOUT)
-    implementation(Dependencies.BIOMETRIC)
+    implementation(Dependencies.Kotlin.COROUTINES_CORE)
 
-    implementation(Dependencies.COMPOSE_MATERIAL)
-    implementation(Dependencies.COMPOSE_UI)
-    implementation(Dependencies.COMPOSE_PREVIEW)
-    androidTestImplementation(Dependencies.COMPOSE_TEST_JUNIT4)
-    debugImplementation(Dependencies.COMPOSE_TOOLING)
-    implementation(Dependencies.LIFECYCLE_RUNTIME)
-    implementation(Dependencies.LIFECYCLE_VIEWMODEL)
-    implementation(Dependencies.ACTIVITY_COMPOSE)
-    implementation(Dependencies.COIL)
-    implementation(Dependencies.ACCOMPANIST_PAGER)
-    debugImplementation(Dependencies.COMPOSE_TEST_MANIFEST)
+    implementation(Dependencies.AndroidX.CORE_KTX)
+    implementation(Dependencies.AndroidX.APPCOMPAT)
+    implementation(Dependencies.AndroidX.CONSTRAINT_LAYOUT)
+    implementation(Dependencies.AndroidX.BIOMETRIC)
+    implementation(Dependencies.AndroidX.ACTIVITY_COMPOSE)
+    implementation(Dependencies.Google.ACCOMPANIST_PAGER)
+    implementation(Dependencies.Google.MATERIAL)
 
-    testImplementation(Dependencies.JUNIT)
-    testImplementation(Dependencies.MOCKK)
-    androidTestImplementation(Dependencies.JUNIT_EXT)
-    androidTestImplementation(Dependencies.ESPRESSO)
-    testImplementation(Dependencies.COROUTINES_TEST)
+    implementation(Dependencies.Compose.MATERIAL)
+    implementation(Dependencies.Compose.UI)
+    implementation(Dependencies.Compose.PREVIEW)
+    implementation(Dependencies.Compose.COIL)
+    debugImplementation(Dependencies.Compose.TOOLING)
 
-    implementation(Dependencies.HILT_ANDROID)
-    kapt(Dependencies.HILT_KAPT)
-    implementation(Dependencies.HILT_NAVIGATION_COMPOSE)
+    implementation(Dependencies.LifeCycle.RUNTIME)
+    implementation(Dependencies.LifeCycle.VIEWMODEL)
 
-    implementation(Dependencies.COROUTINES_CORE)
+    kapt(Dependencies.Hilt.KAPT)
+    implementation(Dependencies.Hilt.ANDROID)
+    implementation(Dependencies.Hilt.NAVIGATION_COMPOSE)
 
-    implementation(Dependencies.DOMAIN)
-    implementation(Dependencies.COMMON)
+    testImplementation(Dependencies.UnitTest.JUNIT)
+    testImplementation(Dependencies.UnitTest.MOCKK)
+    testImplementation(Dependencies.UnitTest.COROUTINES_TEST)
+    debugImplementation(Dependencies.AndroidTest.COMPOSE_MANIFEST)
+    androidTestImplementation(Dependencies.AndroidTest.JUNIT_EXT)
+    androidTestImplementation(Dependencies.AndroidTest.ESPRESSO)
+    androidTestImplementation(Dependencies.AndroidTest.COMPOSE_JUNIT4)
+
+    implementation(Dependencies.Module.DOMAIN)
+    implementation(Dependencies.Module.COMMON)
 }
