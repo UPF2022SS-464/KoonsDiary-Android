@@ -4,7 +4,7 @@ plugins {
     id("kotlin-kapt")
 }
 
-version = "0.1.3"
+version = "0.1.4"
 apply(from = "../publish_kotlin.gradle")
 
 java {

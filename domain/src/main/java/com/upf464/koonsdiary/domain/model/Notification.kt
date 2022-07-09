@@ -13,7 +13,6 @@ sealed interface Notification {
     ) : Notification
 
     data class NewDiary(
-        val group: ShareGroup = ShareGroup(),
         val diary: ShareDiary = ShareDiary(),
     ) : Notification
 
