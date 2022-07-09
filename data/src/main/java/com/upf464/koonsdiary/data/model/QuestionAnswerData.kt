@@ -7,7 +7,7 @@ data class QuestionAnswerData(
     val id: Int = 0,
     val writerId: Int = 0,
     val createdDate: LocalDateTime = LocalDateTime.now(),
-    val question: QuestionData,
+    val question: QuestionData = QuestionData(),
     val content: String = "",
     val reactionMap: Map<Reaction, Int> = emptyMap()
 )
