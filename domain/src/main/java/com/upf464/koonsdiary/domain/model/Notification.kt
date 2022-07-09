@@ -4,7 +4,7 @@ sealed interface Notification {
 
     data class GroupInvite(
         val group: ShareGroup,
-        val isAccepted: Boolean?,
+        val isAccepted: Boolean? = null,
     ) : Notification
 
     data class CottonReaction(
