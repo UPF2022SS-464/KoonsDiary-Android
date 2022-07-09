@@ -3,22 +3,22 @@ package com.upf464.koonsdiary.domain.model
 sealed interface Notification {
 
     data class GroupInvite(
-        val group: ShareGroup,
+        val group: ShareGroup = ShareGroup(),
         val isAccepted: Boolean? = null,
     ) : Notification
 
     data class CottonReaction(
-        val answer: QuestionAnswer,
-        val reaction: Reaction,
+        val answer: QuestionAnswer = QuestionAnswer(),
+        val reaction: Reaction = Reaction(),
     ) : Notification
 
     data class NewDiary(
-        val group: ShareGroup,
-        val diary: ShareDiary,
+        val group: ShareGroup = ShareGroup(),
+        val diary: ShareDiary = ShareDiary(),
     ) : Notification
 
     data class DiaryComment(
-        val diary: ShareDiary,
-        val comment: Comment
+        val diary: ShareDiary = ShareDiary(),
+        val comment: Comment = Comment(),
     ) : Notification
 }
