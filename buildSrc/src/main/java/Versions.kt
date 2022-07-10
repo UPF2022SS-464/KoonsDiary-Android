@@ -1,11 +1,11 @@
 object Versions {
 
     const val COMMON = "0.1.0"
-    const val DOMAIN = "0.1.0"
-    const val DATA = "0.1.0"
+    const val DOMAIN = "0.1.4"
+    const val DATA = "0.1.1"
     const val LOCAL = "0.1.0"
     const val REMOTE = "0.1.0"
-    const val PRESENTATION = "0.1.0"
+    const val PRESENTATION = "0.1.1"
     const val KAKAO = "0.1.0"
     const val FIREBASE = "0.1.0"
 
