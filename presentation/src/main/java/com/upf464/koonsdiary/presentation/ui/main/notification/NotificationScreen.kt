@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.LocalMinimumTouchTargetEnforcement
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -16,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -209,6 +212,7 @@ private fun AppBar(
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun NotificationItem(
     message: String,
@@ -222,13 +226,15 @@ private fun NotificationItem(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .padding(top = 10.dp)
-            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
             .then(
                 if (backgroundColor != null) Modifier
+                    .padding(vertical = 4.dp)
                     .background(backgroundColor.copy(alpha = 0.2f))
+                    .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
                     .padding(top = 10.dp, bottom = 10.dp, start = 16.dp, end = 16.dp)
-                else Modifier.padding(start = 16.dp, end = 16.dp)
+                else Modifier
+                    .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
+                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
             )
     ) {
         icon?.invoke()
@@ -252,26 +258,32 @@ private fun NotificationItem(
                 )
             }
         }
-        onConfirm?.let {
-            IconButton(
-                onClick = it
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = null,
-                    tint = KoonsColor.Green
-                )
+        CompositionLocalProvider(
+            LocalMinimumTouchTargetEnforcement provides false,
+        ) {
+            onConfirm?.let {
+                IconButton(
+                    onClick = it,
+                    modifier = Modifier.padding(horizontal = 4.dp),
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = null,
+                        tint = KoonsColor.Green
+                    )
+                }
             }
-        }
-        onCancel?.let {
-            IconButton(
-                onClick = it
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_cross),
-                    contentDescription = null,
-                    tint = KoonsColor.Red
-                )
+            onCancel?.let {
+                IconButton(
+                    onClick = it,
+                    modifier = Modifier.padding(horizontal = 4.dp),
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_cross),
+                        contentDescription = null,
+                        tint = KoonsColor.Red
+                    )
+                }
             }
         }
     }
