@@ -6,9 +6,11 @@ pluginManagement {
     }
 }
 
+/*
 val githubProperties = java.util.Properties().apply {
     load(java.io.FileInputStream(File("local.properties")))
 }
+*/
 
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -18,6 +20,7 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://devrepo.kakao.com/nexus/content/groups/public/")
         }
+/*
         maven {
             name = "GithubPackages"
             url = uri("https://maven.pkg.github.com/UPF2022SS-464/KoonsDiary-Android")
@@ -26,6 +29,7 @@ dependencyResolutionManagement {
                 password = githubProperties["github_access_token"]?.toString() ?: System.getenv("github_access_token").toString()
             }
         }
+*/
     }
 }
 

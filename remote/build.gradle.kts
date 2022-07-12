@@ -4,8 +4,8 @@ plugins {
     id("kotlin-kapt")
 }
 
-version = "0.1.1"
-apply(from = "../publish_kotlin.gradle")
+//version = "0.1.1"
+//apply(from = "../publish_kotlin.gradle")
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -22,6 +22,6 @@ dependencies {
     testImplementation(Dependencies.UnitTest.JUNIT)
     testImplementation(Dependencies.UnitTest.MOCKK)
 
-    implementation(Dependencies.Module.DATA)
-    implementation(Dependencies.Module.COMMON)
+    implementation(project(Dependencies.Module.DATA))
+    implementation(project(Dependencies.Module.COMMON))
 }

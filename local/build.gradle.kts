@@ -4,8 +4,8 @@ plugins {
     id("kotlin-kapt")
 }
 
-version = "0.1.0"
-apply(from = "../publish_android.gradle")
+//version = "0.1.0"
+//apply(from = "../publish_android.gradle")
 
 android {
     compileSdk = Apps.compileSdkVersion
@@ -60,6 +60,6 @@ dependencies {
     androidTestImplementation(Dependencies.AndroidTest.JUNIT_EXT)
     androidTestImplementation(Dependencies.AndroidTest.ESPRESSO)
 
-    implementation(Dependencies.Module.DATA)
-    implementation(Dependencies.Module.COMMON)
+    implementation(project(Dependencies.Module.DATA))
+    implementation(project(Dependencies.Module.COMMON))
 }

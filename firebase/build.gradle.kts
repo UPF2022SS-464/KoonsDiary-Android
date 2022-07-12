@@ -5,8 +5,8 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
-version = "0.1.0"
-apply(from = "../publish_android.gradle")
+//version = "0.1.0"
+//apply(from = "../publish_android.gradle")
 
 android {
     compileSdk = Apps.compileSdkVersion
@@ -55,6 +55,6 @@ dependencies {
     implementation(Dependencies.Firebase.MESSAGING)
     implementation(Dependencies.Firebase.ANALYTICS)
 
-    implementation(Dependencies.Module.DATA)
-    implementation(Dependencies.Module.COMMON)
+    implementation(project(Dependencies.Module.DATA))
+    implementation(project(Dependencies.Module.COMMON))
 }
