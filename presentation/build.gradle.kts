@@ -37,6 +37,7 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
 
     composeOptions {
@@ -46,6 +47,7 @@ android {
     buildFeatures {
         compose = true
     }
+
     packagingOptions {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
