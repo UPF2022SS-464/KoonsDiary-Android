@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,15 +29,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.upf464.koonsdiary.domain.model.Comment
 import com.upf464.koonsdiary.domain.model.Notification
-import com.upf464.koonsdiary.domain.model.QuestionAnswer
-import com.upf464.koonsdiary.domain.model.Reaction
-import com.upf464.koonsdiary.domain.model.ShareDiary
-import com.upf464.koonsdiary.domain.model.ShareGroup
-import com.upf464.koonsdiary.domain.model.User
 import com.upf464.koonsdiary.presentation.R
+import com.upf464.koonsdiary.presentation.common.Constants
 import com.upf464.koonsdiary.presentation.ui.settings.SettingsActivity
+import com.upf464.koonsdiary.presentation.ui.share_diary.ShareDiaryActivity
+import com.upf464.koonsdiary.presentation.ui.share_diary.ShareDiaryNavigation
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsColor
 import com.upf464.koonsdiary.presentation.ui.theme.KoonsTypography
 import java.time.format.DateTimeFormatter
@@ -57,27 +55,23 @@ internal fun NotificationScreen(
                 NotificationEvent.OpenSettings -> {
                     context.startActivity(Intent(context, SettingsActivity::class.java))
                 }
+                is NotificationEvent.NavigateToShareDiary -> {
+                    val intent = Intent(context, ShareDiaryActivity::class.java).apply {
+                        putExtra(Constants.EXTRA_SHARE_DIARY_ROUTE, ShareDiaryNavigation.DIARY_DETAIL.route)
+                        putExtra(Constants.EXTRA_SHARE_DIARY_ID, event.diaryId)
+                    }
+                    context.startActivity(intent)
+                }
             }
         }
     }
 
     NotificationScreen(
-        onSettingsClicked = { viewModel.openSettings() },
-        notificationState = NotificationState(
-            isLoading = false,
-            listOf(
-                Notification.GroupInvite(group = ShareGroup(name = "테스트임")),
-                Notification.GroupInvite(group = ShareGroup(name = "테스트임"), isAccepted = true),
-                Notification.GroupInvite(group = ShareGroup(name = "테스트임"), isAccepted = false),
-                Notification.CottonReaction(answer = QuestionAnswer(), reaction = Reaction(name = "좋아요")),
-                Notification.DiaryComment(diary = ShareDiary(group = ShareGroup(name = "테스트임"), content = "테스트인데", user = User(nickname = "안녕")),
-                    comment = Comment(content = "하이요")),
-                Notification.NewDiary(diary = ShareDiary(group = ShareGroup(name = "테스트임"), content = "테스트인데", user = User(nickname = "안녕"))),
-            ),
-        ),
-        onAcceptGroupInvite = {},
-        onRejectGroupInvite = {},
-        onClickNotificationAt = {},
+        onSettingsClicked = viewModel::openSettings,
+        notificationState = viewModel.stateFlow.collectAsState().value,
+        onAcceptGroupInvite = viewModel::acceptGroupInvite,
+        onRejectGroupInvite = viewModel::rejectGroupInvite,
+        onClickNotificationAt = viewModel::clickNotification,
     )
 }
 
