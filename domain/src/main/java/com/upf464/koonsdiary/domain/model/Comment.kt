@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 data class Comment(
     val id: Int = 0,
-    val diaryId: Int,
+    val diaryId: Int = 0,
     val user: User = User(),
     val content: String = "",
     val createdDate: LocalDateTime = LocalDateTime.now()

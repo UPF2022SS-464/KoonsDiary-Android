@@ -3,12 +3,14 @@ package com.upf464.koonsdiary.remote.di
 import com.upf464.koonsdiary.data.source.CottonRemoteDataSource
 import com.upf464.koonsdiary.data.source.DiaryRemoteDataSource
 import com.upf464.koonsdiary.data.source.MessageRemoteDataSource
+import com.upf464.koonsdiary.data.source.NotificationRemoteDataSource
 import com.upf464.koonsdiary.data.source.ReportRemoteDataSource
 import com.upf464.koonsdiary.data.source.ShareRemoteDataSource
 import com.upf464.koonsdiary.data.source.UserRemoteDataSource
 import com.upf464.koonsdiary.remote.devsource.CottonRemoteDevDataSourceImpl
 import com.upf464.koonsdiary.remote.devsource.DiaryRemoteDevDataSourceImpl
 import com.upf464.koonsdiary.remote.devsource.MessageRemoteDevDataSourceImpl
+import com.upf464.koonsdiary.remote.devsource.NotificationRemoteDataSourceImpl
 import com.upf464.koonsdiary.remote.devsource.ReportRemoteDevDataSourceImpl
 import com.upf464.koonsdiary.remote.devsource.ShareRemoteDevDataSourceImpl
 import com.upf464.koonsdiary.remote.devsource.UserRemoteDevDataSourceImpl
@@ -50,4 +52,9 @@ internal abstract class DataSourceModule {
     abstract fun bindReportRemoteDataSource(
         source: ReportRemoteDevDataSourceImpl
     ): ReportRemoteDataSource
+
+    @Binds
+    abstract fun bindNotificationRemoteDataSource(
+        source: NotificationRemoteDataSourceImpl
+    ): NotificationRemoteDataSource
 }

@@ -5,8 +5,8 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
-version = "0.1.0"
-apply(from = "../publish_android.gradle")
+// version = "0.1.1"
+// apply(from = "../publish_android.gradle")
 
 android {
     compileSdk = Apps.compileSdkVersion
@@ -37,6 +37,7 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
 
     composeOptions {
@@ -46,6 +47,7 @@ android {
     buildFeatures {
         compose = true
     }
+
     packagingOptions {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
@@ -86,6 +88,6 @@ dependencies {
     androidTestImplementation(Dependencies.AndroidTest.ESPRESSO)
     androidTestImplementation(Dependencies.AndroidTest.COMPOSE_JUNIT4)
 
-    implementation(Dependencies.Module.DOMAIN)
-    implementation(Dependencies.Module.COMMON)
+    implementation(project(Dependencies.Module.DOMAIN))
+    implementation(project(Dependencies.Module.COMMON))
 }

@@ -34,6 +34,7 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
 
     buildFeatures {
@@ -61,12 +62,12 @@ dependencies {
     implementation(Dependencies.Firebase.ANALYTICS)
     implementation(Dependencies.Firebase.CRASHLYTICS)
 
-    implementation(Dependencies.Module.PRESENTATION)
-    implementation(Dependencies.Module.LOCAL)
-    implementation(Dependencies.Module.KAKAO)
-    implementation(Dependencies.Module.FIREBASE)
-    implementation(Dependencies.Module.DOMAIN)
-    implementation(Dependencies.Module.REMOTE)
-    implementation(Dependencies.Module.DATA)
-    implementation(Dependencies.Module.COMMON)
+    implementation(project(Dependencies.Module.PRESENTATION))
+    implementation(project(Dependencies.Module.LOCAL))
+    implementation(project(Dependencies.Module.KAKAO))
+    implementation(project(Dependencies.Module.FIREBASE))
+    implementation(project(Dependencies.Module.DOMAIN))
+    implementation(project(Dependencies.Module.REMOTE))
+    implementation(project(Dependencies.Module.DATA))
+    implementation(project(Dependencies.Module.COMMON))
 }

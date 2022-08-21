@@ -3,6 +3,7 @@ package com.upf464.koonsdiary.data.di
 import com.upf464.koonsdiary.data.repository.CottonRepositoryImpl
 import com.upf464.koonsdiary.data.repository.DiaryRepositoryImpl
 import com.upf464.koonsdiary.data.repository.MessageRepositoryImpl
+import com.upf464.koonsdiary.data.repository.NotificationRepositoryImpl
 import com.upf464.koonsdiary.data.repository.ReportRepositoryImpl
 import com.upf464.koonsdiary.data.repository.SecurityRepositoryImpl
 import com.upf464.koonsdiary.data.repository.ShareRepositoryImpl
@@ -10,6 +11,7 @@ import com.upf464.koonsdiary.data.repository.UserRepositoryImpl
 import com.upf464.koonsdiary.domain.repository.CottonRepository
 import com.upf464.koonsdiary.domain.repository.DiaryRepository
 import com.upf464.koonsdiary.domain.repository.MessageRepository
+import com.upf464.koonsdiary.domain.repository.NotificationRepository
 import com.upf464.koonsdiary.domain.repository.ReportRepository
 import com.upf464.koonsdiary.domain.repository.SecurityRepository
 import com.upf464.koonsdiary.domain.repository.ShareRepository
@@ -65,4 +67,10 @@ internal abstract class RepositoryModule {
     abstract fun bindReportRepository(
         repository: ReportRepositoryImpl
     ): ReportRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindNotificationRepository(
+        repository: NotificationRepositoryImpl
+    ): NotificationRepository
 }

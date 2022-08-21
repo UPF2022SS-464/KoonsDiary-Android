@@ -79,13 +79,13 @@ interface Dependencies {
 
     object Module {
 
-        const val COMMON = "com.upf464.koonsdiary:common:${Versions.COMMON}"
-        const val DOMAIN = "com.upf464.koonsdiary:domain:${Versions.DOMAIN}"
-        const val DATA = "com.upf464.koonsdiary:data:${Versions.DATA}"
-        const val LOCAL = "com.upf464.koonsdiary:local:${Versions.LOCAL}"
-        const val REMOTE = "com.upf464.koonsdiary:remote:${Versions.REMOTE}"
-        const val PRESENTATION = "com.upf464.koonsdiary:presentation:${Versions.PRESENTATION}"
-        const val KAKAO = "com.upf464.koonsdiary:kakao:${Versions.KAKAO}"
-        const val FIREBASE = "com.upf464.koonsdiary:firebase:${Versions.FIREBASE}"
+        const val COMMON = ":common"
+        const val DOMAIN = ":domain"
+        const val DATA = ":data"
+        const val LOCAL = ":local"
+        const val REMOTE = ":remote"
+        const val PRESENTATION = ":presentation"
+        const val KAKAO = ":kakao"
+        const val FIREBASE = ":firebase"
     }
 }
