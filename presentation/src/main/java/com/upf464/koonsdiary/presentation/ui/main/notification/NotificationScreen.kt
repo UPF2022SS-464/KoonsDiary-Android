@@ -51,6 +51,7 @@ internal fun NotificationScreen(
     val context = LocalContext.current
 
     LaunchedEffect(key1 = Unit) {
+        viewModel.init()
         viewModel.eventFlow.collect { event ->
             when (event) {
                 NotificationEvent.OpenSettings -> {

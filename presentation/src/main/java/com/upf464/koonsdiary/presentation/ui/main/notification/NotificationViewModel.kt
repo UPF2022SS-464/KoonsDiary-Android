@@ -22,7 +22,7 @@ internal class NotificationViewModel @Inject constructor(
     private val _stateFlow = MutableStateFlow(NotificationState())
     val stateFlow = _stateFlow.asStateFlow()
 
-    init {
+    fun init() {
         viewModelScope.launch {
             fetchNotificationListUseCase().onSuccess { response ->
                 _stateFlow.value = _stateFlow.value.copy(notificationList = response.notificationList)
