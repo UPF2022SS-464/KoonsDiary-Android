@@ -4,8 +4,8 @@ plugins {
     id("kotlin-kapt")
 }
 
-//version = "0.1.1"
-//apply(from = "../publish_kotlin.gradle")
+// version = "0.1.1"
+// apply(from = "../publish_kotlin.gradle")
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8

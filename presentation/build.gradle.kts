@@ -5,8 +5,8 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
-//version = "0.1.1"
-//apply(from = "../publish_android.gradle")
+// version = "0.1.1"
+// apply(from = "../publish_android.gradle")
 
 android {
     compileSdk = Apps.compileSdkVersion
